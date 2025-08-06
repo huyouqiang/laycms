@@ -81,4 +81,16 @@ abstract class BaseController extends Controller
 
         // E.g.: $this->session = service('session');
     }
+
+    //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+    public function randNum($length) {
+      $result = '';
+      for ($i = 0; $i < $length; $i++) {
+        $result .= rand(0, 9);
+      }
+      return $result;
+    }
+
+    //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 }

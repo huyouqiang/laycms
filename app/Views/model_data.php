@@ -92,19 +92,46 @@
 <script src="//unpkg.com/layui@2.11.5/dist/layui.js"></script>
 <script>
 
-  layui.use(['element', 'layer', 'util', 'form', 'table', 'upload'], function(){
+  layui.use(['element', 'layer', 'util', 'form', 'table', 'upload', 'tabs'], function(){
     var element = layui.element;
     var layer = layui.layer;
     var util = layui.util;
     var form = layui.form;
     var table = layui.table;
     var upload = layui.upload;
+    var tabs = layui.tabs;
     var $ = layui.$;
 
     //头部事件
-    util.event('lay-header-event', {
-      menuLeft: function(othis){ // 左侧菜单事件
-        layer.msg('展开左侧菜单的操作', {icon: 0});
+    util.event('lay-on', {
+      getPriTab: function(othis){ // 左侧菜单事件
+        var priTab = $(this).attr('priTab');
+
+        // iframe 层
+        layer.open({
+          type: 1,
+          title: 'iframe test',
+          shadeClose: true,
+          shade: 0.8,
+          area: ['100%', '100%'],
+          content: '<button type="button" class="layui-btn layui-btn-sm" lay-on="choose">选择</button><table class="layui-hide" id="test1" lay-filter="test1"></table>'
+        });
+        // 创建渲染实例
+        table.render({
+          elem: '#test1',
+          url: '/model/data/' + priTab, // 此处为静态模拟数据，实际使用时需换成真实接口
+          height: 'full-100', // 最大高度减去其他容器已占有的高度差
+          cellMinWidth: 120,
+          page: true,
+          limit: 50,
+          cols: [<?= $fieldJson ?>],
+        });
+
+      },
+      choose: function(othis){ // 左侧菜单事件
+        $("input[name='student_id']").val('100');
+        layer.msg('已选择数据，请关闭窗口');
+        layer.close(othis);
       }
     });
 
@@ -122,6 +149,7 @@
     // 触发单元格工具事件
     table.on('tool(test)', function(obj){
       var data = obj.data; // 获得当前行数据
+      var rowId = data.id;
       if(obj.event === 'edit'){
 
         $.ajax({
@@ -131,15 +159,58 @@
           // data:formData.field,   //传递的参数
           success:function(res){
             // layer.msg(res.msg);
-            var rowForm = res.msg;
+
 
             layer.open({
-              title: '编辑 / <?= $modelName ?> / id:'+ data.id,
+              title: '编辑',
               type: 1,
-              area: ['80%','80%'],
-              content: '<div style="padding: 16px;"><form class="layui-form" lay-filter="demo-val-filter">' + rowForm + '<div class="layui-form-item"><label class="layui-form-label"></label><div class="layui-input-block"><button  type="button" class="layui-btn" lay-submit lay-filter="demo-submit">编辑</button></div></div></form></div>'
+              area: ['100%','100%'],
+              content: '<div id="demoTabs2"></div>'
             });
+
+            console.log(res);
+
+            // 方法渲染
+            tabs.render({
+              elem: '#demoTabs2',
+              header: res.header,
+              body: res.body,
+            });
+
             form.render();
+
+            tabs.on('afterChange(demoTabs2)', function(data) {
+              var index = data.index;
+              var tabName = $(this).html();
+              tabName = tabName.substring(0, tabName.indexOf('&'));
+              // console.log(tabName);
+              // layer.msg(tabName);
+              if (index > 0) {
+
+                $.ajax({
+                  type:"GET",                      //请求类型
+                  url:'/model/data/' + tabName + '?t=child',           //URL
+                  dataType: "json",
+                  data:'',   //传递的参数
+                  success:function(res){          //data就是返回的json类型的数据
+
+                    table.render({
+                      elem: '#' + tabName,
+                      url: '/model/data/' + tabName + '?t=child&id=' + rowId, // 此处为静态模拟数据，实际使用时需换成真实接口
+                      height: 'full-100', // 最大高度减去其他容器已占有的高度差
+                      cellMinWidth: 120,
+                      page: true,
+                      limit: 50,
+                      cols: [JSON.parse(res.fieldJson)],
+                    });
+
+                  }
+                });
+
+              }
+            });
+
+
 
             // 单图片上传
             upload.render({
@@ -239,8 +310,8 @@
       }
     });
 
+    
+
   });
 
 </script>
-</body>
-</html>

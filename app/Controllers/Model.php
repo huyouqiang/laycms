@@ -24,8 +24,17 @@ class Model extends BaseController
     }
 
     $fieldArr = $this->modelFields($modelName);
+//    print_r($fieldArr);
+//    die();
     $fieldArr[] = ['fixed' => 'right', 'title' => '操作', 'width' => '120', 'templet' => '#toolDemo'];
     $fieldJson = json_encode($fieldArr);
+
+    if ( isset($get['t']) && $get['t'] == 'child' ) {
+      $res = ['code' => '1', 'msg' => '字段json', 'fieldJson' => $fieldJson];
+      return $this->response->setJSON($res);
+    }
+
+
     return view('model_data', ['menus' => json_decode($this->cache->get('models'),true), 'modelName' => $modelName, 'fieldJson' => $fieldJson]);
   }
 
@@ -36,7 +45,22 @@ class Model extends BaseController
     $rowData = $this->rowDetail($modelName, $rowId);
     $fieldArr = $this->modelFields($modelName);
     $fieldForm = $this->fieldForm($fieldArr, $rowData);
-    $res = ['code' => '1', 'msg' => $fieldForm];
+    $rowHtml = '<div style="padding: 16px;"><form class="layui-form" lay-filter="demo-val-filter">' . $fieldForm . '<div class="layui-form-item"><label class="layui-form-label"></label><div class="layui-input-block"><button  type="button" class="layui-btn" lay-submit lay-filter="demo-submit">编辑</button></div></div></form></div>';
+    $body = [];
+    $body[] = ['content' => $rowHtml];
+
+
+    $child = $this->childTab($modelName);
+    $header = [];
+    $header[] = ['title' => $modelName.'&nbsp;<span class="layui-badge-rim layui-bg-green">parent</span>'];
+    foreach ($child as $k => $v) {
+      $header[] = ['title' => $v['tabName'].'&nbsp;<span class="layui-badge-rim layui-bg-gray">child</span>'];
+      $body[] = ['content' => '<table class="layui-hide" id="'.$v['tabName'].'" lay-filter="test111"></table>'];
+    }
+
+//    print_r($header);
+
+    $res = ['code' => '1', 'msg' => '记录详情表单', 'header' => $header, 'body' => $body];
     return $this->response->setJSON($res);
   }
 
@@ -60,8 +84,13 @@ class Model extends BaseController
       $res = ['code' => '1', 'msg' => '添加成功'];
     }
     else {
-      $this->db->table(''.$modelName)->where(['id' => $rowId])->update($post);
-      $res = ['code' => '1', 'msg' => '更新成功'];
+      try {
+        $this->db->table(''.$modelName)->where(['id' => $rowId])->update($post);
+        $res = ['code' => '1', 'msg' => '更新成功'];
+      }
+      catch (\Exception $e) {
+        $res = ['code' => '0', 'msg' => $e->getMessage()];
+      }
     }
     return $this->response->setJSON($res);
   }
@@ -89,7 +118,7 @@ class Model extends BaseController
   {
 
     $path = getcwd().'/uploads/'.date('Ymd',time()).'/';
-    $fileName = substr(md5(date('Ymd')),0,16);
+    $fileName = substr(md5(date('YmdHis').$this->randNum(6)),0,16);
     $fileType = substr($_FILES['file']['name'], strrpos($_FILES['file']['name'],'.'));
     if(!file_exists($path)){
       mkdir($path, 0777, true);
@@ -115,12 +144,14 @@ class Model extends BaseController
       $fieldType = substr($value['COLUMN_COMMENT'], strpos($value['COLUMN_COMMENT'], '[')+1, strpos($value['COLUMN_COMMENT'], ']')-(strpos($value['COLUMN_COMMENT'], '[')+1));
       $fieldTypeArr = explode('|', $fieldType);
       $inputValue = empty($rowData) ? '':' value="'.$rowData[$value['field']].'"';
-//      print_r($inputValue);
-//      die();
+      $foreignKey = '';
+//      $foreignKey = empty($value['priTabKey']) ? '':' <div class="layui-form-mid" style="padding: 0!important;">
+//        <button type="button" class="layui-btn layui-btn-primary" lay-on="getPriTab" priTab="'.$value['priTab'].'" priTabKey="'.$value['priTabKey'].'">选择</button>
+//      </div> ';
 
       switch ($fieldTypeArr['0']) {
         case 'input':
-          $form .= '<div class="layui-form-item"><label class="layui-form-label">'.$value['title'].'</label><div class="layui-input-block"><input type="text" name="'.$value['field'].'" lay-verify="required" placeholder="请输入" autocomplete="off" class="layui-input" '.$inputValue.'></div></div>';
+          $form .= '<div class="layui-form-item"><label class="layui-form-label">'.$value['title'].'</label><div class="layui-input-inline layui-input-wrap"><input type="text" name="'.$value['field'].'" lay-verify="required" placeholder="请输入" autocomplete="off" class="layui-input" '.$inputValue.'></div>'.$foreignKey.'</div>';
           break;
         case 'date':
           $form .= '<div class="layui-form-item"><label class="layui-form-label">'.$value['title'].'</label><div class="layui-input-block"><input type="text" name="'.$value['field'].'" lay-verify="required" placeholder="请输入" autocomplete="off" class="layui-input" '.$inputValue.'></div></div>';
@@ -139,7 +170,7 @@ class Model extends BaseController
           $form .= '<div class="layui-form-item" pane><label class="layui-form-label">'.$value['title'].'</label><div class="layui-input-block">'.$optionForm.'</div></div>';
           break;
         case 'file':
-          $form .= '<div class="layui-form-item"><label class="layui-form-label">'.$value['title'].'</label><div class="layui-input-block"><div class="layui-btn-group"><button type="button" class="layui-btn layui-btn-sm uploadFile" uploadFieldName="'.$value['field'].'"><i class="layui-icon layui-icon-uploads"></i>文件上传</button><a type="button" class="layui-btn layui-btn-sm" href="'.($rowData[$value['field']] =='' ? 'javascript:;':$rowData[$value['field']]).'" target="_blank" id="'.$value['field'].'_btn">'.($rowData[$value['field']] =='' ? '文件地址':$rowData[$value['field']]).'</a></div><input type="text" name="'.$value['field'].'" placeholder="请输入" autocomplete="off" id="'.$value['field'].'" class="layui-input" style="display:none;" '.$inputValue.'></div></div>';
+          $form .= '<div class="layui-form-item"><label class="layui-form-label">'.$value['title'].'</label><div class="layui-input-block"><div class="layui-btn-group"><button type="button" class="layui-btn layui-btn-sm uploadFile" uploadFieldName="'.$value['field'].'"><i class="layui-icon layui-icon-uploads"></i>文件上传</button><a type="button" class="layui-btn layui-btn-primary layui-btn-sm" href="'.($rowData[$value['field']] =='' ? 'javascript:;':$rowData[$value['field']]).'" target="_blank" id="'.$value['field'].'_btn">'.($rowData[$value['field']] =='' ? '文件地址':$rowData[$value['field']]).'</a></div><input type="text" name="'.$value['field'].'" placeholder="请输入" autocomplete="off" id="'.$value['field'].'" class="layui-input" style="display:none;" '.$inputValue.'></div></div>';
           break;
         case 'json':
           $form .= '<div class="layui-form-item"><label class="layui-form-label">'.$value['title'].'</label><div class="layui-input-block"><textarea placeholder="请输入" class="layui-textarea" name="'.$value['field'].'" name="'.$value['field'].'" lay-verify="required" placeholder="请输入" autocomplete="off">'.$rowData[$value['field']].'</textarea></div></div>';
@@ -153,9 +184,6 @@ class Model extends BaseController
           foreach ($checkboxArr as $k => $v) {
             $optionArr = explode('=', $v);
             $checkboxValueArr = explode(',', $rowData[$value['field']]);
-//                        print_r($optionArr);
-//            print_r($rowData[$value['field']]);
-//            die();
             $isChecked = (in_array($optionArr['0'], $checkboxValueArr)) ? ' checked ':'';
             $optionForm .= '<input type="checkbox" name="'.$value['field'].'[]" value="'.$optionArr['0'].'" title="'.$optionArr['1'].'" checkboxName="'.$value['field'].'"'.$isChecked.'>';
           }
@@ -183,7 +211,23 @@ class Model extends BaseController
 
   private function modelFields($modelName)
   {
-    $fieldArr = $this->db->query("SELECT  COLUMN_NAME as field,COLUMN_COMMENT,left(COLUMN_COMMENT,locate('[',COLUMN_COMMENT)-1) as title,'100' as width FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = 'laycms' AND  TABLE_NAME = '{$modelName}' order by ordinal_position asc")->getResultArray();
+    $fieldArr = $this->db->query("SELECT
+  C.COLUMN_NAME as field,
+  C.COLUMN_COMMENT,
+  C.COLUMN_KEY,
+  left(C.COLUMN_COMMENT, locate('[', C.COLUMN_COMMENT) -1) as title,
+  '100' as width,
+  if(K.REFERENCED_TABLE_NAME<>C.TABLE_NAME,K.REFERENCED_TABLE_NAME,'') as priTab,
+  if(K.REFERENCED_TABLE_NAME<>C.TABLE_NAME,K.REFERENCED_COLUMN_NAME,'') as priTabKey
+FROM
+  INFORMATION_SCHEMA.COLUMNS C
+left JOIN information_schema.KEY_COLUMN_USAGE K
+ON C.COLUMN_NAME=K.CONSTRAINT_NAME
+WHERE
+  C.TABLE_SCHEMA = 'laycms'
+  AND C.TABLE_NAME = '{$modelName}'
+order by
+  C.ordinal_position asc")->getResultArray();
 
     return $fieldArr;
   }
@@ -195,6 +239,23 @@ class Model extends BaseController
     $rowDetail = $this->db->query("select * from {$modelName} where id='{$rowId}'")->getRowArray();
 
     return $rowDetail;
+  }
+
+  //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+  private function childTab($modelName)
+  {
+    $tabArr = $this->db->query("SELECT
+  TABLE_NAME as tabName
+FROM
+  information_schema.KEY_COLUMN_USAGE
+where
+  CONSTRAINT_SCHEMA = 'laycms'
+  and REFERENCED_TABLE_NAME = '{$modelName}'
+group by
+  TABLE_NAME")->getResultArray();
+
+    return $tabArr;
   }
 
   //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
