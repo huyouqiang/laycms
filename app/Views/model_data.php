@@ -196,7 +196,7 @@
 
                     table.render({
                       elem: '#' + tabName,
-                      url: '/model/data/' + tabName + '?t=child&id=' + rowId, // 此处为静态模拟数据，实际使用时需换成真实接口
+                      url: '/model/data/' + tabName + '?t=child&pid=' + rowId, // 此处为静态模拟数据，实际使用时需换成真实接口
                       height: 'full-100', // 最大高度减去其他容器已占有的高度差
                       cellMinWidth: 120,
                       page: true,

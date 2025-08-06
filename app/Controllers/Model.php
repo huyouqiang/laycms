@@ -17,8 +17,18 @@ class Model extends BaseController
     $get = $this->get;
     if ( isset($get['page']) ) {
       $page = isset($get['page']) ? (($get['page']-1)*$get['limit']):0;
+      $fieldArr = $this->modelFields($modelName);
+      $fk = '';
+      if ( isset($get['pid']) ) {
+        foreach ($fieldArr as $k => $v) {
+          if ($v['priTab'] != '') {
+            $fk = ' where ' . $v['field'] . ' = ' . $get['pid'] . ' ';
+          }
+        }
+      }
+
       $rowNum = $this->db->query("select count(id) as rowNum from ".$modelName)->getRowArray();
-      $data = $this->db->query("select * from ".$modelName." order by id desc limit {$page},{$get['limit']}")->getResultArray();
+      $data = $this->db->query("select * from ".$modelName.$fk." order by id desc limit {$page},{$get['limit']}")->getResultArray();
       $res = ['code' => '0', 'msg' => '模型数据', 'count' => $rowNum['rowNum'], 'data' => $data];
       return $this->response->setJSON($res);
     }

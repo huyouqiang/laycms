@@ -506,3 +506,13 @@ Stack trace:
 #9 /opt/homebrew/var/www/laycms/system/Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
 #10 /opt/homebrew/var/www/laycms/index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
 #11 {main}
+CRITICAL - 2025-08-06 17:18:33 --> ErrorException: Undefined array key "pid"
+[Method: GET, Route: model/data/usr_lesson]
+in APPPATH/Controllers/Model.php on line 24.
+ 1 APPPATH/Controllers/Model.php(24): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined array key "pid"', '/opt/homebrew/var/www/laycms/app/Controllers/Model.php', 24)
+ 2 SYSTEMPATH/CodeIgniter.php(933): App\Controllers\Model->data('usr_lesson')
+ 3 SYSTEMPATH/CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Model))
+ 4 SYSTEMPATH/CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 SYSTEMPATH/Boot.php(363): CodeIgniter\CodeIgniter->run()
+ 6 SYSTEMPATH/Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 7 FCPATH/index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
