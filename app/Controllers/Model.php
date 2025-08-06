@@ -204,10 +204,13 @@ class Model extends BaseController
           $optionForm = '';
           foreach ($selectArr as $k => $v) {
             $optionArr = explode('=', $v);
-            $isChecked = ($optionArr['0'] == $rowData[$value['field']]) ? '':' checked ';
+            $isChecked = ($optionArr['0'] == $rowData[$value['field']]) ? 'selected':'';
             $optionForm .= '<option name="'.$value['field'].'[]" value="'.$optionArr['0'].'" title="'.$optionArr['1'].'" '.$isChecked.'>'.$optionArr['1'].'</option>';
           }
           $form .= '<div class="layui-form-item"><label class="layui-form-label">'.$value['title'].'</label><div class="layui-input-block"><select name="'.$value['field'].'" value="'.$optionArr['0'].'" title="'.$optionArr['1'].'">'.$optionForm.'</select></div></div>';
+//          print_r($form);
+//          print_r($rowData[$value['field']]);
+//          die();
           break;
       }
     }
