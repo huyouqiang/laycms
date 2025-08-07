@@ -17,7 +17,7 @@ class Model extends BaseController
     $get = $this->get;
     if ( isset($get['page']) ) {
       $page = isset($get['page']) ? (($get['page']-1)*$get['limit']):0;
-      $fieldArr = $this->modelFields($modelName);
+      $fieldArr = $this->_modelFields($modelName);
       $fk = '';
       if ( isset($get['pid']) ) {
         foreach ($fieldArr as $k => $v) {
@@ -33,11 +33,17 @@ class Model extends BaseController
       return $this->response->setJSON($res);
     }
 
-    $fieldArr = $this->modelFields($modelName);
+    $fieldArr = $this->_modelFields($modelName);
 //    print_r($fieldArr);
 //    die();
-    $fieldArr[] = ['fixed' => 'right', 'title' => '操作', 'width' => '120', 'templet' => '#toolDemo'];
+    if (isset($get['t']) && $get['t'] == 'child') {
+      $fieldArr[] = ['fixed' => 'right', 'title' => '操作', 'width' => '120', 'templet' => '#toolDemo'];
+    }
+    else {
+      $fieldArr[] = ['fixed' => 'right', 'title' => '操作', 'width' => '120', 'templet' => '#toolDemo'];
+    }
     $fieldJson = json_encode($fieldArr);
+
 
     if ( isset($get['t']) && $get['t'] == 'child' ) {
       $res = ['code' => '1', 'msg' => '字段json', 'fieldJson' => $fieldJson];
@@ -52,20 +58,25 @@ class Model extends BaseController
 
   public function rowForm($modelName, $rowId)
   {
+    $get = $this->get;
     $rowData = $this->rowDetail($modelName, $rowId);
-    $fieldArr = $this->modelFields($modelName);
+    $fieldArr = $this->_modelFields($modelName);
     $fieldForm = $this->fieldForm($fieldArr, $rowData);
-    $rowHtml = '<div style="padding: 16px;"><form class="layui-form" lay-filter="demo-val-filter">' . $fieldForm . '<div class="layui-form-item"><label class="layui-form-label"></label><div class="layui-input-block"><button  type="button" class="layui-btn" lay-submit lay-filter="demo-submit">编辑</button></div></div></form></div>';
+    if (isset($get['t']) && $get['t'] == 'child') {
+      $rowHtml = '<div style="padding: 16px;"><form class="layui-form" lay-filter="demo-val-filter" id="'.$modelName.'">' . $fieldForm . '<div class="layui-form-item"><label class="layui-form-label"></label><div class="layui-input-block"><button  type="button" class="layui-btn" lay-submit lay-filter="child-submit">编辑</button></div></div></form></div>';
+    }
+    else {
+      $rowHtml = '<div style="padding: 16px;"><form class="layui-form" lay-filter="demo-val-filter" id="'.$modelName.'">' . $fieldForm . '<div class="layui-form-item"><label class="layui-form-label"></label><div class="layui-input-block"><button  type="button" class="layui-btn" lay-submit lay-filter="demo-submit">编辑</button></div></div></form></div>';
+    }
+
     $body = [];
     $body[] = ['content' => $rowHtml];
-
-
-    $child = $this->childTab($modelName);
     $header = [];
     $header[] = ['title' => $modelName.'&nbsp;<span class="layui-badge-rim layui-bg-green">parent</span>'];
+    $child = $this->_childTab($modelName);
     foreach ($child as $k => $v) {
       $header[] = ['title' => $v['tabName'].'&nbsp;<span class="layui-badge-rim layui-bg-gray">child</span>'];
-      $body[] = ['content' => '<table class="layui-hide" id="'.$v['tabName'].'" lay-filter="test111"></table>'];
+      $body[] = ['content' => '<table class="layui-hide" id="'.$v['tabName'].'"></table>'];
     }
 
 //    print_r($header);
@@ -161,7 +172,7 @@ class Model extends BaseController
 
       switch ($fieldTypeArr['0']) {
         case 'input':
-          $form .= '<div class="layui-form-item"><label class="layui-form-label">'.$value['title'].'</label><div class="layui-input-inline layui-input-wrap"><input type="text" name="'.$value['field'].'" lay-verify="required" placeholder="请输入" autocomplete="off" class="layui-input" '.$inputValue.'></div>'.$foreignKey.'</div>';
+          $form .= '<div class="layui-form-item"><label class="layui-form-label">'.$value['title'].'</label><div class="layui-input-block"><input type="text" name="'.$value['field'].'" lay-verify="required" placeholder="请输入" autocomplete="off" class="layui-input" '.$inputValue.'></div>'.$foreignKey.'</div>';
           break;
         case 'date':
           $form .= '<div class="layui-form-item"><label class="layui-form-label">'.$value['title'].'</label><div class="layui-input-block"><input type="text" name="'.$value['field'].'" lay-verify="required" placeholder="请输入" autocomplete="off" class="layui-input" '.$inputValue.'></div></div>';
@@ -222,14 +233,14 @@ class Model extends BaseController
 
   //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-  private function modelFields($modelName)
+  private function _modelFields($modelName)
   {
     $fieldArr = $this->db->query("SELECT
   C.COLUMN_NAME as field,
   C.COLUMN_COMMENT,
   C.COLUMN_KEY,
   left(C.COLUMN_COMMENT, locate('[', C.COLUMN_COMMENT) -1) as title,
-  '100' as width,
+  '' as width,
   if(K.REFERENCED_TABLE_NAME<>C.TABLE_NAME,K.REFERENCED_TABLE_NAME,'') as priTab,
   if(K.REFERENCED_TABLE_NAME<>C.TABLE_NAME,K.REFERENCED_COLUMN_NAME,'') as priTabKey
 FROM
@@ -256,7 +267,7 @@ order by
 
   //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-  private function childTab($modelName)
+  private function _childTab($modelName)
   {
     $tabArr = $this->db->query("SELECT
   TABLE_NAME as tabName

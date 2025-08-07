@@ -1,0 +1,182 @@
+ERROR - 2025-08-07 05:29:06 --> mysqli_sql_exception: Unknown column 'class_name' in 'field list' in /opt/homebrew/var/www/laycms/system/Database/MySQLi/Connection.php:327
+Stack trace:
+#0 /opt/homebrew/var/www/laycms/system/Database/MySQLi/Connection.php(327): mysqli->query('UPDATE `usr_stu...', 0)
+#1 /opt/homebrew/var/www/laycms/system/Database/BaseConnection.php(729): CodeIgniter\Database\MySQLi\Connection->execute('UPDATE `usr_stu...')
+#2 /opt/homebrew/var/www/laycms/system/Database/BaseConnection.php(646): CodeIgniter\Database\BaseConnection->simpleQuery('UPDATE `usr_stu...')
+#3 /opt/homebrew/var/www/laycms/system/Database/BaseBuilder.php(2521): CodeIgniter\Database\BaseConnection->query('UPDATE `usr_stu...', Array, false)
+#4 /opt/homebrew/var/www/laycms/app/Controllers/Model.php(102): CodeIgniter\Database\BaseBuilder->update(Array)
+#5 /opt/homebrew/var/www/laycms/system/CodeIgniter.php(933): App\Controllers\Model->rowUpdate('usr_student', '85')
+#6 /opt/homebrew/var/www/laycms/system/CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Model))
+#7 /opt/homebrew/var/www/laycms/system/CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#8 /opt/homebrew/var/www/laycms/system/Boot.php(363): CodeIgniter\CodeIgniter->run()
+#9 /opt/homebrew/var/www/laycms/system/Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#10 /opt/homebrew/var/www/laycms/index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#11 {main}
+ERROR - 2025-08-07 05:29:10 --> mysqli_sql_exception: Unknown column 'class_name' in 'field list' in /opt/homebrew/var/www/laycms/system/Database/MySQLi/Connection.php:327
+Stack trace:
+#0 /opt/homebrew/var/www/laycms/system/Database/MySQLi/Connection.php(327): mysqli->query('UPDATE `usr_stu...', 0)
+#1 /opt/homebrew/var/www/laycms/system/Database/BaseConnection.php(729): CodeIgniter\Database\MySQLi\Connection->execute('UPDATE `usr_stu...')
+#2 /opt/homebrew/var/www/laycms/system/Database/BaseConnection.php(646): CodeIgniter\Database\BaseConnection->simpleQuery('UPDATE `usr_stu...')
+#3 /opt/homebrew/var/www/laycms/system/Database/BaseBuilder.php(2521): CodeIgniter\Database\BaseConnection->query('UPDATE `usr_stu...', Array, false)
+#4 /opt/homebrew/var/www/laycms/app/Controllers/Model.php(102): CodeIgniter\Database\BaseBuilder->update(Array)
+#5 /opt/homebrew/var/www/laycms/system/CodeIgniter.php(933): App\Controllers\Model->rowUpdate('usr_student', '85')
+#6 /opt/homebrew/var/www/laycms/system/CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Model))
+#7 /opt/homebrew/var/www/laycms/system/CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#8 /opt/homebrew/var/www/laycms/system/Boot.php(363): CodeIgniter\CodeIgniter->run()
+#9 /opt/homebrew/var/www/laycms/system/Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#10 /opt/homebrew/var/www/laycms/index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#11 {main}
+ERROR - 2025-08-07 05:29:16 --> mysqli_sql_exception: Unknown column 'class_name' in 'field list' in /opt/homebrew/var/www/laycms/system/Database/MySQLi/Connection.php:327
+Stack trace:
+#0 /opt/homebrew/var/www/laycms/system/Database/MySQLi/Connection.php(327): mysqli->query('UPDATE `usr_stu...', 0)
+#1 /opt/homebrew/var/www/laycms/system/Database/BaseConnection.php(729): CodeIgniter\Database\MySQLi\Connection->execute('UPDATE `usr_stu...')
+#2 /opt/homebrew/var/www/laycms/system/Database/BaseConnection.php(646): CodeIgniter\Database\BaseConnection->simpleQuery('UPDATE `usr_stu...')
+#3 /opt/homebrew/var/www/laycms/system/Database/BaseBuilder.php(2521): CodeIgniter\Database\BaseConnection->query('UPDATE `usr_stu...', Array, false)
+#4 /opt/homebrew/var/www/laycms/app/Controllers/Model.php(102): CodeIgniter\Database\BaseBuilder->update(Array)
+#5 /opt/homebrew/var/www/laycms/system/CodeIgniter.php(933): App\Controllers\Model->rowUpdate('usr_student', '85')
+#6 /opt/homebrew/var/www/laycms/system/CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Model))
+#7 /opt/homebrew/var/www/laycms/system/CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#8 /opt/homebrew/var/www/laycms/system/Boot.php(363): CodeIgniter\CodeIgniter->run()
+#9 /opt/homebrew/var/www/laycms/system/Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#10 /opt/homebrew/var/www/laycms/index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#11 {main}
+ERROR - 2025-08-07 05:29:29 --> mysqli_sql_exception: Unknown column 'class_name' in 'field list' in /opt/homebrew/var/www/laycms/system/Database/MySQLi/Connection.php:327
+Stack trace:
+#0 /opt/homebrew/var/www/laycms/system/Database/MySQLi/Connection.php(327): mysqli->query('UPDATE `usr_stu...', 0)
+#1 /opt/homebrew/var/www/laycms/system/Database/BaseConnection.php(729): CodeIgniter\Database\MySQLi\Connection->execute('UPDATE `usr_stu...')
+#2 /opt/homebrew/var/www/laycms/system/Database/BaseConnection.php(646): CodeIgniter\Database\BaseConnection->simpleQuery('UPDATE `usr_stu...')
+#3 /opt/homebrew/var/www/laycms/system/Database/BaseBuilder.php(2521): CodeIgniter\Database\BaseConnection->query('UPDATE `usr_stu...', Array, false)
+#4 /opt/homebrew/var/www/laycms/app/Controllers/Model.php(102): CodeIgniter\Database\BaseBuilder->update(Array)
+#5 /opt/homebrew/var/www/laycms/system/CodeIgniter.php(933): App\Controllers\Model->rowUpdate('usr_student', '85')
+#6 /opt/homebrew/var/www/laycms/system/CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Model))
+#7 /opt/homebrew/var/www/laycms/system/CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#8 /opt/homebrew/var/www/laycms/system/Boot.php(363): CodeIgniter\CodeIgniter->run()
+#9 /opt/homebrew/var/www/laycms/system/Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#10 /opt/homebrew/var/www/laycms/index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#11 {main}
+ERROR - 2025-08-07 05:37:13 --> mysqli_sql_exception: Unknown column 'class_name' in 'field list' in /opt/homebrew/var/www/laycms/system/Database/MySQLi/Connection.php:327
+Stack trace:
+#0 /opt/homebrew/var/www/laycms/system/Database/MySQLi/Connection.php(327): mysqli->query('UPDATE `usr_stu...', 0)
+#1 /opt/homebrew/var/www/laycms/system/Database/BaseConnection.php(729): CodeIgniter\Database\MySQLi\Connection->execute('UPDATE `usr_stu...')
+#2 /opt/homebrew/var/www/laycms/system/Database/BaseConnection.php(646): CodeIgniter\Database\BaseConnection->simpleQuery('UPDATE `usr_stu...')
+#3 /opt/homebrew/var/www/laycms/system/Database/BaseBuilder.php(2521): CodeIgniter\Database\BaseConnection->query('UPDATE `usr_stu...', Array, false)
+#4 /opt/homebrew/var/www/laycms/app/Controllers/Model.php(102): CodeIgniter\Database\BaseBuilder->update(Array)
+#5 /opt/homebrew/var/www/laycms/system/CodeIgniter.php(933): App\Controllers\Model->rowUpdate('usr_student', '83')
+#6 /opt/homebrew/var/www/laycms/system/CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Model))
+#7 /opt/homebrew/var/www/laycms/system/CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#8 /opt/homebrew/var/www/laycms/system/Boot.php(363): CodeIgniter\CodeIgniter->run()
+#9 /opt/homebrew/var/www/laycms/system/Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#10 /opt/homebrew/var/www/laycms/index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#11 {main}
+ERROR - 2025-08-07 05:40:22 --> mysqli_sql_exception: Unknown column 'class_name' in 'field list' in /opt/homebrew/var/www/laycms/system/Database/MySQLi/Connection.php:327
+Stack trace:
+#0 /opt/homebrew/var/www/laycms/system/Database/MySQLi/Connection.php(327): mysqli->query('UPDATE `usr_stu...', 0)
+#1 /opt/homebrew/var/www/laycms/system/Database/BaseConnection.php(729): CodeIgniter\Database\MySQLi\Connection->execute('UPDATE `usr_stu...')
+#2 /opt/homebrew/var/www/laycms/system/Database/BaseConnection.php(646): CodeIgniter\Database\BaseConnection->simpleQuery('UPDATE `usr_stu...')
+#3 /opt/homebrew/var/www/laycms/system/Database/BaseBuilder.php(2521): CodeIgniter\Database\BaseConnection->query('UPDATE `usr_stu...', Array, false)
+#4 /opt/homebrew/var/www/laycms/app/Controllers/Model.php(102): CodeIgniter\Database\BaseBuilder->update(Array)
+#5 /opt/homebrew/var/www/laycms/system/CodeIgniter.php(933): App\Controllers\Model->rowUpdate('usr_student', '83')
+#6 /opt/homebrew/var/www/laycms/system/CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Model))
+#7 /opt/homebrew/var/www/laycms/system/CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#8 /opt/homebrew/var/www/laycms/system/Boot.php(363): CodeIgniter\CodeIgniter->run()
+#9 /opt/homebrew/var/www/laycms/system/Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#10 /opt/homebrew/var/www/laycms/index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#11 {main}
+ERROR - 2025-08-07 05:41:24 --> mysqli_sql_exception: Unknown column 'student_like' in 'field list' in /opt/homebrew/var/www/laycms/system/Database/MySQLi/Connection.php:327
+Stack trace:
+#0 /opt/homebrew/var/www/laycms/system/Database/MySQLi/Connection.php(327): mysqli->query('UPDATE `usr_stu...', 0)
+#1 /opt/homebrew/var/www/laycms/system/Database/BaseConnection.php(729): CodeIgniter\Database\MySQLi\Connection->execute('UPDATE `usr_stu...')
+#2 /opt/homebrew/var/www/laycms/system/Database/BaseConnection.php(646): CodeIgniter\Database\BaseConnection->simpleQuery('UPDATE `usr_stu...')
+#3 /opt/homebrew/var/www/laycms/system/Database/BaseBuilder.php(2521): CodeIgniter\Database\BaseConnection->query('UPDATE `usr_stu...', Array, false)
+#4 /opt/homebrew/var/www/laycms/app/Controllers/Model.php(102): CodeIgniter\Database\BaseBuilder->update(Array)
+#5 /opt/homebrew/var/www/laycms/system/CodeIgniter.php(933): App\Controllers\Model->rowUpdate('usr_student_cla...', '83')
+#6 /opt/homebrew/var/www/laycms/system/CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Model))
+#7 /opt/homebrew/var/www/laycms/system/CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#8 /opt/homebrew/var/www/laycms/system/Boot.php(363): CodeIgniter\CodeIgniter->run()
+#9 /opt/homebrew/var/www/laycms/system/Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#10 /opt/homebrew/var/www/laycms/index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#11 {main}
+ERROR - 2025-08-07 05:41:35 --> mysqli_sql_exception: Unknown column 'student_like' in 'field list' in /opt/homebrew/var/www/laycms/system/Database/MySQLi/Connection.php:327
+Stack trace:
+#0 /opt/homebrew/var/www/laycms/system/Database/MySQLi/Connection.php(327): mysqli->query('UPDATE `usr_stu...', 0)
+#1 /opt/homebrew/var/www/laycms/system/Database/BaseConnection.php(729): CodeIgniter\Database\MySQLi\Connection->execute('UPDATE `usr_stu...')
+#2 /opt/homebrew/var/www/laycms/system/Database/BaseConnection.php(646): CodeIgniter\Database\BaseConnection->simpleQuery('UPDATE `usr_stu...')
+#3 /opt/homebrew/var/www/laycms/system/Database/BaseBuilder.php(2521): CodeIgniter\Database\BaseConnection->query('UPDATE `usr_stu...', Array, false)
+#4 /opt/homebrew/var/www/laycms/app/Controllers/Model.php(102): CodeIgniter\Database\BaseBuilder->update(Array)
+#5 /opt/homebrew/var/www/laycms/system/CodeIgniter.php(933): App\Controllers\Model->rowUpdate('usr_student_cla...', '83')
+#6 /opt/homebrew/var/www/laycms/system/CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Model))
+#7 /opt/homebrew/var/www/laycms/system/CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#8 /opt/homebrew/var/www/laycms/system/Boot.php(363): CodeIgniter\CodeIgniter->run()
+#9 /opt/homebrew/var/www/laycms/system/Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#10 /opt/homebrew/var/www/laycms/index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#11 {main}
+ERROR - 2025-08-07 05:42:01 --> mysqli_sql_exception: Unknown column 'student_like' in 'field list' in /opt/homebrew/var/www/laycms/system/Database/MySQLi/Connection.php:327
+Stack trace:
+#0 /opt/homebrew/var/www/laycms/system/Database/MySQLi/Connection.php(327): mysqli->query('UPDATE `usr_stu...', 0)
+#1 /opt/homebrew/var/www/laycms/system/Database/BaseConnection.php(729): CodeIgniter\Database\MySQLi\Connection->execute('UPDATE `usr_stu...')
+#2 /opt/homebrew/var/www/laycms/system/Database/BaseConnection.php(646): CodeIgniter\Database\BaseConnection->simpleQuery('UPDATE `usr_stu...')
+#3 /opt/homebrew/var/www/laycms/system/Database/BaseBuilder.php(2521): CodeIgniter\Database\BaseConnection->query('UPDATE `usr_stu...', Array, false)
+#4 /opt/homebrew/var/www/laycms/app/Controllers/Model.php(102): CodeIgniter\Database\BaseBuilder->update(Array)
+#5 /opt/homebrew/var/www/laycms/system/CodeIgniter.php(933): App\Controllers\Model->rowUpdate('usr_student_cla...', '83')
+#6 /opt/homebrew/var/www/laycms/system/CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Model))
+#7 /opt/homebrew/var/www/laycms/system/CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#8 /opt/homebrew/var/www/laycms/system/Boot.php(363): CodeIgniter\CodeIgniter->run()
+#9 /opt/homebrew/var/www/laycms/system/Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#10 /opt/homebrew/var/www/laycms/index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#11 {main}
+ERROR - 2025-08-07 05:42:45 --> mysqli_sql_exception: Unknown column 'student_like' in 'field list' in /opt/homebrew/var/www/laycms/system/Database/MySQLi/Connection.php:327
+Stack trace:
+#0 /opt/homebrew/var/www/laycms/system/Database/MySQLi/Connection.php(327): mysqli->query('UPDATE `usr_stu...', 0)
+#1 /opt/homebrew/var/www/laycms/system/Database/BaseConnection.php(729): CodeIgniter\Database\MySQLi\Connection->execute('UPDATE `usr_stu...')
+#2 /opt/homebrew/var/www/laycms/system/Database/BaseConnection.php(646): CodeIgniter\Database\BaseConnection->simpleQuery('UPDATE `usr_stu...')
+#3 /opt/homebrew/var/www/laycms/system/Database/BaseBuilder.php(2521): CodeIgniter\Database\BaseConnection->query('UPDATE `usr_stu...', Array, false)
+#4 /opt/homebrew/var/www/laycms/app/Controllers/Model.php(102): CodeIgniter\Database\BaseBuilder->update(Array)
+#5 /opt/homebrew/var/www/laycms/system/CodeIgniter.php(933): App\Controllers\Model->rowUpdate('usr_student_cla...', '83')
+#6 /opt/homebrew/var/www/laycms/system/CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Model))
+#7 /opt/homebrew/var/www/laycms/system/CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#8 /opt/homebrew/var/www/laycms/system/Boot.php(363): CodeIgniter\CodeIgniter->run()
+#9 /opt/homebrew/var/www/laycms/system/Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#10 /opt/homebrew/var/www/laycms/index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#11 {main}
+ERROR - 2025-08-07 05:47:51 --> mysqli_sql_exception: Unknown column 'student_like' in 'field list' in /opt/homebrew/var/www/laycms/system/Database/MySQLi/Connection.php:327
+Stack trace:
+#0 /opt/homebrew/var/www/laycms/system/Database/MySQLi/Connection.php(327): mysqli->query('UPDATE `usr_stu...', 0)
+#1 /opt/homebrew/var/www/laycms/system/Database/BaseConnection.php(729): CodeIgniter\Database\MySQLi\Connection->execute('UPDATE `usr_stu...')
+#2 /opt/homebrew/var/www/laycms/system/Database/BaseConnection.php(646): CodeIgniter\Database\BaseConnection->simpleQuery('UPDATE `usr_stu...')
+#3 /opt/homebrew/var/www/laycms/system/Database/BaseBuilder.php(2521): CodeIgniter\Database\BaseConnection->query('UPDATE `usr_stu...', Array, false)
+#4 /opt/homebrew/var/www/laycms/app/Controllers/Model.php(109): CodeIgniter\Database\BaseBuilder->update(Array)
+#5 /opt/homebrew/var/www/laycms/system/CodeIgniter.php(933): App\Controllers\Model->rowUpdate('usr_student_cla...', '83')
+#6 /opt/homebrew/var/www/laycms/system/CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Model))
+#7 /opt/homebrew/var/www/laycms/system/CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#8 /opt/homebrew/var/www/laycms/system/Boot.php(363): CodeIgniter\CodeIgniter->run()
+#9 /opt/homebrew/var/www/laycms/system/Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#10 /opt/homebrew/var/www/laycms/index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#11 {main}
+ERROR - 2025-08-07 05:48:53 --> mysqli_sql_exception: Unknown column 'student_like' in 'field list' in /opt/homebrew/var/www/laycms/system/Database/MySQLi/Connection.php:327
+Stack trace:
+#0 /opt/homebrew/var/www/laycms/system/Database/MySQLi/Connection.php(327): mysqli->query('UPDATE `usr_stu...', 0)
+#1 /opt/homebrew/var/www/laycms/system/Database/BaseConnection.php(729): CodeIgniter\Database\MySQLi\Connection->execute('UPDATE `usr_stu...')
+#2 /opt/homebrew/var/www/laycms/system/Database/BaseConnection.php(646): CodeIgniter\Database\BaseConnection->simpleQuery('UPDATE `usr_stu...')
+#3 /opt/homebrew/var/www/laycms/system/Database/BaseBuilder.php(2521): CodeIgniter\Database\BaseConnection->query('UPDATE `usr_stu...', Array, false)
+#4 /opt/homebrew/var/www/laycms/app/Controllers/Model.php(109): CodeIgniter\Database\BaseBuilder->update(Array)
+#5 /opt/homebrew/var/www/laycms/system/CodeIgniter.php(933): App\Controllers\Model->rowUpdate('usr_student_cla...', '83')
+#6 /opt/homebrew/var/www/laycms/system/CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Model))
+#7 /opt/homebrew/var/www/laycms/system/CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#8 /opt/homebrew/var/www/laycms/system/Boot.php(363): CodeIgniter\CodeIgniter->run()
+#9 /opt/homebrew/var/www/laycms/system/Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#10 /opt/homebrew/var/www/laycms/index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#11 {main}
+ERROR - 2025-08-07 05:50:19 --> mysqli_sql_exception: Unknown column 'student_like' in 'field list' in /opt/homebrew/var/www/laycms/system/Database/MySQLi/Connection.php:327
+Stack trace:
+#0 /opt/homebrew/var/www/laycms/system/Database/MySQLi/Connection.php(327): mysqli->query('UPDATE `usr_stu...', 0)
+#1 /opt/homebrew/var/www/laycms/system/Database/BaseConnection.php(729): CodeIgniter\Database\MySQLi\Connection->execute('UPDATE `usr_stu...')
+#2 /opt/homebrew/var/www/laycms/system/Database/BaseConnection.php(646): CodeIgniter\Database\BaseConnection->simpleQuery('UPDATE `usr_stu...')
+#3 /opt/homebrew/var/www/laycms/system/Database/BaseBuilder.php(2521): CodeIgniter\Database\BaseConnection->query('UPDATE `usr_stu...', Array, false)
+#4 /opt/homebrew/var/www/laycms/app/Controllers/Model.php(109): CodeIgniter\Database\BaseBuilder->update(Array)
+#5 /opt/homebrew/var/www/laycms/system/CodeIgniter.php(933): App\Controllers\Model->rowUpdate('usr_student_cla...', '80')
+#6 /opt/homebrew/var/www/laycms/system/CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Model))
+#7 /opt/homebrew/var/www/laycms/system/CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#8 /opt/homebrew/var/www/laycms/system/Boot.php(363): CodeIgniter\CodeIgniter->run()
+#9 /opt/homebrew/var/www/laycms/system/Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#10 /opt/homebrew/var/www/laycms/index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#11 {main}

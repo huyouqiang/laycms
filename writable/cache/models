@@ -1,1 +1,1 @@
-a:3:{s:4:"time";i:1754002322;s:3:"ttl";i:315360000;s:4:"data";s:226:"[{"group":"学生分组1","model":[{"name_en":"usr_student","name_ch":"学生列表1"},{"name_en":"usr_lesson","name_ch":"学生课程"}]},{"group":"学生分组2","model":[{"name_en":"usr_school","name_ch":"学校列表1"}]}]";}
+a:3:{s:4:"time";i:1754540085;s:3:"ttl";i:315360000;s:4:"data";s:176:"[{"group":"学生分组1","model":[{"name_en":"usr_student","name_ch":"学生列表1"}]},{"group":"学生分组2","model":[{"name_en":"usr_school","name_ch":"学校列表1"}]}]";}

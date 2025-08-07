@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>layout 管理界面大布局示例 - Layui</title>
+  <title>laycms - 数据表格</title>
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -11,7 +11,7 @@
 <body>
 <div class="layui-layout layui-layout-admin">
   <div class="layui-header">
-    <div class="layui-logo layui-hide-xs layui-bg-black">cms</div>
+    <div class="layui-logo layui-hide-xs layui-bg-black"><a href="/" style="color: #ffffff;">laycms</a></div>
     <!-- 头部区域（可配合layui 已有的水平导航） -->
     <ul class="layui-nav layui-layout-left">
       <!-- 移动端显示 -->
@@ -67,7 +67,7 @@
           </span>
         </div>
         <div class="layui-card-body">
-          <table class="layui-hide" id="test" lay-filter="test"></table>
+          <table class="layui-hide" id="test"></table>
         </div>
       </div>
       <br><br>
@@ -89,6 +89,7 @@
     </button>
   </div>
 </script>
+
 <script src="//unpkg.com/layui@2.11.5/dist/layui.js"></script>
 <script>
 
@@ -102,38 +103,6 @@
     var tabs = layui.tabs;
     var $ = layui.$;
 
-    //头部事件
-    util.event('lay-on', {
-      getPriTab: function(othis){ // 左侧菜单事件
-        var priTab = $(this).attr('priTab');
-
-        // iframe 层
-        layer.open({
-          type: 1,
-          title: 'iframe test',
-          shadeClose: true,
-          shade: 0.8,
-          area: ['100%', '100%'],
-          content: '<button type="button" class="layui-btn layui-btn-sm" lay-on="choose">选择</button><table class="layui-hide" id="test1" lay-filter="test1"></table>'
-        });
-        // 创建渲染实例
-        table.render({
-          elem: '#test1',
-          url: '/model/data/' + priTab, // 此处为静态模拟数据，实际使用时需换成真实接口
-          height: 'full-100', // 最大高度减去其他容器已占有的高度差
-          cellMinWidth: 120,
-          page: true,
-          limit: 50,
-          cols: [<?= $fieldJson ?>],
-        });
-
-      },
-      choose: function(othis){ // 左侧菜单事件
-        $("input[name='student_id']").val('100');
-        layer.msg('已选择数据，请关闭窗口');
-        layer.close(othis);
-      }
-    });
 
     // 创建渲染实例
     table.render({
@@ -202,6 +171,145 @@
                       page: true,
                       limit: 50,
                       cols: [JSON.parse(res.fieldJson)],
+                    });
+
+                    table.on('tool(' + tabName + ')', function(obj) {
+
+                      if (obj.event === 'edit') {
+
+                        // alert('huhu');
+
+
+
+                        var childData = obj.data; // 获得当前行数据
+                        $.ajax({
+                          type:"get",                      //请求类型
+                          url:"/model/rowform/" + tabName + "/" + childData.id + "?t=child",           //URL
+                          // dataType: "json",
+                          // data:formData.field,   //传递的参数
+                          success:function(res){
+
+                            // alert(res);
+
+                            layer.open({
+                              title: '编辑',
+                              type: 1,
+                              area: ['100%','100%'],
+                              content: '<div id="demoTabs3"></div>'
+                            });
+
+                            console.log(res);
+
+                            // 方法渲染
+                            tabs.render({
+                              elem: '#demoTabs3',
+                              header: res.header,
+                              body: res.body,
+                            });
+
+                            form.render();
+
+                            // 单图片上传
+                            upload.render({
+                              elem: '.uploadFile',
+                              url: '/model/uploadfile', // 实际使用时改成您自己的上传接口即可。
+                              before: function(obj){
+                                layer.msg('上传中...');
+                              },
+                              done: function(res){
+                                if(res.code == '1'){
+                                  // $(this).next().html(res.msg);
+                                  console.log(this.item);
+                                  var uploadFieldName = $(this.item).attr('uploadFieldName');
+                                  $("#" + uploadFieldName + '_btn').text(res.msg);
+                                  $("#" + uploadFieldName + '_btn').attr('href', res.msg);
+                                  $("#" + uploadFieldName).val(res.msg);
+                                  // layer.msg($("#" + uploadFieldName).val());
+
+                                }
+                                console.log(obj);
+                              }
+                            });
+
+                          }
+                        });
+                      }
+                      else if(obj.event === 'delete') {
+                        var childData = obj.data; // 获得当前行数据
+                        layer.confirm('真的删除行 [id: '+ childData.id +'] 么', function(index){
+                          $.ajax({
+                            type:"GET",                      //请求类型
+                            url:"/model/rowdel/" + tabName + "/" + childData.id,           //URL
+                            dataType: "json",
+                            data:'',   //传递的参数
+                            success:function(res){          //data就是返回的json类型的数据
+                              if(res.code=='1'){
+                                layer.msg(res.msg);
+                              }
+                              else{
+                                layer.msg(res.msg);
+                              }
+                            }
+                          });
+                          obj.del(); // 删除对应行（tr）的DOM结构
+                        });
+                      }
+
+                      // 提交事件
+                      form.on('submit(child-submit)', function(formData){
+                        console.log(formData);
+                        alert('123');
+
+                        var rowData = formData.field;
+                        delete rowData.file;
+
+                        // return false;
+
+                        $('#' + tabName + ' input[type=checkbox]').each(function(key, value) {
+                          var name = $(this).attr('checkboxName'); // 获取当前checkbox的name属性
+                          var value = $(this).val(); // 获取当前checkbox的值
+                          var isChecked = $(this).is(':checked'); // 检查是否被选中
+
+                          if (!rowData[name]) {
+                            rowData[name] = []; // 初始化数组
+                          }
+                          if (isChecked) {
+                            rowData[name].push(value); // 如果被选中，添加到数组中
+                          }
+
+                        });
+
+                        $.each(rowData, function(key, value) {
+
+                          if ( key.indexOf('[') !== -1 ) {
+                            // alert(key);
+                            delete rowData[key];
+                          }
+
+                          if (Array.isArray(value)) {
+                            rowData[key] = value.join(',');
+                          }
+
+                          // console.log(rowData);
+                        });
+
+                        // console.log(rowData);
+                        //
+                        // return false;
+
+                        $.ajax({
+                          type:"POST",                      //请求类型
+                          url:"/model/rowupdate/" + tabName + "/" + formData.field.id,           //URL
+                          // dataType: "json",
+                          data:formData.field,   //传递的参数
+                          success:function(res){
+                            layer.msg(res.msg);
+                            table.reload('test');
+                          }
+                        });
+
+                      });
+
                     });
 
                   }
