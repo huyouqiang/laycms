@@ -7,10 +7,13 @@ class Model extends BaseController
 {
   public function index()
   {
+    $this->checkLogin();
+
     $res = ['menus' => json_decode($this->cache->get('models'),true)];
     $res['sqlVersion'] = $this->db->query("select VERSION() as sqlVersion")->getRowArray();
 //    print_r($sqlVersion);
 
+    $this->accessLog($res);
     return view('index', $res);
   }
 
@@ -18,6 +21,8 @@ class Model extends BaseController
 
   public function data($modelName)
   {
+    $this->checkLogin();
+
     $get = $this->get;
     if ( isset($get['page']) ) {
       $page = isset($get['page']) ? (($get['page']-1)*$get['limit']):0;
@@ -67,6 +72,8 @@ class Model extends BaseController
 
   public function rowForm($modelName, $rowId)
   {
+    $this->checkLogin();
+
     $get = $this->get;
     $rowData = $this->rowDetail($modelName, $rowId);
     $fieldArr = $this->_modelFields($modelName);
@@ -91,6 +98,8 @@ class Model extends BaseController
 //    print_r($header);
 
     $res = ['code' => '1', 'msg' => '记录详情表单', 'header' => $header, 'body' => $body];
+
+//    $this->accessLog($res);
     return $this->response->setJSON($res);
   }
 
@@ -98,6 +107,7 @@ class Model extends BaseController
 
   public function rowDel($modelName, $rowId)
   {
+    $this->checkLogin();
     $this->db->table($modelName)->delete(['id' => $rowId]);
     $res = ['code' => '1', 'msg' => '删除记录成功'];
     return $this->response->setJSON($res);
@@ -107,6 +117,8 @@ class Model extends BaseController
 
   public function rowUpdate($modelName, $rowId)
   {
+    $this->checkLogin();
+
     $post = $this->post;
     unset($post['file']);
     if ($rowId == '0') {
@@ -122,6 +134,8 @@ class Model extends BaseController
         $res = ['code' => '0', 'msg' => $e->getMessage()];
       }
     }
+
+    $this->accessLog($res);
     return $this->response->setJSON($res);
   }
 
@@ -129,6 +143,7 @@ class Model extends BaseController
 
   public function settings()
   {
+    $this->checkLogin();
     return view('model_list', ['menus' => json_decode($this->cache->get('models'), true)]);
   }
 
@@ -136,6 +151,7 @@ class Model extends BaseController
 
   public function modelJson()
   {
+    $this->checkLogin();
     $post = $this->post;
     $this->cache->save('models', $post['modelJson'], 60*60*24*365*10);
     $res = ['code' => '1', 'msg' => '保存成功'];
@@ -146,7 +162,7 @@ class Model extends BaseController
 
   public function uploadFile()
   {
-
+    $this->checkLogin();
     $path = getcwd().'/uploads/'.date('Ymd',time()).'/';
     $fileName = substr(md5(date('YmdHis').$this->randNum(6)),0,16);
     $fileType = substr($_FILES['file']['name'], strrpos($_FILES['file']['name'],'.'));
@@ -269,9 +285,45 @@ order by
 
   private function rowDetail($modelName, $rowId)
   {
+    $this->checkLogin();
     $rowDetail = $this->db->query("select * from {$modelName} where id='{$rowId}'")->getRowArray();
 
     return $rowDetail;
+  }
+
+  //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+  public function login()
+  {
+    $get = $this->get;
+
+
+
+    if (isset($get['userName']) && !empty($get['userName'])) {
+
+//      print_r($get);
+
+      $users = json_decode($this->cache->get('users'), true);
+//
+      foreach ($users as $k => $v) {
+        if ($get['userName'] == $v['userName'] && $get['passWord'] == $v['passWord']) {
+          $this->session->set('login', $v);
+          $res = ['code' => '1', 'msg' => '登录成功'];
+          return $this->response->setJSON($res);
+        }
+      }
+      $res = ['code' => '0', 'msg' => '登录失败'];
+      return $this->response->setJSON($res);
+
+    }
+    else {
+      $this->session->remove('login');
+      $res = ['menus' => json_decode($this->cache->get('models'),true)];
+
+      $this->accessLog($res);
+      return view('login', $res);
+    }
+
   }
 
   //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -

@@ -15,4 +15,5 @@ $routes->post('/model/rowupdate/(:any)/(:num)', 'Model::rowUpdate/$1/$2');
 $routes->get('/model/rowform/(:any)/(:num)', 'Model::rowForm/$1/$2');
 $routes->post('/model/modeljson', 'Model::modelJson');
 $routes->post('/model/uploadfile', 'Model::uploadFile');
+$routes->get('/login', 'Model::login');
 

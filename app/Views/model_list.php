@@ -10,51 +10,9 @@
 </head>
 <body>
 <div class="layui-layout layui-layout-admin">
-  <div class="layui-header">
-    <div class="layui-logo layui-hide-xs layui-bg-black">cms</div>
-    <!-- 头部区域（可配合layui 已有的水平导航） -->
-    <ul class="layui-nav layui-layout-left">
-      <!-- 移动端显示 -->
-      <li class="layui-nav-item layui-show-xs-inline-block layui-hide-sm" lay-header-event="menuLeft">
-        <i class="layui-icon layui-icon-spread-left"></i>
-      </li>
-      <li class="layui-nav-item layui-hide-xs"><a href="/model/settings">模型管理</a></li>
-<!--      <li class="layui-nav-item layui-hide-xs"><a href="javascript:;">用户管理</a></li>-->
-<!--      <li class="layui-nav-item layui-hide-xs"><a href="javascript:;">备份还原</a></li>-->
-<!--      <li class="layui-nav-item layui-hide-xs"><a href="javascript:;">系统设置</a></li>-->
-    </ul>
-    <ul class="layui-nav layui-layout-right">
-      <li class="layui-nav-item layui-hide layui-show-sm-inline-block">
-        <a href="javascript:;">
-          <img src="//unpkg.com/outeres@0.0.10/img/layui/icon-v2.png" class="layui-nav-img">
-          tester
-        </a>
-        <dl class="layui-nav-child">
-          <dd><a href="javascript:;">Your Profile</a></dd>
-          <dd><a href="javascript:;">Settings</a></dd>
-          <dd><a href="javascript:;">Sign out</a></dd>
-        </dl>
-      </li>
+  <?= $this->include('public/header') ?>
+  <?= $this->include('public/left') ?>
 
-    </ul>
-  </div>
-  <div class="layui-side layui-bg-black">
-    <div class="layui-side-scroll">
-      <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
-      <ul class="layui-nav layui-nav-tree" lay-filter="test">
-        <?php foreach ($menus as $key => $value): ?>
-        <li class="layui-nav-item layui-nav-itemed">
-          <a class="" href="javascript:;"><?= $value['group'] ?></a>
-          <dl class="layui-nav-child active">
-            <?php foreach ($value['model'] as $key1 => $value1): ?>
-            <dd><a href="/model/data/<?= $value1['name_en'] ?>"><?= $value1['name_ch'] ?></a></dd>
-            <?php endforeach ?>
-          </dl>
-        </li>
-        <?php endforeach ?>
-      </ul>
-    </div>
-  </div>
   <div class="layui-body">
     <!-- 内容主体区域 -->
     <div style="padding: 15px;">

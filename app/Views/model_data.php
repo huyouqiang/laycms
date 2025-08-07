@@ -8,53 +8,32 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link href="//unpkg.com/layui@2.11.5/dist/css/layui.css" rel="stylesheet">
 </head>
+<style>
+  .demo-login-container{width: 320px; margin: 21px auto 0;}
+  .demo-login-other .layui-icon{position: relative; display: inline-block; margin: 0 2px; top: 2px; font-size: 26px;}
+  body {
+    background-image:  url(http://hutc.top/public/bg.jpeg);
+    * 背景图垂直、水平均居中 */
+    background-position: center center;
+    /* 背景图不平铺 */
+    background-repeat: no-repeat;
+    /* 当内容高度大于图片高度时，背景图像的位置相对于viewport固定 */
+    background-attachment: fixed;
+    /* 让背景图基于容器大小伸缩 */
+    background-size: cover;
+    opacity: 0.9; /* 透明度设置为50% */
+    filter: alpha(Opacity=90);
+    -moz-opacity: 0.9;
+    opacity: 0.9;
+    -khtml-opacity: 0.9;
+  }
+
+</style>
 <body>
 <div class="layui-layout layui-layout-admin">
-  <div class="layui-header">
-    <div class="layui-logo layui-hide-xs layui-bg-black"><a href="/" style="color: #ffffff;">laycms</a></div>
-    <!-- 头部区域（可配合layui 已有的水平导航） -->
-    <ul class="layui-nav layui-layout-left">
-      <!-- 移动端显示 -->
-      <li class="layui-nav-item layui-show-xs-inline-block layui-hide-sm" lay-header-event="menuLeft">
-        <i class="layui-icon layui-icon-spread-left"></i>
-      </li>
-      <li class="layui-nav-item layui-hide-xs"><a href="/model/settings">模型管理</a></li>
-<!--      <li class="layui-nav-item layui-hide-xs"><a href="javascript:;">用户管理</a></li>-->
-<!--      <li class="layui-nav-item layui-hide-xs"><a href="javascript:;">备份还原</a></li>-->
-<!--      <li class="layui-nav-item layui-hide-xs"><a href="javascript:;">系统设置</a></li>-->
-    </ul>
-    <ul class="layui-nav layui-layout-right">
-      <li class="layui-nav-item layui-hide layui-show-sm-inline-block">
-        <a href="javascript:;">
-          <img src="//unpkg.com/outeres@0.0.10/img/layui/icon-v2.png" class="layui-nav-img">
-          tester
-        </a>
-        <dl class="layui-nav-child">
-          <dd><a href="javascript:;">Your Profile</a></dd>
-          <dd><a href="javascript:;">Settings</a></dd>
-          <dd><a href="javascript:;">Sign out</a></dd>
-        </dl>
-      </li>
+  <?= $this->include('public/header') ?>
+  <?= $this->include('public/left') ?>
 
-    </ul>
-  </div>
-  <div class="layui-side layui-bg-black">
-    <div class="layui-side-scroll">
-      <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
-      <ul class="layui-nav layui-nav-tree" lay-filter="test">
-        <?php foreach ($menus as $key => $value): ?>
-        <li class="layui-nav-item layui-nav-itemed">
-          <a class="" href="javascript:;"><?= $value['group'] ?></a>
-          <dl class="layui-nav-child">
-            <?php foreach ($value['model'] as $key1 => $value1): ?>
-            <dd class="<?php if (strpos(uri_string(), $value1['name_en']) !== false): ?>layui-this<?php endif ?>"><a href="/model/data/<?= $value1['name_en'] ?>"><?= $value1['name_ch'] ?></a></dd>
-            <?php endforeach ?>
-          </dl>
-        </li>
-        <?php endforeach ?>
-      </ul>
-    </div>
-  </div>
   <div class="layui-body">
     <!-- 内容主体区域 -->
     <div style="padding: 15px;">
