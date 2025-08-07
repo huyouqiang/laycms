@@ -258,7 +258,7 @@
                       // 提交事件
                       form.on('submit(child-submit)', function(formData){
                         console.log(formData);
-                        alert('123');
+                        // alert('123');
 
                         var rowData = formData.field;
                         delete rowData.file;

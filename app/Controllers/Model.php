@@ -29,6 +29,11 @@ class Model extends BaseController
 
       $rowNum = $this->db->query("select count(id) as rowNum from ".$modelName)->getRowArray();
       $data = $this->db->query("select * from ".$modelName.$fk." order by id desc limit {$page},{$get['limit']}")->getResultArray();
+
+      $data = $this->_tabList($modelName, $data);
+
+//      print_r($data);
+//      die();
       $res = ['code' => '0', 'msg' => '模型数据', 'count' => $rowNum['rowNum'], 'data' => $data];
       return $this->response->setJSON($res);
     }
@@ -280,6 +285,72 @@ group by
   TABLE_NAME")->getResultArray();
 
     return $tabArr;
+  }
+
+  //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+  private function _tabList($modelName, $dataList)
+  {
+
+    $modelFields = $this->_modelFields($modelName);
+
+    foreach ($dataList as $k1 => $v1) {
+      foreach ($modelFields as $k2 => $v2) {
+//        print_r($v2);
+        $fieldType = substr($v2['COLUMN_COMMENT'], strpos($v2['COLUMN_COMMENT'], '[')+1, strpos($v2['COLUMN_COMMENT'], ']')-(strpos($v2['COLUMN_COMMENT'], '[')+1));
+        $fieldTypeArr = explode('|', $fieldType);
+//        print_r($fieldTypeArr);
+        switch ($fieldTypeArr['0']) {
+          case 'date':
+            $v1[$v2['field']] = date($fieldTypeArr['1'], $v1[$v2['field']]);
+            break;
+          case 'radio':
+            $radioArr = explode('&', $fieldTypeArr['1']);
+            foreach ($radioArr as $k => $v) {
+              $optionArr = explode('=', $v);
+//              print_r($optionArr);
+//              print_r($v1[$v2['field']].'ddd');
+//              print_r('---');
+              if ($optionArr['0'] == $v1[$v2['field']]) {
+                $v1[$v2['field']] = $optionArr['1'];
+              }
+            }
+            break;
+          case 'select':
+            $selectArr = explode('&', $fieldTypeArr['1']);
+            foreach ($selectArr as $k => $v) {
+              $optionArr = explode('=', $v);
+//              print_r($optionArr);
+//              print_r($v1[$v2['field']].'ddd');
+//              print_r('---');
+              if ($optionArr['0'] == $v1[$v2['field']]) {
+                $v1[$v2['field']] = $optionArr['1'];
+              }
+            }
+            break;
+          case 'checkbox':
+            $checkboxArr = explode('&', $fieldTypeArr['1']);
+            $checkboxStr = '';
+            foreach ($checkboxArr as $k => $v) {
+              $optionArr = explode('=', $v);
+              $checkboxValueArr = explode(',', $v1[$v2['field']]);
+
+              if (in_array($optionArr['0'], $checkboxValueArr)) {
+                $checkboxStr .= $optionArr['1'].'/';
+              }
+            }
+            $v1[$v2['field']] = $checkboxStr;
+            break;
+        }
+
+      }
+      $dataList[$k1] = $v1;
+//      print_r($v1);
+    }
+
+//    print_r($dataList);
+
+    return $dataList;
   }
 
   //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
