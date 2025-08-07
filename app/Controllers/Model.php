@@ -7,7 +7,11 @@ class Model extends BaseController
 {
   public function index()
   {
-    return view('index', ['menus' => json_decode($this->cache->get('models'),true)]);
+    $res = ['menus' => json_decode($this->cache->get('models'),true)];
+    $res['sqlVersion'] = $this->db->query("select VERSION() as sqlVersion")->getRowArray();
+//    print_r($sqlVersion);
+
+    return view('index', $res);
   }
 
   //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -

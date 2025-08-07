@@ -70,7 +70,24 @@
           </span>
         </div>
         <div class="layui-card-body">
-          123
+
+
+          <table class="layui-table" id="demo">
+            <tr>
+              <td>网站名称</td>
+              <td>laycms</td></tr>
+            <tr>
+              <td>平台版本</td>
+              <td>laycms v1.0.0</td></tr>
+            <tr>
+              <td>脚本语言</td>
+              <td><?php echo 'php '.PHP_VERSION; ?></td></tr>
+            <tr>
+              <td>数据库</td>
+              <td><?= 'mysql '.$sqlVersion['sqlVersion'] ?></td></tr>
+          </table>
+
+
         </div>
       </div>
       <br><br>
@@ -85,11 +102,14 @@
 <script src="//unpkg.com/layui@2.11.5/dist/layui.js"></script>
 <script>
   //JS
-  layui.use(['element', 'layer', 'util'], function(){
+  layui.use(['element', 'layer', 'util', 'table'], function(){
     var element = layui.element;
     var layer = layui.layer;
     var util = layui.util;
+    var table = layui.table;
     var $ = layui.$;
+
+
 
     //头部事件
     util.event('lay-header-event', {
