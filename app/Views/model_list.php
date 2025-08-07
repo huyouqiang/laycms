@@ -6,7 +6,7 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link href="//unpkg.com/layui@2.11.5/dist/css/layui.css" rel="stylesheet">
+  <link href="/public/layui/css/layui.css" rel="stylesheet">
 </head>
 <body>
 <div class="layui-layout layui-layout-admin">
@@ -16,7 +16,7 @@
   <div class="layui-body">
     <!-- 内容主体区域 -->
     <div style="padding: 15px;">
-      <div class="layui-card layui-panel">
+      <div class="layui-card layui-panel" style="height: calc(85vh)">
         <div class="layui-card-header">
           <span class="layui-breadcrumb">
             <a href="">首页</a>
@@ -25,7 +25,7 @@
         </div>
         <div class="layui-card-body">
           <div class="layui-btn-group" style="margin-bottom: 10px;">
-            <a type="button" class="layui-btn layui-btn-sm" href="#" lay-header-event="modelJson">
+            <a type="button" class="layui-btn layui-btn-primary layui-btn-sm" href="#" lay-header-event="modelJson">
               <i class="layui-icon layui-icon-addition"></i>模型配置json
             </a>
           </div>
@@ -58,7 +58,7 @@
                     <td><?= $key1+1 ?></td>
                     <td>
                       <div class="layui-btn-group">
-                        <button type="button" class="layui-btn layui-btn-sm">
+                        <button type="button" class="layui-btn layui-btn-primary layui-btn-sm">
                           <i class="layui-icon layui-icon-table"></i>
                         </button>
                       </div>
@@ -76,10 +76,7 @@
       <br><br>
     </div>
   </div>
-  <div class="layui-footer">
-    <!-- 底部固定区域 -->
-    底部固定区域
-  </div>
+    <?= $this->include('public/footer') ?>
 </div>
 
 <script src="//unpkg.com/layui@2.11.5/dist/layui.js"></script>
@@ -120,7 +117,7 @@
           shadeClose: true, // 点击遮罩区域，关闭弹层
           maxmin: false, // 允许全屏最小化
           anim: 0, // 0-6 的动画形式，-1 不开启
-          content: '<div style="padding: 32px;"><form class="layui-form" lay-filter="demo-val-filter"><div class="layui-form-item"><textarea placeholder="请输入内容" class="layui-textarea" rows="20" name="modelJson"></textarea></div><button class="layui-btn layui-btn-fluid" lay-submit="" lay-filter="demo-submit">保存</button></form></div>'
+          content: '<div style="padding: 32px;"><form class="layui-form" lay-filter="demo-val-filter"><div class="layui-form-item"><textarea placeholder="请输入内容" class="layui-textarea" rows="20" name="modelJson"></textarea></div><button class="layui-btn layui-btn-primary layui-btn-fluid" lay-submit="" lay-filter="demo-submit">保存</button></form></div>'
         });
 
         form.render();

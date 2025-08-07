@@ -6,7 +6,6 @@ use CodeIgniter\Router\RouteCollection;
  * @var RouteCollection $routes
  */
 $routes->get('/', 'Model::index');
-$routes->get('/model/index', 'Model::index');
 $routes->get('/model/settings', 'Model::settings');
 $routes->get('/model/fieldlist/(:num)', 'Model::fieldList/$1');
 $routes->get('/model/data/(:any)', 'Model::data/$1');

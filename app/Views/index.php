@@ -6,7 +6,7 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link href="//unpkg.com/layui@2.11.5/dist/css/layui.css" rel="stylesheet">
+  <link href="/public/layui/css/layui.css" rel="stylesheet">
 </head>
 <body>
 <div class="layui-layout layui-layout-admin">
@@ -16,7 +16,7 @@
   <div class="layui-body">
     <!-- 内容主体区域 -->
     <div style="padding: 15px;">
-      <div class="layui-card layui-panel">
+      <div class="layui-card layui-panel" style="height: calc(85vh)">
         <div class="layui-card-header">
           <span class="layui-breadcrumb">
             <a href="/">首页</a>
@@ -47,10 +47,7 @@
       <br><br>
     </div>
   </div>
-  <div class="layui-footer">
-    <!-- 底部固定区域 -->
-    底部固定区域
-  </div>
+  <?= $this->include('public/footer') ?>
 </div>
 
 <script src="//unpkg.com/layui@2.11.5/dist/layui.js"></script>

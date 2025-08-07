@@ -6,33 +6,13 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link href="//unpkg.com/layui@2.11.5/dist/css/layui.css" rel="stylesheet">
+  <link href="/public/layui/css/layui.css" rel="stylesheet">
 </head>
 <body>
 <div class="layui-layout layui-layout-admin">
   <?= $this->include('public/header') ?>
-  <div class="layui-body" style="margin-top: calc(30vh - 100px);left: 35%;">
-    <style>
-      .demo-login-container{width: 320px; margin: 21px auto 0;}
-      .demo-login-other .layui-icon{position: relative; display: inline-block; margin: 0 2px; top: 2px; font-size: 26px;}
-      body {
-        background-image:  url(http://hutc.top/public/bg.jpeg);
-        * 背景图垂直、水平均居中 */
-        background-position: center center;
-        /* 背景图不平铺 */
-        background-repeat: no-repeat;
-        /* 当内容高度大于图片高度时，背景图像的位置相对于viewport固定 */
-        background-attachment: fixed;
-        /* 让背景图基于容器大小伸缩 */
-        background-size: cover;
-        opacity: 0.95; /* 透明度设置为50% */
-        filter: alpha(Opacity=95);
-        -moz-opacity: 0.95;
-        opacity: 0.95;
-        -khtml-opacity: 0.95;
-      }
+  <div class="layui-body" style="left: 0;display: flex;justify-content: center;align-items: center;">
 
-    </style>
     <div class="layui-panel" style="width: 400px;">
       <div style="padding: 32px;">
 
@@ -76,21 +56,17 @@
               <a href="#forget" style="float: right; margin-top: 7px;">忘记密码？</a>
             </div>
             <div class="layui-form-item">
-              <button type="button" class="layui-btn layui-btn-fluid" lay-submit lay-filter="demo-login">登录</button>
+              <button type="button" class="layui-btn layui-btn-primary layui-btn-fluid" lay-submit lay-filter="demo-login">登录</button>
             </div>
 
           </div>
         </form>
 
-
       </div>
     </div>
 
   </div>
-  <div class="layui-footer" style="left: 0px;">
-    <!-- 底部固定区域 -->
-    底部固定区域
-  </div>
+  <?= $this->include('public/footer') ?>
 </div>
 
 <script src="//unpkg.com/layui@2.11.5/dist/layui.js"></script>

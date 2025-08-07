@@ -79,16 +79,16 @@ class Model extends BaseController
     $fieldArr = $this->_modelFields($modelName);
     $fieldForm = $this->fieldForm($fieldArr, $rowData);
     if (isset($get['t']) && $get['t'] == 'child') {
-      $rowHtml = '<div style="padding: 16px;"><form class="layui-form" lay-filter="demo-val-filter" id="'.$modelName.'">' . $fieldForm . '<div class="layui-form-item"><label class="layui-form-label"></label><div class="layui-input-block"><button  type="button" class="layui-btn" lay-submit lay-filter="child-submit">编辑</button></div></div></form></div>';
+      $rowHtml = '<div style="padding: 16px;"><form class="layui-form" lay-filter="demo-val-filter" id="'.$modelName.'">' . $fieldForm . '<div class="layui-form-item"><label class="layui-form-label"></label><div class="layui-input-block"><button  type="button" class="layui-btn layui-btn-primary" lay-submit lay-filter="child-submit">编辑</button></div></div></form></div>';
     }
     else {
-      $rowHtml = '<div style="padding: 16px;"><form class="layui-form" lay-filter="demo-val-filter" id="'.$modelName.'">' . $fieldForm . '<div class="layui-form-item"><label class="layui-form-label"></label><div class="layui-input-block"><button  type="button" class="layui-btn" lay-submit lay-filter="demo-submit">编辑</button></div></div></form></div>';
+      $rowHtml = '<div style="padding: 16px;"><form class="layui-form" lay-filter="demo-val-filter" id="'.$modelName.'">' . $fieldForm . '<div class="layui-form-item"><label class="layui-form-label"></label><div class="layui-input-block"><button  type="button" class="layui-btn layui-btn-primary" lay-submit lay-filter="demo-submit">编辑</button></div></div></form></div>';
     }
 
     $body = [];
     $body[] = ['content' => $rowHtml];
     $header = [];
-    $header[] = ['title' => $modelName.'&nbsp;<span class="layui-badge-rim layui-bg-green">parent</span>'];
+    $header[] = ['title' => $modelName.'&nbsp;<span class="layui-badge-rim layui-bg-cyan">parent</span>'];
     $child = $this->_childTab($modelName);
     foreach ($child as $k => $v) {
       $header[] = ['title' => $v['tabName'].'&nbsp;<span class="layui-badge-rim layui-bg-gray">child</span>'];
@@ -216,7 +216,7 @@ class Model extends BaseController
           $form .= '<div class="layui-form-item" pane><label class="layui-form-label">'.$value['title'].'</label><div class="layui-input-block">'.$optionForm.'</div></div>';
           break;
         case 'file':
-          $form .= '<div class="layui-form-item"><label class="layui-form-label">'.$value['title'].'</label><div class="layui-input-block"><div class="layui-btn-group"><button type="button" class="layui-btn layui-btn-sm uploadFile" uploadFieldName="'.$value['field'].'"><i class="layui-icon layui-icon-uploads"></i>文件上传</button><a type="button" class="layui-btn layui-btn-primary layui-btn-sm" href="'.($rowData[$value['field']] =='' ? 'javascript:;':$rowData[$value['field']]).'" target="_blank" id="'.$value['field'].'_btn">'.($rowData[$value['field']] =='' ? '文件地址':$rowData[$value['field']]).'</a></div><input type="text" name="'.$value['field'].'" placeholder="请输入" autocomplete="off" id="'.$value['field'].'" class="layui-input" style="display:none;" '.$inputValue.'></div></div>';
+          $form .= '<div class="layui-form-item"><label class="layui-form-label">'.$value['title'].'</label><div class="layui-input-block"><div class="layui-btn-group"><button type="button" class="layui-btn layui-btn-primary layui-btn-sm uploadFile" uploadFieldName="'.$value['field'].'"><i class="layui-icon layui-icon-uploads"></i>文件上传</button><a type="button" class="layui-btn layui-btn-primary layui-btn-sm" href="'.($rowData[$value['field']] =='' ? 'javascript:;':$rowData[$value['field']]).'" target="_blank" id="'.$value['field'].'_btn">'.($rowData[$value['field']] =='' ? '文件地址':$rowData[$value['field']]).'</a></div><input type="text" name="'.$value['field'].'" placeholder="请输入" autocomplete="off" id="'.$value['field'].'" class="layui-input" style="display:none;" '.$inputValue.'></div></div>';
           break;
         case 'json':
           $form .= '<div class="layui-form-item"><label class="layui-form-label">'.$value['title'].'</label><div class="layui-input-block"><textarea placeholder="请输入" class="layui-textarea" name="'.$value['field'].'" name="'.$value['field'].'" lay-verify="required" placeholder="请输入" autocomplete="off">'.$rowData[$value['field']].'</textarea></div></div>';
