@@ -77,7 +77,10 @@ class Model extends BaseController
       return $this->response->setJSON($res);
     }
 
+
     $fieldArr = $this->_modelFields($modelName);
+    array_unshift($fieldArr, ['fixed' => 'left', 'type' => 'checkbox']);
+
 //    print_r($fieldArr);
 //    die();
     if (isset($get['t']) && $get['t'] == 'child') {
@@ -165,8 +168,14 @@ class Model extends BaseController
   public function rowDel($modelName, $rowId)
   {
     $this->checkLogin();
-    $this->db->table($modelName)->delete(['id' => $rowId]);
-    $res = ['code' => '1', 'msg' => '删除记录成功'];
+    try {
+      $this->db->table($modelName)->delete(['id' => $rowId]);
+      $res = ['code' => '1', 'msg' => '删除记录成功'];
+    }
+    catch (\Exception $e) {
+      $res = ['code' => '0', 'msg' => $e->getMessage()];
+    }
+
     return $this->response->setJSON($res);
   }
 
@@ -180,8 +189,13 @@ class Model extends BaseController
     unset($post['file']);
     if ($rowId == '0') {
       unset($post['id']);
-      $this->db->table(''.$modelName)->insert($post);
-      $res = ['code' => '1', 'msg' => '添加成功'];
+      try {
+        $this->db->table(''.$modelName)->insert($post);
+        $res = ['code' => '1', 'msg' => '添加成功'];
+      }
+      catch (\Exception $e) {
+        $res = ['code' => '0', 'msg' => $e->getMessage()];
+      }
     }
     else {
       try {
@@ -249,7 +263,7 @@ class Model extends BaseController
       $fieldTypeArr = explode('|', $fieldType);
       $inputValue = empty($rowData) ? '':' value="'.$rowData[$value['field']].'"';
       $foreignKey = '';
-      $layVerify = empty($search) ? '' : 'required';
+      $layVerify = empty($search) ? '' : '';
 
 //      print_r($layVerify);
 //      die();

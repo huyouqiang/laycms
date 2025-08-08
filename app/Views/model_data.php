@@ -42,6 +42,9 @@
     <button type="button" class="layui-btn layui-btn-primary layui-btn-sm" lay-event="add">
       <i class="layui-icon layui-icon-add-1"></i>
     </button>
+    <button type="button" class="layui-btn layui-btn-primary layui-btn-sm" lay-event="batchDelete">
+      <i class="layui-icon layui-icon-delete"></i>
+    </button>
     <button type="button" class="layui-btn layui-btn-primary layui-btn-sm" lay-event="search">
       <i class="layui-icon layui-icon-search"></i>
     </button>
@@ -268,6 +271,46 @@
             //token: '新的 token2'
           } // 搜索的字段
         });
+      }
+      else if (obj.event === 'batchDelete') {
+        var id = obj.config.id;
+        var checkStatus = table.checkStatus(id);
+        var othis = lay(this);
+        var data = checkStatus.data;
+        console.log(data);
+        layer.confirm('真的删除这些行么', function(index) {
+          $.each(data, function(index, obj) {
+
+            console.log(obj.id);
+            $.ajax({
+              type: "GET",                      //请求类型
+              url: "/model/rowdel/<?= $modelName ?>/" + obj.id,           //URL
+              dataType: "json",
+              data: '',   //传递的参数
+              success: function (res) {          //data就是返回的json类型的数据
+                if (res.code == '1') {
+                  layer.msg(res.msg);
+                } else {
+                  layer.msg(res.msg);
+                }
+              }
+            });
+
+          });
+          table.reload('test', {
+            page: {
+              curr: 1 // 重新从第 1 页开始
+            },
+            where: {
+
+              //test: '新的 test2',
+              //token: '新的 token2'
+            } // 搜索的字段
+          });
+        });
+
+
+
       }
     });
 
