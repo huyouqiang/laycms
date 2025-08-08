@@ -1,0 +1,128 @@
+DEBUG - 2025-08-08 08:44:46 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-08-08 08:44:46 --> type: GET post: [] page: /model/data/usr_student ip: 127.0.0.1 agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 response: ""
+DEBUG - 2025-08-08 08:44:46 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-08-08 08:44:46 --> type: GET post: [] page: /login ip: 127.0.0.1 agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 response: ""
+INFO - 2025-08-08 08:44:46 --> type: GET post: [] page: /login ip: 127.0.0.1 agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 response: {"menus":[{"group":"\u5b66\u751f\u5206\u7ec41","model":[{"name_en":"usr_student","name_ch":"\u5b66\u751f\u5217\u88681"}]},{"group":"\u5b66\u751f\u5206\u7ec42","model":[{"name_en":"usr_school","name_ch":"\u5b66\u6821\u5217\u88681"}]}]}
+DEBUG - 2025-08-08 08:44:53 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-08-08 08:44:53 --> type: GET post: [] page: /login?userName=adminer&passWord=123456 ip: 127.0.0.1 agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 response: ""
+DEBUG - 2025-08-08 08:44:53 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-08-08 08:44:53 --> type: GET post: [] page: / ip: 127.0.0.1 agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 response: ""
+INFO - 2025-08-08 08:44:53 --> type: GET post: [] page: / ip: 127.0.0.1 agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 response: {"menus":[{"group":"\u5b66\u751f\u5206\u7ec41","model":[{"name_en":"usr_student","name_ch":"\u5b66\u751f\u5217\u88681"}]},{"group":"\u5b66\u751f\u5206\u7ec42","model":[{"name_en":"usr_school","name_ch":"\u5b66\u6821\u5217\u88681"}]}],"sqlVersion":{"sqlVersion":"8.0.42"}}
+DEBUG - 2025-08-08 08:44:54 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-08-08 08:44:54 --> type: GET post: [] page: /model/data/usr_student ip: 127.0.0.1 agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 response: ""
+DEBUG - 2025-08-08 08:44:54 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-08-08 08:44:54 --> type: GET post: [] page: /model/data/usr_student?page=1&limit=50 ip: 127.0.0.1 agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 response: ""
+DEBUG - 2025-08-08 08:45:35 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-08-08 08:45:35 --> type: GET post: [] page: /model/data/usr_student ip: 127.0.0.1 agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 response: ""
+DEBUG - 2025-08-08 08:45:35 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-08-08 08:45:35 --> type: GET post: [] page: /model/data/usr_student?page=1&limit=50 ip: 127.0.0.1 agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 response: ""
+DEBUG - 2025-08-08 08:46:24 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-08-08 08:46:24 --> type: GET post: [] page: /model/data/usr_student ip: 127.0.0.1 agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 response: ""
+DEBUG - 2025-08-08 08:46:24 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-08-08 08:46:24 --> type: GET post: [] page: /model/data/usr_student?page=1&limit=50 ip: 127.0.0.1 agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 response: ""
+DEBUG - 2025-08-08 08:46:25 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-08-08 08:46:25 --> type: GET post: [] page: /model/data/usr_student?page=1&limit=50 ip: 127.0.0.1 agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 response: ""
+DEBUG - 2025-08-08 08:46:26 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-08-08 08:46:26 --> type: GET post: [] page: /model/data/usr_student?page=1&limit=50 ip: 127.0.0.1 agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 response: ""
+DEBUG - 2025-08-08 08:46:27 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-08-08 08:46:27 --> type: GET post: [] page: /model/data/usr_student?page=1&limit=50 ip: 127.0.0.1 agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 response: ""
+DEBUG - 2025-08-08 08:46:27 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-08-08 08:46:27 --> type: GET post: [] page: /model/rowform/usr_student/0?t=search ip: 127.0.0.1 agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 response: ""
+DEBUG - 2025-08-08 08:46:34 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-08-08 08:46:34 --> type: GET post: [] page: /model/data/usr_student?page=1&limit=50&create_time=&student_name=&student_gender=3&student_json=&student_html=&student_float=&student_select=1 ip: 127.0.0.1 agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 response: ""
+DEBUG - 2025-08-08 08:46:38 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-08-08 08:46:38 --> type: GET post: [] page: /model/data/usr_student?page=1&limit=50&create_time=&student_name=&student_gender=3&student_json=&student_html=&student_float=&student_select=1 ip: 127.0.0.1 agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 response: ""
+DEBUG - 2025-08-08 08:46:39 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-08-08 08:46:39 --> type: GET post: [] page: /model/data/usr_student?page=1&limit=50&create_time=&student_name=&student_gender=3&student_json=&student_html=&student_float=&student_select=1 ip: 127.0.0.1 agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 response: ""
+DEBUG - 2025-08-08 08:46:40 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-08-08 08:46:40 --> type: GET post: [] page: /model/data/usr_student?page=1&limit=50&create_time=&student_name=&student_gender=3&student_json=&student_html=&student_float=&student_select=1 ip: 127.0.0.1 agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 response: ""
+DEBUG - 2025-08-08 08:50:38 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-08-08 08:50:38 --> type: GET post: [] page: /model/data/usr_student ip: 127.0.0.1 agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 response: ""
+DEBUG - 2025-08-08 08:50:40 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-08-08 08:50:40 --> type: GET post: [] page: /model/data/usr_student ip: 127.0.0.1 agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 response: ""
+DEBUG - 2025-08-08 08:51:18 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-08-08 08:51:18 --> type: GET post: [] page: /model/data/usr_student ip: 127.0.0.1 agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 response: ""
+DEBUG - 2025-08-08 08:51:18 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-08-08 08:51:18 --> type: GET post: [] page: /model/data/usr_student?page=1&limit=50 ip: 127.0.0.1 agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 response: ""
+DEBUG - 2025-08-08 08:51:20 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-08-08 08:51:20 --> type: GET post: [] page: /model/rowform/usr_student/0?t=search ip: 127.0.0.1 agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 response: ""
+DEBUG - 2025-08-08 08:51:23 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-08-08 08:51:23 --> type: GET post: [] page: /model/data/usr_student?page=1&limit=50&create_time=&student_name=&student_gender=3&student_json=&student_html=&student_float=&student_select=1 ip: 127.0.0.1 agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 response: ""
+DEBUG - 2025-08-08 08:51:25 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-08-08 08:51:25 --> type: GET post: [] page: /model/data/usr_student?page=1&limit=50&id= ip: 127.0.0.1 agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 response: ""
+ERROR - 2025-08-08 08:51:25 --> mysqli_sql_exception: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '' at line 1 in /opt/homebrew/var/www/laycms/system/Database/MySQLi/Connection.php:327
+Stack trace:
+#0 /opt/homebrew/var/www/laycms/system/Database/MySQLi/Connection.php(327): mysqli->query('select count(id...', 0)
+#1 /opt/homebrew/var/www/laycms/system/Database/BaseConnection.php(729): CodeIgniter\Database\MySQLi\Connection->execute('select count(id...')
+#2 /opt/homebrew/var/www/laycms/system/Database/BaseConnection.php(646): CodeIgniter\Database\BaseConnection->simpleQuery('select count(id...')
+#3 /opt/homebrew/var/www/laycms/app/Controllers/Model.php(69): CodeIgniter\Database\BaseConnection->query('select count(id...')
+#4 /opt/homebrew/var/www/laycms/system/CodeIgniter.php(933): App\Controllers\Model->data('usr_student')
+#5 /opt/homebrew/var/www/laycms/system/CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Model))
+#6 /opt/homebrew/var/www/laycms/system/CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#7 /opt/homebrew/var/www/laycms/system/Boot.php(363): CodeIgniter\CodeIgniter->run()
+#8 /opt/homebrew/var/www/laycms/system/Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#9 /opt/homebrew/var/www/laycms/index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#10 {main}
+CRITICAL - 2025-08-08 08:51:25 --> CodeIgniter\Database\Exceptions\DatabaseException: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '' at line 1
+[Method: GET, Route: model/data/usr_student]
+in SYSTEMPATH/Database/BaseConnection.php on line 684.
+ 1 APPPATH/Controllers/Model.php(69): CodeIgniter\Database\BaseConnection->query('select count(id) as rowNum from usr_student  where ')
+ 2 SYSTEMPATH/CodeIgniter.php(933): App\Controllers\Model->data('usr_student')
+ 3 SYSTEMPATH/CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Model))
+ 4 SYSTEMPATH/CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 SYSTEMPATH/Boot.php(363): CodeIgniter\CodeIgniter->run()
+ 6 SYSTEMPATH/Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 7 FCPATH/index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2025-08-08 08:51:25 --> [Caused by] CodeIgniter\Database\Exceptions\DatabaseException: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '' at line 1
+in SYSTEMPATH/Database/MySQLi/Connection.php on line 332.
+ 1 SYSTEMPATH/Database/BaseConnection.php(729): CodeIgniter\Database\MySQLi\Connection->execute('select count(id) as rowNum from usr_student  where ')
+ 2 SYSTEMPATH/Database/BaseConnection.php(646): CodeIgniter\Database\BaseConnection->simpleQuery('select count(id) as rowNum from usr_student  where ')
+ 3 APPPATH/Controllers/Model.php(69): CodeIgniter\Database\BaseConnection->query('select count(id) as rowNum from usr_student  where ')
+ 4 SYSTEMPATH/CodeIgniter.php(933): App\Controllers\Model->data('usr_student')
+ 5 SYSTEMPATH/CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Model))
+ 6 SYSTEMPATH/CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 7 SYSTEMPATH/Boot.php(363): CodeIgniter\CodeIgniter->run()
+ 8 SYSTEMPATH/Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 9 FCPATH/index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2025-08-08 08:51:25 --> [Caused by] mysqli_sql_exception: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '' at line 1
+in SYSTEMPATH/Database/MySQLi/Connection.php on line 327.
+ 1 SYSTEMPATH/Database/MySQLi/Connection.php(327): mysqli->query('select count(id) as rowNum from usr_student  where ', 0)
+ 2 SYSTEMPATH/Database/BaseConnection.php(729): CodeIgniter\Database\MySQLi\Connection->execute('select count(id) as rowNum from usr_student  where ')
+ 3 SYSTEMPATH/Database/BaseConnection.php(646): CodeIgniter\Database\BaseConnection->simpleQuery('select count(id) as rowNum from usr_student  where ')
+ 4 APPPATH/Controllers/Model.php(69): CodeIgniter\Database\BaseConnection->query('select count(id) as rowNum from usr_student  where ')
+ 5 SYSTEMPATH/CodeIgniter.php(933): App\Controllers\Model->data('usr_student')
+ 6 SYSTEMPATH/CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Model))
+ 7 SYSTEMPATH/CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 8 SYSTEMPATH/Boot.php(363): CodeIgniter\CodeIgniter->run()
+ 9 SYSTEMPATH/Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+10 FCPATH/index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+DEBUG - 2025-08-08 08:51:55 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-08-08 08:51:55 --> type: GET post: [] page: /model/data/usr_student ip: 127.0.0.1 agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 response: ""
+DEBUG - 2025-08-08 08:51:56 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-08-08 08:51:56 --> type: GET post: [] page: /model/data/usr_student?page=1&limit=50 ip: 127.0.0.1 agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 response: ""
+DEBUG - 2025-08-08 08:51:57 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-08-08 08:51:57 --> type: GET post: [] page: /model/rowform/usr_student/0?t=search ip: 127.0.0.1 agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 response: ""
+DEBUG - 2025-08-08 08:51:59 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-08-08 08:51:59 --> type: GET post: [] page: /model/data/usr_student?page=1&limit=50&create_time=&student_name=&student_gender=3&student_json=&student_html=&student_float=&student_select=1 ip: 127.0.0.1 agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 response: ""
+DEBUG - 2025-08-08 08:52:02 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-08-08 08:52:02 --> type: GET post: [] page: /model/data/usr_student?page=1&limit=50 ip: 127.0.0.1 agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 response: ""
+DEBUG - 2025-08-08 08:52:32 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-08-08 08:52:32 --> type: GET post: [] page: /model/data/usr_school ip: 127.0.0.1 agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 response: ""
+DEBUG - 2025-08-08 08:52:32 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-08-08 08:52:32 --> type: GET post: [] page: /model/data/usr_school?page=1&limit=50 ip: 127.0.0.1 agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 response: ""
+DEBUG - 2025-08-08 08:52:33 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-08-08 08:52:33 --> type: GET post: [] page: /model/data/usr_student ip: 127.0.0.1 agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 response: ""
+DEBUG - 2025-08-08 08:52:33 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-08-08 08:52:33 --> type: GET post: [] page: /model/data/usr_student?page=1&limit=50 ip: 127.0.0.1 agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 response: ""
+DEBUG - 2025-08-08 08:52:35 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-08-08 08:52:35 --> type: GET post: [] page: /model/data/usr_school ip: 127.0.0.1 agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 response: ""
+DEBUG - 2025-08-08 08:52:35 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-08-08 08:52:35 --> type: GET post: [] page: /model/data/usr_school?page=1&limit=50 ip: 127.0.0.1 agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 response: ""
+DEBUG - 2025-08-08 08:52:36 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-08-08 08:52:36 --> type: GET post: [] page: /model/data/usr_student ip: 127.0.0.1 agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 response: ""
+DEBUG - 2025-08-08 08:52:36 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-08-08 08:52:36 --> type: GET post: [] page: /model/data/usr_student?page=1&limit=50 ip: 127.0.0.1 agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 response: ""
+DEBUG - 2025-08-08 08:52:36 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-08-08 08:52:36 --> type: GET post: [] page: /model/data/usr_school ip: 127.0.0.1 agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 response: ""
+DEBUG - 2025-08-08 08:52:37 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-08-08 08:52:37 --> type: GET post: [] page: /model/data/usr_school?page=1&limit=50 ip: 127.0.0.1 agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 response: ""

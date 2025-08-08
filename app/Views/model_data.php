@@ -45,6 +45,9 @@
     <button type="button" class="layui-btn layui-btn-primary layui-btn-sm" lay-event="search">
       <i class="layui-icon layui-icon-search"></i>
     </button>
+    <button type="button" class="layui-btn layui-btn-primary layui-btn-sm" lay-event="reload">
+      <i class="layui-icon layui-icon-refresh"></i>
+    </button>
 <!--    <button type="button" class="layui-btn layui-btn-primary layui-btn-sm" lay-event="export">-->
 <!--      <i class="layui-icon layui-icon-export"></i>-->
 <!--    </button>-->
@@ -252,6 +255,18 @@
             });
 
           }
+        });
+      }
+      else if (obj.event === 'reload') {
+        table.reload('test', {
+          page: {
+            curr: 1 // 重新从第 1 页开始
+          },
+          where: {
+
+            //test: '新的 test2',
+            //token: '新的 token2'
+          } // 搜索的字段
         });
       }
     });
