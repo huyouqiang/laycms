@@ -19,7 +19,7 @@ use CodeIgniter\Config\DotEnv;
 
 /**
  * Command to display the current environment,
- * or set a new one in the `.env` file.
+ * or set a new one in the `..env` file.
  */
 final class Environment extends BaseCommand
 {
@@ -36,7 +36,7 @@ final class Environment extends BaseCommand
      *
      * @var string
      */
-    protected $name = 'env';
+    protected $name = '.env';
 
     /**
      * The Command's short description
@@ -50,7 +50,7 @@ final class Environment extends BaseCommand
      *
      * @var string
      */
-    protected $usage = 'env [<environment>]';
+    protected $usage = '.env [<environment>]';
 
     /**
      * The Command's arguments
@@ -109,7 +109,7 @@ final class Environment extends BaseCommand
         }
 
         if (! $this->writeNewEnvironmentToEnvFile($env)) {
-            CLI::error('Error in writing new environment to .env file.', 'light_gray', 'red');
+            CLI::error('Error in writing new environment to ..env file.', 'light_gray', 'red');
             CLI::newLine();
 
             return EXIT_ERROR;
@@ -133,12 +133,12 @@ final class Environment extends BaseCommand
      */
     private function writeNewEnvironmentToEnvFile(string $newEnv): bool
     {
-        $baseEnv = ROOTPATH . 'env';
-        $envFile = ROOTPATH . '.env';
+        $baseEnv = ROOTPATH . '.env';
+        $envFile = ROOTPATH . '..env';
 
         if (! is_file($envFile)) {
             if (! is_file($baseEnv)) {
-                CLI::write('Both default shipped `env` file and custom `.env` are missing.', 'yellow');
+                CLI::write('Both default shipped `.env` file and custom `..env` are missing.', 'yellow');
                 CLI::write('It is impossible to write the new environment type.', 'yellow');
                 CLI::newLine();
 

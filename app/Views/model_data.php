@@ -64,7 +64,7 @@
 <script src="//unpkg.com/layui@2.11.5/dist/layui.js"></script>
 <script>
 
-  layui.use(['element', 'layer', 'util', 'form', 'table', 'upload', 'tabs'], function(){
+  layui.use(['element', 'layer', 'util', 'form', 'table', 'upload', 'tabs', 'laydate'], function(){
     var element = layui.element;
     var layer = layui.layer;
     var util = layui.util;
@@ -72,6 +72,7 @@
     var table = layui.table;
     var upload = layui.upload;
     var tabs = layui.tabs;
+    var laydate = layui.laydate;
     var $ = layui.$;
 
 
@@ -119,6 +120,11 @@
             });
 
             form.render();
+            // 日期
+            laydate.render({
+              elem: '.lay-date',
+              type: 'datetime'
+            });
             // 单图片上传
             upload.render({
               elem: '.uploadFile',
@@ -199,6 +205,54 @@
       }
       else if (obj.event === 'search') {
         layer.msg('搜索');
+        $.ajax({
+          type: "get",                      //请求类型
+          url: "/model/rowform/<?= $modelName ?>/0?t=search",           //URL
+          // dataType: "json",
+          // data:formData.field,   //传递的参数
+          success: function (res) {
+            // layer.msg(res.msg);
+
+
+            layer.open({
+              title: '搜索',
+              type: 1,
+              area: ['60%', '60%'],
+              content: '<div id="demoTabs2"></div>'
+            });
+
+            console.log(res);
+
+            // 方法渲染
+            tabs.render({
+              elem: '#demoTabs2',
+              header: res.header,
+              body: res.body,
+            });
+
+            form.render();
+            // 日期
+            laydate.render({
+              elem: '.lay-date',
+              type: 'datetime'
+            });
+
+            // 搜索提交
+            form.on('submit(demo-table-search)', function(data){
+              var field = data.field; // 获得表单字段
+              // 执行搜索重载
+              table.reload('test', {
+                page: {
+                  curr: 1 // 重新从第 1 页开始
+                },
+                where: field // 搜索的字段
+              });
+              // layer.msg('搜索成功<br>此处为静态模拟数据，实际使用时换成真实接口即可');
+              return false; // 阻止默认 form 跳转
+            });
+
+          }
+        });
       }
     });
 
@@ -234,6 +288,11 @@
             });
 
             form.render();
+            // 日期
+            laydate.render({
+              elem: '.lay-date',
+              type: 'datetime'
+            });
 
             tabs.on('afterChange(demoTabs2)', function(data) {
               var index = data.index;

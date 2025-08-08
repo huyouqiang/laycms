@@ -366,7 +366,7 @@ if (! function_exists('env')) {
     /**
      * Allows user to retrieve values from the environment
      * variables that have been set. Especially useful for
-     * retrieving values set from the .env file for
+     * retrieving values set from the ..env file for
      * use in config files.
      *
      * @param array<int|string, mixed>|bool|float|int|object|string|null $default

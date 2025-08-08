@@ -281,8 +281,8 @@ class Logger implements LoggerInterface
      * {session_vars}
      * {post_vars}
      * {get_vars}
-     * {env}
-     * {env:foo}
+     * {.env}
+     * {.env:foo}
      * {file}
      * {line}
      *
@@ -312,7 +312,7 @@ class Logger implements LoggerInterface
 
         $replace['{post_vars}'] = '$_POST: ' . print_r($_POST, true);
         $replace['{get_vars}']  = '$_GET: ' . print_r($_GET, true);
-        $replace['{env}']       = ENVIRONMENT;
+        $replace['{.env}']       = ENVIRONMENT;
 
         // Allow us to log the file/line that we are logging from
         if (str_contains($message, '{file}') || str_contains($message, '{line}')) {
@@ -322,12 +322,12 @@ class Logger implements LoggerInterface
             $replace['{line}'] = $line;
         }
 
-        // Match up environment variables in {env:foo} tags.
-        if (str_contains($message, 'env:')) {
-            preg_match('/env:[^}]+/', $message, $matches);
+        // Match up environment variables in {.env:foo} tags.
+        if (str_contains($message, '.env:')) {
+            preg_match('/.env:[^}]+/', $message, $matches);
 
             foreach ($matches as $str) {
-                $key                 = str_replace('env:', '', $str);
+                $key                 = str_replace('.env:', '', $str);
                 $replace["{{$str}}"] = $_ENV[$key] ?? 'n/a';
             }
         }

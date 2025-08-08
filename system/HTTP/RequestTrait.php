@@ -213,12 +213,12 @@ trait RequestTrait
      *
      * @return mixed
      *
-     * @deprecated 4.4.4 This method does not work from the beginning. Use `env()`.
+     * @deprecated 4.4.4 This method does not work from the beginning. Use `.env()`.
      */
     public function getEnv($index = null, $filter = null, $flags = null)
     {
         // @phpstan-ignore-next-line
-        return $this->fetchGlobal('env', $index, $filter, $flags);
+        return $this->fetchGlobal('.env', $index, $filter, $flags);
     }
 
     /**

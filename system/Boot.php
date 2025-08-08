@@ -165,7 +165,7 @@ class Boot
     }
 
     /**
-     * Load environment settings from .env files into $_SERVER and $_ENV
+     * Load environment settings from ..env files into $_SERVER and $_ENV
      */
     protected static function loadDotEnv(Paths $paths): void
     {

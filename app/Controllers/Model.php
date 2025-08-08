@@ -27,17 +27,47 @@ class Model extends BaseController
     if ( isset($get['page']) ) {
       $page = isset($get['page']) ? (($get['page']-1)*$get['limit']):0;
       $fieldArr = $this->_modelFields($modelName);
-      $fk = '';
+      $where = " ";
       if ( isset($get['pid']) ) {
         foreach ($fieldArr as $k => $v) {
           if ($v['priTab'] != '') {
-            $fk = ' where ' . $v['field'] . ' = ' . $get['pid'] . ' ';
+            $where = ' where ' . $v['field'] . ' = ' . $get['pid'] . ' ';
           }
         }
       }
 
-      $rowNum = $this->db->query("select count(id) as rowNum from ".$modelName)->getRowArray();
-      $data = $this->db->query("select * from ".$modelName.$fk." order by id desc limit {$page},{$get['limit']}")->getResultArray();
+      if (sizeof($get) > 2) {
+        $search = $get;
+        unset($search['page'], $search['limit']);
+        foreach ($search as $k => $v) {
+          if (empty($v)) {
+            unset($search[$k]);
+          }
+        }
+        $keys = array_keys($search);
+        $values = array_values($search);
+        $where .= ' where ';
+        foreach ($keys as $k => $v) {
+
+
+          if (is_array($values[$k])) {
+            $where .= "$keys[$k] like '%".implode(',', $values[$k])."%'";
+          }
+          else {
+            $where .= "$keys[$k] like '%".$values[$k]."%'";
+          }
+
+          if (sizeof($values) != ($k + 1)) {
+            $where .= " and ";
+          }
+
+        }
+//        print_r($where);
+//        die();
+      }
+
+      $rowNum = $this->db->query("select count(id) as rowNum from ".$modelName.$where)->getRowArray();
+      $data = $this->db->query("select * from ".$modelName.$where." order by id desc limit {$page},{$get['limit']}")->getResultArray();
 
       $data = $this->_tabList($modelName, $data);
 
@@ -84,7 +114,8 @@ class Model extends BaseController
     }
 //    print_r($rowData);
 //    die();
-    $fieldForm = $this->fieldForm($fieldArr, $rowData);
+    $search = (isset($get['t']) && $get['t'] == 'search') ? '' : '1';
+    $fieldForm = $this->fieldForm($fieldArr, $rowData, $search);
 
     if (isset($get['t']) && $get['t'] == 'child' && $rowId != 0) {
       $rowHtml = '<div style="padding: 16px;"><form class="layui-form" lay-filter="demo-val-filter" id="'.$modelName.'">' . $fieldForm . '<div class="layui-form-item"><label class="layui-form-label"></label><div class="layui-input-block"><button  type="button" class="layui-btn layui-btn-primary" lay-submit lay-filter="child-submit">编辑</button></div></div></form></div>';
@@ -92,6 +123,10 @@ class Model extends BaseController
     else if( isset($get['t']) && $get['t'] == 'child' && $rowId == 0 ){
 
       $rowHtml = '<div style="padding: 16px;"><form class="layui-form" lay-filter="demo-val-filter" id="'.$modelName.'">' . $fieldForm . '<div class="layui-form-item"><label class="layui-form-label"></label><div class="layui-input-block"><button  type="button" class="layui-btn layui-btn-primary" lay-submit lay-filter="child-submit">增加</button></div></div></form></div>';
+    }
+    else if( isset($get['t']) && $get['t'] == 'search' && $rowId == 0 ){
+
+      $rowHtml = '<div style="padding: 16px;"><form class="layui-form" lay-filter="demo-val-filter" id="'.$modelName.'">' . $fieldForm . '<div class="layui-form-item"><label class="layui-form-label"></label><div class="layui-input-block"><button  type="button" class="layui-btn layui-btn-primary" lay-submit lay-filter="demo-table-search">搜索</button></div></div></form></div>';
     }
     else if( !isset($get['t']) && $rowId != 0 ){
 
@@ -205,7 +240,7 @@ class Model extends BaseController
 
   //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-  private function fieldForm($fieldArr, $rowData = []):string
+  private function fieldForm($fieldArr, $rowData = [], $search = ''):string
   {
     $form = '';
     foreach ($fieldArr as $key => $value) {
@@ -214,6 +249,10 @@ class Model extends BaseController
       $fieldTypeArr = explode('|', $fieldType);
       $inputValue = empty($rowData) ? '':' value="'.$rowData[$value['field']].'"';
       $foreignKey = '';
+      $layVerify = empty($search) ? '' : 'required';
+
+//      print_r($layVerify);
+//      die();
 
       switch ($fieldTypeArr['0']) {
         case 'input':
@@ -221,14 +260,14 @@ class Model extends BaseController
             $form .= '';
           }
           else {
-            $form .= '<div class="layui-form-item"><label class="layui-form-label">'.$value['title'].'</label><div class="layui-input-block"><input type="text" name="'.$value['field'].'" lay-verify="required" placeholder="请输入" autocomplete="off" class="layui-input" '.$inputValue.'></div>'.$foreignKey.'</div>';
+            $form .= '<div class="layui-form-item"><label class="layui-form-label">'.$value['title'].'</label><div class="layui-input-block"><input type="text" name="'.$value['field'].'" lay-verify="'.$layVerify.'" placeholder="请输入" autocomplete="off" class="layui-input" '.$inputValue.'></div>'.$foreignKey.'</div>';
           }
           break;
         case 'date':
-          $form .= '<div class="layui-form-item"><label class="layui-form-label">'.$value['title'].'</label><div class="layui-input-block"><input type="text" name="'.$value['field'].'" lay-verify="required" placeholder="请输入" autocomplete="off" class="layui-input" '.$inputValue.'></div></div>';
+          $form .= '<div class="layui-form-item"><label class="layui-form-label">'.$value['title'].'</label><div class="layui-input-block"><input type="text" name="'.$value['field'].'" placeholder="yyyy-MM-dd HH:mm:ss" autocomplete="off" class="layui-input lay-date" '.$inputValue.'  lay-verify="datetime" ></div></div>';
           break;
         case 'float':
-          $form .= '<div class="layui-form-item"><label class="layui-form-label">'.$value['title'].'</label><div class="layui-input-block"><input type="text" name="'.$value['field'].'" lay-verify="required" placeholder="请输入" autocomplete="off" class="layui-input" '.$inputValue.'></div></div>';
+          $form .= '<div class="layui-form-item"><label class="layui-form-label">'.$value['title'].'</label><div class="layui-input-block"><input type="text" name="'.$value['field'].'" lay-verify="'.$layVerify.'" placeholder="请输入" autocomplete="off" class="layui-input" '.$inputValue.'></div></div>';
           break;
         case 'radio':
           $radioArr = explode('&', $fieldTypeArr['1']);
@@ -241,13 +280,18 @@ class Model extends BaseController
           $form .= '<div class="layui-form-item" pane><label class="layui-form-label">'.$value['title'].'</label><div class="layui-input-block">'.$optionForm.'</div></div>';
           break;
         case 'file':
-          $form .= '<div class="layui-form-item"><label class="layui-form-label">'.$value['title'].'</label><div class="layui-input-block"><div class="layui-btn-group"><button type="button" class="layui-btn layui-btn-primary layui-btn-sm uploadFile" uploadFieldName="'.$value['field'].'"><i class="layui-icon layui-icon-uploads"></i>文件上传</button><a type="button" class="layui-btn layui-btn-primary layui-btn-sm" href="'.($rowData[$value['field']] =='' ? 'javascript:;':$rowData[$value['field']]).'" target="_blank" id="'.$value['field'].'_btn">'.($rowData[$value['field']] =='' ? '文件地址':$rowData[$value['field']]).'</a></div><input type="text" name="'.$value['field'].'" placeholder="请输入" autocomplete="off" id="'.$value['field'].'" class="layui-input" style="display:none;" '.$inputValue.'></div></div>';
+          if (empty($search)) {
+            $form .= '';
+          }
+          else {
+            $form .= '<div class="layui-form-item"><label class="layui-form-label">'.$value['title'].'</label><div class="layui-input-block"><div class="layui-btn-group"><button type="button" class="layui-btn layui-btn-primary layui-btn-sm uploadFile" uploadFieldName="'.$value['field'].'"><i class="layui-icon layui-icon-uploads"></i>文件上传</button><a type="button" class="layui-btn layui-btn-primary layui-btn-sm" href="'.($rowData[$value['field']] =='' ? 'javascript:;':$rowData[$value['field']]).'" target="_blank" id="'.$value['field'].'_btn">'.($rowData[$value['field']] =='' ? '文件地址':$rowData[$value['field']]).'</a></div><input type="text" name="'.$value['field'].'" placeholder="请输入" autocomplete="off" id="'.$value['field'].'" class="layui-input" style="display:none;" '.$inputValue.'></div></div>';
+          }
           break;
         case 'json':
-          $form .= '<div class="layui-form-item"><label class="layui-form-label">'.$value['title'].'</label><div class="layui-input-block"><textarea placeholder="请输入" class="layui-textarea" name="'.$value['field'].'" name="'.$value['field'].'" lay-verify="required" placeholder="请输入" autocomplete="off">'.$rowData[$value['field']].'</textarea></div></div>';
+          $form .= '<div class="layui-form-item"><label class="layui-form-label">'.$value['title'].'</label><div class="layui-input-block"><textarea placeholder="请输入" class="layui-textarea" name="'.$value['field'].'" name="'.$value['field'].'" lay-verify="'.$layVerify.'" placeholder="请输入" autocomplete="off">'.$rowData[$value['field']].'</textarea></div></div>';
           break;
         case 'editor':
-          $form .= '<div class="layui-form-item"><label class="layui-form-label">'.$value['title'].'</label><div class="layui-input-block"><textarea placeholder="请输入" class="layui-textarea" name="'.$value['field'].'" name="'.$value['field'].'" lay-verify="required" placeholder="请输入" autocomplete="off" >'.$rowData[$value['field']].'</textarea></div></div>';
+          $form .= '<div class="layui-form-item"><label class="layui-form-label">'.$value['title'].'</label><div class="layui-input-block"><textarea placeholder="请输入" class="layui-textarea" name="'.$value['field'].'" name="'.$value['field'].'" lay-verify="'.$layVerify.'" placeholder="请输入" autocomplete="off" >'.$rowData[$value['field']].'</textarea></div></div>';
           break;
         case 'checkbox':
           $checkboxArr = explode('&', $fieldTypeArr['1']);
