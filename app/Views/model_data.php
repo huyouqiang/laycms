@@ -34,7 +34,22 @@
   </div>
   <?= $this->include('public/footer') ?>
 </div>
-
+<script type="text/html" id="toolbarDemo">
+  <div class="layui-btn-group">
+<!--    <button type="button" class="layui-btn layui-btn-primary layui-btn-sm" lay-event="delete">-->
+<!--      <i class="layui-icon layui-icon-delete"></i>-->
+<!--    </button>-->
+    <button type="button" class="layui-btn layui-btn-primary layui-btn-sm" lay-event="add">
+      <i class="layui-icon layui-icon-add-1"></i>
+    </button>
+    <button type="button" class="layui-btn layui-btn-primary layui-btn-sm" lay-event="search">
+      <i class="layui-icon layui-icon-search"></i>
+    </button>
+<!--    <button type="button" class="layui-btn layui-btn-primary layui-btn-sm" lay-event="export">-->
+<!--      <i class="layui-icon layui-icon-export"></i>-->
+<!--    </button>-->
+  </div>
+</script>
 <script type="text/html" id="toolDemo">
   <div class="layui-btn-group">
     <button type="button" class="layui-btn layui-btn-primary layui-btn-sm" lay-event="edit">
@@ -64,11 +79,127 @@
     table.render({
       elem: '#test',
       url: '/<?= uri_string() ?>', // 此处为静态模拟数据，实际使用时需换成真实接口
+      toolbar: '#toolbarDemo',
       height: 'full-200', // 最大高度减去其他容器已占有的高度差
       cellMinWidth: 120,
       page: true,
       limit: 50,
       cols: [<?= $fieldJson ?>],
+    });
+
+    // 触发单元格工具事件
+    // 工具栏事件
+    table.on('toolbar(test)', function(obj){
+      if (obj.event === 'add') {
+        // layer.msg('增加');
+
+        $.ajax({
+          type: "get",                      //请求类型
+          url: "/model/rowform/<?= $modelName ?>/0",           //URL
+          // dataType: "json",
+          // data:formData.field,   //传递的参数
+          success: function (res) {
+            // layer.msg(res.msg);
+
+
+            layer.open({
+              title: '添加',
+              type: 1,
+              area: ['100%', '100%'],
+              content: '<div id="demoTabs2"></div>'
+            });
+
+            console.log(res);
+
+            // 方法渲染
+            tabs.render({
+              elem: '#demoTabs2',
+              header: res.header,
+              body: res.body,
+            });
+
+            form.render();
+            // 单图片上传
+            upload.render({
+              elem: '.uploadFile',
+              url: '/model/uploadfile', // 实际使用时改成您自己的上传接口即可。
+              before: function(obj){
+                layer.msg('上传中...');
+              },
+              done: function(res){
+                if(res.code == '1'){
+                  // $(this).next().html(res.msg);
+                  console.log(this.item);
+                  var uploadFieldName = $(this.item).attr('uploadFieldName');
+                  $("#" + uploadFieldName + '_btn').text(res.msg);
+                  $("#" + uploadFieldName + '_btn').attr('href', res.msg);
+                  $("#" + uploadFieldName).val(res.msg);
+                  // layer.msg($("#" + uploadFieldName).val());
+
+                }
+                console.log(obj);
+              }
+            });
+          }
+        });
+
+
+        // 提交事件
+        form.on('submit(priAdd)', function(formData){
+          // console.log(formData);
+
+          var rowData = formData.field;
+          delete rowData.file;
+
+          $('input[type=checkbox]').each(function(key, value) {
+            var name = $(this).attr('checkboxName'); // 获取当前checkbox的name属性
+            var value = $(this).val(); // 获取当前checkbox的值
+            var isChecked = $(this).is(':checked'); // 检查是否被选中
+
+            if (!rowData[name]) {
+              rowData[name] = []; // 初始化数组
+            }
+            if (isChecked) {
+              rowData[name].push(value); // 如果被选中，添加到数组中
+            }
+
+          });
+
+          $.each(rowData, function(key, value) {
+
+            if ( key.indexOf('[') !== -1 ) {
+              // alert(key);
+              delete rowData[key];
+            }
+
+            if (Array.isArray(value)) {
+              rowData[key] = value.join(',');
+            }
+
+            // console.log(rowData);
+          });
+
+          // console.log(rowData);
+          //
+          // return false;
+
+          $.ajax({
+            type:"POST",                      //请求类型
+            url:"/model/rowupdate/<?= $modelName ?>/0",           //URL
+            // dataType: "json",
+            data:formData.field,   //传递的参数
+            success:function(res){
+              layer.msg(res.msg);
+              table.reload('test');
+            }
+          });
+
+        });
+
+      }
+      else if (obj.event === 'search') {
+        layer.msg('搜索');
+      }
     });
 
     // 触发单元格工具事件
@@ -374,7 +505,6 @@
       }
     });
 
-    
 
   });
 
