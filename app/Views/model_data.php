@@ -724,7 +724,7 @@
                           data:formData.field,   //传递的参数
                           success:function(res){
                             layer.msg(res.msg);
-                            table.reload('test');
+                            table.reload(tabName);
                           }
                         });
 
