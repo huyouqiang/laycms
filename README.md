@@ -6,51 +6,61 @@
 
 <table>
 <tr>
+  <th>序号</th>
   <th>类型</th>
   <th>长度</th>
   <th>注释</th>
 </tr>
 <tr>
+  <td>1</td>
   <td>int</td>
   <td>不限</td>
   <td>id[input]</td>
 </tr>
 <tr>
+  <td>2</td>
   <td>datetime</td>
   <td>0</td>
   <td>时间[date|Y-m-d H:i:s]</td>
 </tr>
 <tr>
+  <td>3</td>
   <td>tinyint</td>
   <td>不限</td>
   <td>性别[radio|1=男&2=女&3=保密]</td>
 </tr>
 <tr>
+  <td>4</td>
   <td>varchar</td>
   <td>10</td>
   <td>爱好[checkbox|1=看书&2=旅游&3=音乐]</td>
 </tr>
 <tr>
+  <td>5</td>
   <td>varchar</td>
   <td>255</td>
   <td>头像[file]</td>
 </tr>
 <tr>
+  <td>6</td>
   <td>json</td>
   <td>0</td>
   <td>配置[json]</td>
 </tr>
 <tr>
+  <td>7</td>
   <td>text</td>
   <td>0</td>
   <td>富文本[editor]</td>
 </tr>
 <tr>
+  <td>8</td>
   <td>float</td>
   <td>不限</td>
   <td>浮点型[float]</td>
 </tr>
 <tr>
+  <td>9</td>
   <td>tinyint</td>
   <td>不限</td>
   <td>下拉框[select|1=男&2=女]</td>
