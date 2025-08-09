@@ -36,9 +36,6 @@
 </div>
 <script type="text/html" id="toolbarDemo">
   <div class="layui-btn-group">
-<!--    <button type="button" class="layui-btn layui-btn-primary layui-btn-sm" lay-event="delete">-->
-<!--      <i class="layui-icon layui-icon-delete"></i>-->
-<!--    </button>-->
     <button type="button" class="layui-btn layui-btn-primary layui-btn-sm" lay-event="add">
       <i class="layui-icon layui-icon-add-1"></i>
     </button>
@@ -51,9 +48,6 @@
     <button type="button" class="layui-btn layui-btn-primary layui-btn-sm" lay-event="reload">
       <i class="layui-icon layui-icon-refresh"></i>
     </button>
-<!--    <button type="button" class="layui-btn layui-btn-primary layui-btn-sm" lay-event="export">-->
-<!--      <i class="layui-icon layui-icon-export"></i>-->
-<!--    </button>-->
   </div>
 </script>
 <script type="text/html" id="toolDemo">
@@ -94,7 +88,7 @@
       cols: [<?= $fieldJson ?>],
     });
 
-    // 触发单元格工具事件
+
     // 工具栏事件
     table.on('toolbar(test)', function(obj){
       if (obj.event === 'add') {
@@ -244,7 +238,7 @@
             });
 
             // 搜索提交
-            form.on('submit(demo-table-search)', function(data){
+            form.on('submit(<?= $modelName ?>)', function(data){
               var field = data.field; // 获得表单字段
               // 执行搜索重载
               table.reload('test', {
@@ -369,12 +363,234 @@
 
                     table.render({
                       elem: '#' + tabName,
+                      toolbar: '#toolbarDemo',
                       url: '/model/data/' + tabName + '?t=child&pid=' + rowId, // 此处为静态模拟数据，实际使用时需换成真实接口
                       height: 'full-100', // 最大高度减去其他容器已占有的高度差
                       cellMinWidth: 120,
                       page: true,
                       limit: 50,
                       cols: [JSON.parse(res.fieldJson)],
+                    });
+
+                    // 工具栏事件
+                    table.on('toolbar(' + tabName + ')', function(obj){
+                      if (obj.event === 'add') {
+                        // layer.msg('增加');
+
+                        $.ajax({
+                          type: "get",                      //请求类型
+                          url: "/model/rowform/" + tabName + "/0?t=child",           //URL
+                          // dataType: "json",
+                          // data:formData.field,   //传递的参数
+                          success: function (res) {
+                            // layer.msg(res.msg);
+
+
+                            layer.open({
+                              title: '添加',
+                              type: 1,
+                              area: ['100%', '100%'],
+                              content: '<div id="demoTabs3"></div>'
+                            });
+
+                            console.log(res);
+
+                            // 方法渲染
+                            tabs.render({
+                              elem: '#demoTabs3',
+                              header: res.header,
+                              body: res.body,
+                            });
+
+                            form.render();
+                            // 日期
+                            laydate.render({
+                              elem: '.lay-date',
+                              type: 'datetime'
+                            });
+                            // 单图片上传
+                            upload.render({
+                              elem: '.uploadFile',
+                              url: '/model/uploadfile', // 实际使用时改成您自己的上传接口即可。
+                              before: function(obj){
+                                layer.msg('上传中...');
+                              },
+                              done: function(res){
+                                if(res.code == '1'){
+                                  // $(this).next().html(res.msg);
+                                  console.log(this.item);
+                                  var uploadFieldName = $(this.item).attr('uploadFieldName');
+                                  $("#" + uploadFieldName + '_btn').text(res.msg);
+                                  $("#" + uploadFieldName + '_btn').attr('href', res.msg);
+                                  $("#" + uploadFieldName).val(res.msg);
+                                  // layer.msg($("#" + uploadFieldName).val());
+
+                                }
+                                console.log(obj);
+                              }
+                            });
+                          }
+                        });
+
+
+                        // 提交事件
+                        form.on('submit(child-submit)', function(formData){
+                          console.log(formData);
+
+                          var rowData = formData.field;
+                          delete rowData.file;
+
+                          $('#' + tabName + ' input[type=checkbox]').each(function(key, value) {
+                            var name = $(this).attr('checkboxName'); // 获取当前checkbox的name属性
+                            var value = $(this).val(); // 获取当前checkbox的值
+                            var isChecked = $(this).is(':checked'); // 检查是否被选中
+
+                            if (!rowData[name]) {
+                              rowData[name] = []; // 初始化数组
+                            }
+                            if (isChecked) {
+                              rowData[name].push(value); // 如果被选中，添加到数组中
+                            }
+
+                          });
+
+                          $.each(rowData, function(key, value) {
+
+                            if ( key.indexOf('[') !== -1 ) {
+                              // alert(key);
+                              delete rowData[key];
+                            }
+
+                            if (Array.isArray(value)) {
+                              rowData[key] = value.join(',');
+                            }
+
+                            // console.log(rowData);
+                          });
+
+                          // console.log(rowData);
+                          //
+                          // return false;
+
+                          $.ajax({
+                            type:"POST",                      //请求类型
+                            url:"/model/rowupdate/" + tabName + "/0",           //URL
+                            // dataType: "json",
+                            data:formData.field,   //传递的参数
+                            success:function(res){
+                              layer.msg(res.msg);
+                              table.reload(tabName);
+                            }
+                          });
+
+                        });
+
+                      }
+                      else if (obj.event === 'search') {
+                        layer.msg('搜索');
+                        $.ajax({
+                          type: "get",                      //请求类型
+                          url: "/model/rowform/" + tabName + "/0?t=search",           //URL
+                          // dataType: "json",
+                          // data:formData.field,   //传递的参数
+                          success: function (res) {
+                            // layer.msg(res.msg);
+
+
+                            layer.open({
+                              title: '搜索',
+                              type: 1,
+                              area: ['60%', '60%'],
+                              content: '<div id="demoTabs3"></div>'
+                            });
+
+                            console.log(res);
+
+                            // 方法渲染
+                            tabs.render({
+                              elem: '#demoTabs3',
+                              header: res.header,
+                              body: res.body,
+                            });
+
+                            form.render();
+                            // 日期
+                            laydate.render({
+                              elem: '.lay-date',
+                              type: 'datetime'
+                            });
+
+                            // alert(tabName);
+
+                            // 搜索提交
+                            form.on('submit(' + tabName + ')', function(data){
+                              var field = data.field; // 获得表单字段
+                              // 执行搜索重载
+                              table.reload(tabName, {
+                                page: {
+                                  curr: 1 // 重新从第 1 页开始
+                                },
+                                where: field // 搜索的字段
+                              });
+                              // layer.msg('搜索成功<br>此处为静态模拟数据，实际使用时换成真实接口即可');
+                              return false; // 阻止默认 form 跳转
+                            });
+
+                          }
+                        });
+                      }
+                      else if (obj.event === 'reload') {
+                        table.reload(tabName, {
+                          page: {
+                            curr: 1 // 重新从第 1 页开始
+                          },
+                          where: {
+
+                            //test: '新的 test2',
+                            //token: '新的 token2'
+                          } // 搜索的字段
+                        });
+                      }
+                      else if (obj.event === 'batchDelete') {
+                        var id = obj.config.id;
+                        var checkStatus = table.checkStatus(id);
+                        var othis = lay(this);
+                        var data = checkStatus.data;
+                        console.log(data);
+                        layer.confirm('真的删除这些行么', function(index) {
+                          $.each(data, function(index, obj) {
+
+                            console.log(obj.id);
+                            $.ajax({
+                              type: "GET",                      //请求类型
+                              url: "/model/rowdel/" + tabName + "/" + obj.id,           //URL
+                              dataType: "json",
+                              data: '',   //传递的参数
+                              success: function (res) {          //data就是返回的json类型的数据
+                                if (res.code == '1') {
+                                  layer.msg(res.msg);
+                                } else {
+                                  layer.msg(res.msg);
+                                }
+                              }
+                            });
+
+                          });
+                          table.reload(tabName, {
+                            page: {
+                              curr: 1 // 重新从第 1 页开始
+                            },
+                            where: {
+
+                              //test: '新的 test2',
+                              //token: '新的 token2'
+                            } // 搜索的字段
+                          });
+                        });
+
+
+
+                      }
                     });
 
                     table.on('tool(' + tabName + ')', function(obj) {

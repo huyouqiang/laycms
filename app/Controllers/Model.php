@@ -36,9 +36,9 @@ class Model extends BaseController
         }
       }
 
-      if (sizeof($get) > 2) {
+      if (sizeof($get) > 2 && !isset($get['pid'])) {
         $search = $get;
-        unset($search['page'], $search['limit']);
+        unset($search['page'], $search['limit'], $search['t']);
         foreach ($search as $k => $v) {
           if (empty($v)) {
             unset($search[$k]);
@@ -47,6 +47,36 @@ class Model extends BaseController
         $keys = array_keys($search);
         $values = array_values($search);
         $where .= ' where ';
+        foreach ($keys as $k => $v) {
+
+
+          if (is_array($values[$k])) {
+            $where .= "$keys[$k] like '%".implode(',', $values[$k])."%'";
+          }
+          else {
+            $where .= "$keys[$k] like '%".$values[$k]."%'";
+          }
+
+          if (sizeof($values) != ($k + 1)) {
+            $where .= " and ";
+          }
+
+        }
+//        print_r($where);
+//        die();
+      }
+
+      if (sizeof($get) > 4 && isset($get['pid'])) {
+        $search = $get;
+        unset($search['page'], $search['limit'], $search['t'], $search['pid']);
+        foreach ($search as $k => $v) {
+          if (empty($v)) {
+            unset($search[$k]);
+          }
+        }
+        $keys = array_keys($search);
+        $values = array_values($search);
+        $where .= ' and ';
         foreach ($keys as $k => $v) {
 
 
@@ -129,7 +159,7 @@ class Model extends BaseController
     }
     else if( isset($get['t']) && $get['t'] == 'search' && $rowId == 0 ){
 
-      $rowHtml = '<div style="padding: 16px;"><form class="layui-form" lay-filter="demo-val-filter" id="'.$modelName.'">' . $fieldForm . '<div class="layui-form-item"><label class="layui-form-label"></label><div class="layui-input-block"><button  type="button" class="layui-btn layui-btn-primary" lay-submit lay-filter="demo-table-search">搜索</button></div></div></form></div>';
+      $rowHtml = '<div style="padding: 16px;"><form class="layui-form" lay-filter="demo-val-filter" id="'.$modelName.'">' . $fieldForm . '<div class="layui-form-item"><label class="layui-form-label"></label><div class="layui-input-block"><button  type="button" class="layui-btn layui-btn-primary" lay-submit lay-filter="'.$modelName.'">搜索</button></div></div></form></div>';
     }
     else if( !isset($get['t']) && $rowId != 0 ){
 
@@ -148,7 +178,7 @@ class Model extends BaseController
       $child = $this->_childTab($modelName);
       foreach ($child as $k => $v) {
         $header[] = ['title' => $v['tabName'].'&nbsp;<span class="layui-badge-rim layui-bg-gray">子表</span>'];
-        $body[] = ['content' => '<table class="layui-hide" id="'.$v['tabName'].'"></table>'];
+        $body[] = ['content' => '<table class="layui-hide" id="'.$v['tabName'].'"></table><script type="text/html" id="toolbarDemo"><div class="layui-btn-group"><button type="button" class="layui-btn layui-btn-primary layui-btn-sm" lay-event="add"><i class="layui-icon layui-icon-add-1"></i> </button> <button type="button" class="layui-btn layui-btn-primary layui-btn-sm" lay-event="batchDelete"> <i class="layui-icon layui-icon-delete"></i></button> <button type="button" class="layui-btn layui-btn-primary layui-btn-sm" lay-event="search"><i class="layui-icon layui-icon-search"></i></button><button type="button" class="layui-btn layui-btn-primary layui-btn-sm" lay-event="reload"><i class="layui-icon layui-icon-refresh"></i></button></div></script>'];
       }
     }
 
@@ -186,7 +216,7 @@ class Model extends BaseController
     $this->checkLogin();
 
     $post = $this->post;
-    unset($post['file']);
+    unset($post['file'], $post['undefined']);
     if ($rowId == '0') {
       unset($post['id']);
       try {
