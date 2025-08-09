@@ -19,7 +19,7 @@
       <div class="layui-card layui-panel" style="height: calc(85vh)">
         <div class="layui-card-header">
           <span class="layui-breadcrumb">
-            <a href="">首页</a>
+            <a href="/">首页</a>
             <a><cite>模型管理</cite></a>
           </span>
         </div>

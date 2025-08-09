@@ -148,20 +148,22 @@ class Model extends BaseController
 //    print_r($rowData);
 //    die();
     $search = (isset($get['t']) && $get['t'] == 'search') ? '' : '1';
-    $fieldForm = $this->fieldForm($fieldArr, $rowData, $search);
+    $child = (isset($get['t']) && $get['t'] == 'child') ? '' : '';
+
+    $fieldForm = $this->fieldForm($fieldArr, $rowData, $search, $child);
 
     if (isset($get['t']) && $get['t'] == 'child' && $rowId != 0) {
       $rowHtml = '<div style="padding: 16px;"><form class="layui-form" lay-filter="demo-val-filter" id="'.$modelName.'">' . $fieldForm . '<div class="layui-form-item"><label class="layui-form-label"></label><div class="layui-input-block"><button  type="button" class="layui-btn layui-btn-primary" lay-submit lay-filter="child-submit">编辑</button></div></div></form></div>';
     }
-    else if( isset($get['t']) && $get['t'] == 'child' && $rowId == 0 ){
+    else if( isset($get['t']) && $get['t'] == 'child' && $rowId == 0 ) {
 
       $rowHtml = '<div style="padding: 16px;"><form class="layui-form" lay-filter="demo-val-filter" id="'.$modelName.'">' . $fieldForm . '<div class="layui-form-item"><label class="layui-form-label"></label><div class="layui-input-block"><button  type="button" class="layui-btn layui-btn-primary" lay-submit lay-filter="child-submit">增加</button></div></div></form></div>';
     }
-    else if( isset($get['t']) && $get['t'] == 'search' && $rowId == 0 ){
+    else if( isset($get['t']) && $get['t'] == 'search' && $rowId == 0 ) {
 
       $rowHtml = '<div style="padding: 16px;"><form class="layui-form" lay-filter="demo-val-filter" id="'.$modelName.'">' . $fieldForm . '<div class="layui-form-item"><label class="layui-form-label"></label><div class="layui-input-block"><button  type="button" class="layui-btn layui-btn-primary" lay-submit lay-filter="'.$modelName.'">搜索</button></div></div></form></div>';
     }
-    else if( !isset($get['t']) && $rowId != 0 ){
+    else if( !isset($get['t']) && $rowId != 0 ) {
 
       $rowHtml = '<div style="padding: 16px;"><form class="layui-form" lay-filter="demo-val-filter" id="'.$modelName.'">' . $fieldForm . '<div class="layui-form-item"><label class="layui-form-label"></label><div class="layui-input-block"><button  type="button" class="layui-btn layui-btn-primary" lay-submit lay-filter="demo-submit">编辑</button></div></div></form></div>';
     }
@@ -172,7 +174,12 @@ class Model extends BaseController
     $body = [];
     $body[] = ['content' => $rowHtml];
     $header = [];
-    $header[] = ['title' => $modelName.'&nbsp;<span class="layui-badge-rim layui-bg-cyan">主表</span>'];
+    if (isset($get['t']) && $get['t'] == 'child') {
+      $header[] = ['title' => $modelName . '&nbsp;<span class="layui-badge-rim layui-bg-gray">子表</span>'];
+    }
+    else {
+      $header[] = ['title' => $modelName . '&nbsp;<span class="layui-badge-rim layui-bg-cyan">主表</span>'];
+    }
 
     if ($rowId != 0) {
       $child = $this->_childTab($modelName);
@@ -284,7 +291,7 @@ class Model extends BaseController
 
   //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-  private function fieldForm($fieldArr, $rowData = [], $search = ''):string
+  private function fieldForm($fieldArr, $rowData = [], $search = '', $child = ''):string
   {
     $form = '';
     foreach ($fieldArr as $key => $value) {
@@ -294,9 +301,7 @@ class Model extends BaseController
       $inputValue = empty($rowData) ? '':' value="'.$rowData[$value['field']].'"';
       $foreignKey = '';
       $layVerify = empty($search) ? '' : '';
-
-//      print_r($layVerify);
-//      die();
+      $readOnly = !empty($child) && !empty($value['priTabKey']) ? 'readonly' : '';
 
       switch ($fieldTypeArr['0']) {
         case 'input':
@@ -304,7 +309,7 @@ class Model extends BaseController
             $form .= '';
           }
           else {
-            $form .= '<div class="layui-form-item"><label class="layui-form-label">'.$value['title'].'</label><div class="layui-input-block"><input type="text" name="'.$value['field'].'" lay-verify="'.$layVerify.'" placeholder="请输入" autocomplete="off" class="layui-input" '.$inputValue.'></div>'.$foreignKey.'</div>';
+            $form .= '<div class="layui-form-item"><label class="layui-form-label">'.$value['title'].'</label><div class="layui-input-block"><input type="text" name="'.$value['field'].'" lay-verify="'.$layVerify.'" placeholder="请输入" autocomplete="off" class="layui-input" '.$inputValue.' '.$readOnly.'></div>'.$foreignKey.'</div>';
           }
           break;
         case 'date':
@@ -472,7 +477,7 @@ group by
 //        print_r($fieldTypeArr);
         switch ($fieldTypeArr['0']) {
           case 'date':
-            $v1[$v2['field']] = date($fieldTypeArr['1'], $v1[$v2['field']]);
+//            $v1[$v2['field']] = date($fieldTypeArr['1'], $v1[$v2['field']]);
             break;
           case 'radio':
             $radioArr = explode('&', $fieldTypeArr['1']);
