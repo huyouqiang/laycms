@@ -490,7 +490,7 @@
                         layer.msg('搜索');
                         $.ajax({
                           type: "get",                      //请求类型
-                          url: "/model/rowform/" + tabName + "/0?t=search",           //URL
+                          url: "/model/rowform/" + tabName + "/0?t=searchChild",           //URL
                           // dataType: "json",
                           // data:formData.field,   //传递的参数
                           success: function (res) {
