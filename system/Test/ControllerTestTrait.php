@@ -33,7 +33,7 @@ use Throwable;
  *       ->withResponse($response)
  *       ->withUri($uri)
  *       ->withBody($body)
- *       ->controller('App\Controllers\Model')
+ *       ->controller('App\Controllers\Service')
  *       ->execute('methodName');
  */
 trait ControllerTestTrait

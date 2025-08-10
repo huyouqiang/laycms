@@ -74,7 +74,7 @@ interface FabricatorModel
      *
      * @param bool $val
      *
-     * @return Model
+     * @return Service
      */
     // public function withDeleted($val = true);
 

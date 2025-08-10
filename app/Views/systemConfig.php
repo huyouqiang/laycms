@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title><?= $systemConfig['title'] ?> - 模型管理</title>
+  <title><?= $systemConfig['title'] ?> - 系统设置</title>
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -20,57 +20,39 @@
         <div class="layui-card-header">
           <span class="layui-breadcrumb">
             <a href="/">首页</a>
-            <a><cite>模型管理</cite></a>
+            <a><cite>系统设置</cite></a>
           </span>
         </div>
         <div class="layui-card-body">
           <div class="layui-btn-group" style="margin-bottom: 10px;">
             <a type="button" class="layui-btn layui-btn-primary layui-btn-sm" href="#" lay-header-event="modelJson">
-              <i class="layui-icon layui-icon-addition"></i>模型配置json
+              <i class="layui-icon layui-icon-addition"></i>系统设置json
             </a>
           </div>
-          <div class="layui-collapse">
-            <?php foreach ($menus as $key => $value): ?>
-            <div class="layui-colla-item">
-              <div class="layui-colla-title">
-                <?= $value['group'] ?>
-              </div>
-              <div class="layui-colla-content layui-show">
-                <table class="layui-table">
-                  <colgroup>
-                    <col width="150">
-                    <col width="150">
-                    <col>
-                  </colgroup>
-                  <thead>
-                  <tr>
-                    <th>模型标识</th>
-                    <th>模型名称</th>
-                    <th>模型排序</th>
-                    <th>字段列表</th>
-                  </tr>
-                  </thead>
-                  <tbody>
-                  <?php foreach ($value['model'] as $key1 => $value1): ?>
-                  <tr>
-                    <td><?= $value1['name_en'] ?></td>
-                    <td><?= $value1['name_ch'] ?></td>
-                    <td><?= $key1+1 ?></td>
-                    <td>
-                      <div class="layui-btn-group">
-                        <button type="button" class="layui-btn layui-btn-primary layui-btn-sm">
-                          <i class="layui-icon layui-icon-table"></i>
-                        </button>
-                      </div>
-                    </td>
-                  </tr>
-                  <?php endforeach ?>
 
-                  </tbody>
-                </table>
-              </div>
-            </div>
-            <?php endforeach ?>
+          <table class="layui-table">
+            <thead>
+            <tr>
+              <th>选项</th>
+              <th>设置</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+              <td>标题</td>
+              <td><?= $systemConfig['title'] ?></td>
+            </tr>
+            <tr>
+              <td>底部</td>
+              <td><?= $systemConfig['footer'] ?></td>
+            </tr>
+            <tr>
+              <td>logo</td>
+              <td><?= $systemConfig['logo'] ?></td>
+            </tr>
+            </tbody>
+          </table>
+
         </div>
       </div>
       <br><br>
@@ -112,16 +94,16 @@
         layer.open({
           type: 1, // page 层类型
           area: ['600px', '600px'],
-          title: '模型配置json',
+          title: '系统设置json',
           shade: 0.6, // 遮罩透明度
           shadeClose: true, // 点击遮罩区域，关闭弹层
           maxmin: false, // 允许全屏最小化
           anim: 0, // 0-6 的动画形式，-1 不开启
-          content: '<div style="padding: 32px;"><form class="layui-form" lay-filter="demo-val-filter"><div class="layui-form-item"><textarea placeholder="请输入内容" class="layui-textarea" rows="20" name="modelJson"></textarea></div><button class="layui-btn layui-btn-primary layui-btn-fluid" lay-submit="" lay-filter="demo-submit">保存</button></form></div>'
+          content: '<div style="padding: 32px;"><form class="layui-form" lay-filter="demo-val-filter"><div class="layui-form-item"><textarea placeholder="请输入内容" class="layui-textarea" rows="20" name="systemConfigJson"></textarea></div><button class="layui-btn layui-btn-primary layui-btn-fluid" lay-submit="" lay-filter="demo-submit">保存</button></form></div>'
         });
 
         form.render();
-        form.val('demo-val-filter', {modelJson:'<?= json_encode($menus) ?>'});
+        form.val('demo-val-filter', {systemConfigJson:'<?= json_encode($systemConfig) ?>'});
 
         // 提交事件
         form.on('submit(demo-submit)', function(formData){
@@ -135,14 +117,15 @@
           // });
 
           $.ajax({
-            type:"POST",                      //请求类型
-            url:"/model/modeljson",           //URL
+            type:"get",                      //请求类型
+            url:"/systemConfig",           //URL
             // dataType: "json",
             data:field,   //传递的参数
             success:function(res){          //data就是返回的json类型的数据
 
               if(res.code=='1'){
                 layer.msg(res.msg);
+                window.location.reload();
               }
               else{
                 layer.msg(res.msg);

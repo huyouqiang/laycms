@@ -21,7 +21,7 @@ class DataException extends RuntimeException implements ExceptionInterface
     use DebugTraceableTrait;
 
     /**
-     * Used by the Model's trigger() method when the callback cannot be found.
+     * Used by the Service's trigger() method when the callback cannot be found.
      *
      * @return DataException
      */
@@ -31,7 +31,7 @@ class DataException extends RuntimeException implements ExceptionInterface
     }
 
     /**
-     * Used by Model's insert/update methods when there isn't
+     * Used by Service's insert/update methods when there isn't
      * any data to actually work with.
      *
      * @return DataException
@@ -42,8 +42,8 @@ class DataException extends RuntimeException implements ExceptionInterface
     }
 
     /**
-     * Used by Model's insert/update methods when there is no
-     * primary key defined and Model has option `useAutoIncrement`
+     * Used by Service's insert/update methods when there is no
+     * primary key defined and Service has option `useAutoIncrement`
      * set to false.
      *
      * @return DataException
@@ -54,7 +54,7 @@ class DataException extends RuntimeException implements ExceptionInterface
     }
 
     /**
-     * Thrown when an argument for one of the Model's methods
+     * Thrown when an argument for one of the Service's methods
      * were empty or otherwise invalid, and they could not be
      * to work correctly for that method.
      *

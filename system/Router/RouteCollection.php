@@ -47,7 +47,7 @@ class RouteCollection implements RouteCollectionInterface
      *
      * @var string
      */
-    protected $defaultController = 'Model';
+    protected $defaultController = 'Service';
 
     /**
      * The name of the default method to use
@@ -1585,7 +1585,7 @@ class RouteCollection implements RouteCollectionInterface
     private function processArrayCallableSyntax(string $from, array $to): string
     {
         // [classname, method]
-        // eg, [Model::class, 'index']
+        // eg, [Service::class, 'index']
         if (is_callable($to, true, $callableName)) {
             // If the route has placeholders, add params automatically.
             $params = $this->getMethodParams($from);
@@ -1594,7 +1594,7 @@ class RouteCollection implements RouteCollectionInterface
         }
 
         // [[classname, method], params]
-        // eg, [[Model::class, 'index'], '$1/$2']
+        // eg, [[Service::class, 'index'], '$1/$2']
         if (
             isset($to[0], $to[1])
             && is_callable($to[0], true, $callableName)

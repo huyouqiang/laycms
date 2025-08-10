@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace CodeIgniter\Exceptions;
 
 /**
- * Model Exceptions.
+ * Service Exceptions.
  */
 class ModelException extends FrameworkException
 {

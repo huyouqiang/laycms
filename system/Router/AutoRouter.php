@@ -115,7 +115,7 @@ final class AutoRouter implements AutoRouterInterface
                 if (is_string($handler)) {
                     $handler = strtolower($handler);
 
-                    // Like $routes->cli('hello/(:segment)', 'Model::$1')
+                    // Like $routes->cli('hello/(:segment)', 'Service::$1')
                     if (str_contains($handler, '::$')) {
                         throw new PageNotFoundException(
                             'Cannot access CLI Route: ' . $uri,

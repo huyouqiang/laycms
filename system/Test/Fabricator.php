@@ -49,7 +49,7 @@ class Fabricator
     protected $faker;
 
     /**
-     * Model instance (can be non-framework if it follows framework design)
+     * Service instance (can be non-framework if it follows framework design)
      *
      * @var Model|object
      */

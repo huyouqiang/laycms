@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title><?= $systemConfig['title'] ?> - 首页数据</title>
+  <title><?= $systemConfig['title'] ?> - 系统提示</title>
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -20,47 +20,29 @@
         <div class="layui-card-header">
           <span class="layui-breadcrumb">
             <a href="/">首页</a>
-            <a><cite>网站信息</cite></a>
+            <a><cite>系统提示</cite></a>
           </span>
         </div>
         <div class="layui-card-body">
-
-
-          <table class="layui-table" id="demo">
-            <tr>
-              <td>网站名称</td>
-              <td>laycms</td></tr>
-            <tr>
-              <td>平台版本</td>
-              <td>laycms v1.0.0</td></tr>
-            <tr>
-              <td>脚本语言</td>
-              <td><?php echo 'php '.PHP_VERSION; ?></td></tr>
-            <tr>
-              <td>数据库</td>
-              <td><?= 'mysql '.$sqlVersion['sqlVersion'] ?></td></tr>
-          </table>
-
-
+          <?= $msg ?>
         </div>
       </div>
       <br><br>
     </div>
   </div>
-  <?= $this->include('public/footer') ?>
+    <?= $this->include('public/footer') ?>
 </div>
 
 <script src="//unpkg.com/layui@2.11.5/dist/layui.js"></script>
 <script>
   //JS
-  layui.use(['element', 'layer', 'util', 'table'], function(){
+  layui.use(['element', 'layer', 'util', 'table', 'form'], function(){
     var element = layui.element;
     var layer = layui.layer;
     var util = layui.util;
-    var table = layui.table;
     var $ = layui.$;
-
-
+    var table = layui.table;
+    var form = layui.form;
 
     //头部事件
     util.event('lay-header-event', {

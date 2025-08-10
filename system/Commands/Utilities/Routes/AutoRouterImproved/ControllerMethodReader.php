@@ -47,7 +47,7 @@ final class ControllerMethodReader
      *
      * @return list<array<string, array|string>>
      */
-    public function read(string $class, string $defaultController = 'Model', string $defaultMethod = 'index'): array
+    public function read(string $class, string $defaultController = 'Service', string $defaultMethod = 'index'): array
     {
         $reflection = new ReflectionClass($class);
 

@@ -3,7 +3,7 @@
 namespace App\Controllers;
 use CodeIgniter\Files\File;
 
-class Model extends BaseController
+class Service extends BaseController
 {
   public function index()
   {
@@ -22,6 +22,7 @@ class Model extends BaseController
   public function data($modelName)
   {
     $this->checkLogin();
+    $this->checkUserPermission();
 
     $get = $this->get;
     if ( isset($get['page']) ) {
@@ -265,6 +266,83 @@ class Model extends BaseController
 
   //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
+  public function users()
+  {
+    $this->checkLogin();
+    $this->checkUserPermission();
+    $get = $this->get;
+
+    $json = [
+      "0" => [
+        "userName" => "adminer",
+        "passWord" => "123456",
+        "models" => "*",
+        "pages" => "*"
+      ],
+      "1" => [
+        "userName" => "guest",
+        "passWord" => "123456",
+        "models" => "usr_student",
+        "pages" => "/model/data"
+      ]
+    ];
+
+//    $this->cache->save('users', json_encode($json), 60*60*24*365*10);
+
+    if (isset($get['usersJson'])) {
+//      print_r($get['usersJson']);
+//      die();
+      $this->cache->save('users', $get['usersJson'], 60*60*24*365*10);
+      $res = ['code' => '1', 'msg' => '保存成功'];
+      return $this->response->setJSON($res);
+    }
+    else {
+      $res['menus'] = json_decode($this->cache->get('models'), true);
+      $res['users'] = json_decode($this->cache->get('users'), true);
+      return view('users', $res);
+    }
+
+
+  }
+
+  //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+  public function backup()
+  {
+    $this->checkLogin();
+
+    $get = $this->get;
+    $res['menus'] = json_decode($this->cache->get('models'), true);
+    $res['users'] = json_decode($this->cache->get('users'), true);
+    return view('backup', $res);
+
+
+
+  }
+
+  //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+  public function systemConfig()
+  {
+    $this->checkLogin();
+    $get = $this->get;
+
+    if (isset($get['systemConfigJson'])) {
+      $this->cache->save('systemConfig', $get['systemConfigJson'], 60*60*24*365*10);
+      $res = ['code' => '1', 'msg' => '保存成功'];
+      return $this->response->setJSON($res);
+    }
+    else {
+      $res['menus'] = json_decode($this->cache->get('models'), true);
+      $res['systemConfig'] = json_decode($this->cache->get('systemConfig'), true);
+      return view('systemConfig', $res);
+    }
+
+
+  }
+
+  //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
   public function modelJson()
   {
     $this->checkLogin();
@@ -450,6 +528,18 @@ order by
       return view('login', $res);
     }
 
+  }
+
+  //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+  public function noPermission()
+  {
+    $get = $this->get;
+    $res['menus'] = json_decode($this->cache->get('models'),true);
+    $res['msg'] = '您没有操作这里的权限';
+//    print_r($res);
+//    die();
+    return view('noPermission', $res);
   }
 
   //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -

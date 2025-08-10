@@ -15,7 +15,7 @@ use Psr\Log\LoggerInterface;
  * BaseController provides a convenient place for loading components
  * and performing functions that are needed by all your controllers.
  * Extend this class in any new controllers:
- *     class Model extends BaseController
+ *     class Service extends BaseController
  *
  * For security be sure to declare any new methods as protected or private.
  */
@@ -63,6 +63,7 @@ abstract class BaseController extends Controller
     $this->forge = \Config\Database::forge();
     $this->cache = service('cache');
     $this->accessLog();
+
 
 
 
@@ -126,6 +127,20 @@ abstract class BaseController extends Controller
 //    die();
 
     log_message('info', 'type: {type} post: {post} page: {page} ip: {ipAddress} agent: {agent} response: {response}', $info);
+
+  }
+
+  //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+  public function checkUserPermission()
+  {
+
+    $user = $this->session->get('login');
+    $currentPage = substr($_SERVER['REQUEST_URI'], 0, strpos($_SERVER['REQUEST_URI'], '?'));
+
+    if (strpos($user['pages'],  $currentPage) === false) {
+//      header('Location: /noPermission');
+    }
 
   }
 

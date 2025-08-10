@@ -31,7 +31,7 @@ use ReflectionException;
 use stdClass;
 
 /**
- * The Model class extends BaseModel and provides additional
+ * The Service class extends BaseModel and provides additional
  * convenient features that makes working with a SQL database
  * table less painful.
  *
@@ -137,7 +137,7 @@ class Model extends BaseModel
     protected $escape = [];
 
     /**
-     * Builder method names that should not be used in the Model.
+     * Builder method names that should not be used in the Service.
      *
      * @var list<string> method name
      */
@@ -935,7 +935,7 @@ class Model extends BaseModel
     }
 
     /**
-     * Checks the Builder method name that should not be used in the Model.
+     * Checks the Builder method name that should not be used in the Service.
      */
     private function checkBuilderMethod(string $name): void
     {

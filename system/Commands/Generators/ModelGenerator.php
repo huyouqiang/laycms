@@ -18,7 +18,7 @@ use CodeIgniter\CLI\CLI;
 use CodeIgniter\CLI\GeneratorTrait;
 
 /**
- * Generates a skeleton Model file.
+ * Generates a skeleton Service file.
  */
 class ModelGenerator extends BaseCommand
 {
@@ -80,7 +80,7 @@ class ModelGenerator extends BaseCommand
      */
     public function run(array $params)
     {
-        $this->component = 'Model';
+        $this->component = 'Service';
         $this->directory = 'Models';
         $this->template  = 'model.tpl.php';
 
@@ -99,7 +99,7 @@ class ModelGenerator extends BaseCommand
 
         $baseClass = class_basename($class);
 
-        if (preg_match('/^(\S+)Model$/i', $baseClass, $match) === 1) {
+        if (preg_match('/^(\S+)Service$/i', $baseClass, $match) === 1) {
             $baseClass = $match[1];
         }
 
@@ -116,7 +116,7 @@ class ModelGenerator extends BaseCommand
         if ($return === 'entity') {
             $return = str_replace('Models', 'Entities', $class);
 
-            if (preg_match('/^(\S+)Model$/i', $return, $match) === 1) {
+            if (preg_match('/^(\S+)Service$/i', $return, $match) === 1) {
                 $return = $match[1];
 
                 if ($this->getOption('suffix')) {

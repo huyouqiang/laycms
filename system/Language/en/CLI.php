@@ -27,7 +27,7 @@ return [
             'entity'     => 'Entity class name',
             'filter'     => 'Filter class name',
             'migration'  => 'Migration class name',
-            'model'      => 'Model class name',
+            'model'      => 'Service class name',
             'seeder'     => 'Seeder class name',
             'test'       => 'Test class name',
             'validation' => 'Validation class name',

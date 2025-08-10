@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 // Database language settings
 return [
-    'invalidEvent'                     => '"{0}" is not a valid Model Event callback.',
+    'invalidEvent'                     => '"{0}" is not a valid Service Event callback.',
     'invalidArgument'                  => 'You must provide a valid "{0}".',
     'invalidAllowedFields'             => 'Allowed fields must be specified for model: "{0}"',
     'emptyDataset'                     => 'There is no data to {0}.',

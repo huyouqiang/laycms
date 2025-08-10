@@ -1,0 +1,218 @@
+DEBUG - 2025-08-10 05:56:54 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-08-10 05:56:54 --> type: GET post: [] page: /backup ip: 127.0.0.1 agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 response: ""
+CRITICAL - 2025-08-10 05:56:54 --> ErrorException: Undefined variable $users
+[Method: GET, Route: backup]
+in APPPATH/Views/backup.php on line 48.
+ 1 APPPATH/Views/backup.php(48): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined variable $users', '/opt/homebrew/var/www/laycms/app/Views/backup.php', 48)
+ 2 SYSTEMPATH/View/View.php(226): include('/opt/homebrew/var/www/laycms/app/Views/backup.php')
+ 3 SYSTEMPATH/View/View.php(229): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH/Common.php(1167): CodeIgniter\View\View->render('backup', [], true)
+ 5 APPPATH/Controllers/Service.php(317): view('backup', [...])
+ 6 SYSTEMPATH/CodeIgniter.php(933): App\Controllers\Service->backup()
+ 7 SYSTEMPATH/CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Service))
+ 8 SYSTEMPATH/CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 SYSTEMPATH/Boot.php(363): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH/Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+11 FCPATH/index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+DEBUG - 2025-08-10 05:57:26 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-08-10 05:57:26 --> type: GET post: [] page: /backup ip: 127.0.0.1 agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 response: ""
+DEBUG - 2025-08-10 05:57:27 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-08-10 05:57:27 --> type: GET post: [] page: /backup ip: 127.0.0.1 agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 response: ""
+DEBUG - 2025-08-10 05:57:27 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-08-10 05:57:27 --> type: GET post: [] page: /backup ip: 127.0.0.1 agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 response: ""
+DEBUG - 2025-08-10 05:57:30 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-08-10 05:57:30 --> type: GET post: [] page: /backup ip: 127.0.0.1 agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 response: ""
+DEBUG - 2025-08-10 05:57:31 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-08-10 05:57:31 --> type: GET post: [] page: /backup ip: 127.0.0.1 agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 response: ""
+DEBUG - 2025-08-10 05:57:31 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-08-10 05:57:31 --> type: GET post: [] page: /backup ip: 127.0.0.1 agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 response: ""
+DEBUG - 2025-08-10 05:58:34 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-08-10 05:58:34 --> type: GET post: [] page: /backup ip: 127.0.0.1 agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 response: ""
+DEBUG - 2025-08-10 05:58:47 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-08-10 05:58:47 --> type: GET post: [] page: /backup ip: 127.0.0.1 agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 response: ""
+DEBUG - 2025-08-10 05:58:47 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-08-10 05:58:47 --> type: GET post: [] page: /systemConfig ip: 127.0.0.1 agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 response: ""
+DEBUG - 2025-08-10 05:59:12 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-08-10 05:59:12 --> type: GET post: [] page: /systemConfig ip: 127.0.0.1 agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 response: ""
+DEBUG - 2025-08-10 05:59:13 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-08-10 05:59:13 --> type: GET post: [] page: /systemConfig ip: 127.0.0.1 agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 response: ""
+DEBUG - 2025-08-10 05:59:13 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-08-10 05:59:13 --> type: GET post: [] page: /backup ip: 127.0.0.1 agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 response: ""
+DEBUG - 2025-08-10 05:59:14 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-08-10 05:59:14 --> type: GET post: [] page: /users ip: 127.0.0.1 agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 response: ""
+DEBUG - 2025-08-10 05:59:15 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-08-10 05:59:15 --> type: GET post: [] page: /model/settings ip: 127.0.0.1 agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 response: ""
+DEBUG - 2025-08-10 05:59:15 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-08-10 05:59:15 --> type: GET post: [] page: /users ip: 127.0.0.1 agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 response: ""
+DEBUG - 2025-08-10 05:59:16 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-08-10 05:59:16 --> type: GET post: [] page: /backup ip: 127.0.0.1 agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 response: ""
+DEBUG - 2025-08-10 05:59:16 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-08-10 05:59:16 --> type: GET post: [] page: /systemConfig ip: 127.0.0.1 agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 response: ""
+DEBUG - 2025-08-10 05:59:18 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-08-10 05:59:18 --> type: GET post: [] page: /model/data/usr_student ip: 127.0.0.1 agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 response: ""
+DEBUG - 2025-08-10 05:59:18 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-08-10 05:59:18 --> type: GET post: [] page: /model/data/usr_student?page=1&limit=50 ip: 127.0.0.1 agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 response: ""
+DEBUG - 2025-08-10 05:59:25 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-08-10 05:59:25 --> type: GET post: [] page: /backup ip: 127.0.0.1 agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 response: ""
+DEBUG - 2025-08-10 05:59:40 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-08-10 05:59:40 --> type: GET post: [] page: /systemConfig ip: 127.0.0.1 agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 response: ""
+DEBUG - 2025-08-10 06:00:54 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-08-10 06:00:54 --> type: GET post: [] page: / ip: 127.0.0.1 agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 response: ""
+INFO - 2025-08-10 06:00:54 --> type: GET post: [] page: / ip: 127.0.0.1 agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 response: {"menus":[{"group":"\u5b66\u751f\u5206\u7ec41","model":[{"name_en":"usr_student","name_ch":"\u5b66\u751f\u5217\u88681"}]},{"group":"\u5b66\u751f\u5206\u7ec42","model":[{"name_en":"usr_school","name_ch":"\u5b66\u6821\u5217\u88681"}]}],"sqlVersion":{"sqlVersion":"8.0.42"}}
+DEBUG - 2025-08-10 06:05:45 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-08-10 06:05:45 --> type: GET post: [] page: /systemConfig ip: 127.0.0.1 agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 response: ""
+DEBUG - 2025-08-10 06:05:46 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-08-10 06:05:46 --> type: GET post: [] page: / ip: 127.0.0.1 agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 response: ""
+INFO - 2025-08-10 06:05:46 --> type: GET post: [] page: / ip: 127.0.0.1 agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 response: {"menus":[{"group":"\u5b66\u751f\u5206\u7ec41","model":[{"name_en":"usr_student","name_ch":"\u5b66\u751f\u5217\u88681"}]},{"group":"\u5b66\u751f\u5206\u7ec42","model":[{"name_en":"usr_school","name_ch":"\u5b66\u6821\u5217\u88681"}]}],"sqlVersion":{"sqlVersion":"8.0.42"}}
+DEBUG - 2025-08-10 06:06:25 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-08-10 06:06:25 --> type: GET post: [] page: /users ip: 127.0.0.1 agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 response: ""
+DEBUG - 2025-08-10 06:06:31 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-08-10 06:06:31 --> type: GET post: [] page: /model/settings ip: 127.0.0.1 agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 response: ""
+DEBUG - 2025-08-10 06:06:35 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-08-10 06:06:35 --> type: GET post: [] page: /users ip: 127.0.0.1 agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 response: ""
+DEBUG - 2025-08-10 06:06:36 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-08-10 06:06:36 --> type: GET post: [] page: /backup ip: 127.0.0.1 agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 response: ""
+DEBUG - 2025-08-10 06:06:42 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-08-10 06:06:42 --> type: GET post: [] page: /systemConfig ip: 127.0.0.1 agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 response: ""
+DEBUG - 2025-08-10 06:08:36 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-08-10 06:08:36 --> type: GET post: [] page: /backup ip: 127.0.0.1 agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 response: ""
+DEBUG - 2025-08-10 06:08:38 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-08-10 06:08:38 --> type: GET post: [] page: /systemConfig ip: 127.0.0.1 agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 response: ""
+CRITICAL - 2025-08-10 06:08:38 --> ErrorException: Undefined variable $users
+[Method: GET, Route: systemConfig]
+in APPPATH/Views/systemConfig.php on line 98.
+ 1 APPPATH/Views/systemConfig.php(98): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined variable $users', '/opt/homebrew/var/www/laycms/app/Views/systemConfig.php', 98)
+ 2 SYSTEMPATH/View/View.php(226): include('/opt/homebrew/var/www/laycms/app/Views/systemConfig.php')
+ 3 SYSTEMPATH/View/View.php(229): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH/Common.php(1167): CodeIgniter\View\View->render('systemConfig', [], true)
+ 5 APPPATH/Controllers/Service.php(349): view('systemConfig', [...])
+ 6 SYSTEMPATH/CodeIgniter.php(933): App\Controllers\Service->systemConfig()
+ 7 SYSTEMPATH/CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Service))
+ 8 SYSTEMPATH/CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 SYSTEMPATH/Boot.php(363): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH/Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+11 FCPATH/index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+DEBUG - 2025-08-10 06:09:55 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-08-10 06:09:55 --> type: GET post: [] page: /systemConfig ip: 127.0.0.1 agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 response: ""
+DEBUG - 2025-08-10 06:09:55 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-08-10 06:09:55 --> type: GET post: [] page: /systemConfig ip: 127.0.0.1 agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 response: ""
+DEBUG - 2025-08-10 06:10:41 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-08-10 06:10:41 --> type: GET post: [] page: /systemConfig ip: 127.0.0.1 agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 response: ""
+DEBUG - 2025-08-10 06:11:34 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-08-10 06:11:34 --> type: GET post: [] page: /systemConfig ip: 127.0.0.1 agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 response: ""
+DEBUG - 2025-08-10 06:11:35 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-08-10 06:11:35 --> type: GET post: [] page: /systemConfig ip: 127.0.0.1 agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 response: ""
+DEBUG - 2025-08-10 06:11:35 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-08-10 06:11:35 --> type: GET post: [] page: /systemConfig ip: 127.0.0.1 agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 response: ""
+DEBUG - 2025-08-10 06:11:50 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-08-10 06:11:50 --> type: GET post: [] page: /systemConfig ip: 127.0.0.1 agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 response: ""
+DEBUG - 2025-08-10 06:11:51 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-08-10 06:11:51 --> type: GET post: [] page: /systemConfig ip: 127.0.0.1 agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 response: ""
+DEBUG - 2025-08-10 06:12:16 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-08-10 06:12:16 --> type: GET post: [] page: /systemConfig ip: 127.0.0.1 agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 response: ""
+DEBUG - 2025-08-10 06:12:16 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-08-10 06:12:16 --> type: GET post: [] page: /systemConfig ip: 127.0.0.1 agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 response: ""
+DEBUG - 2025-08-10 06:12:17 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-08-10 06:12:17 --> type: GET post: [] page: /systemConfig ip: 127.0.0.1 agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 response: ""
+DEBUG - 2025-08-10 06:12:17 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-08-10 06:12:17 --> type: GET post: [] page: /systemConfig ip: 127.0.0.1 agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 response: ""
+DEBUG - 2025-08-10 06:12:17 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-08-10 06:12:17 --> type: GET post: [] page: /systemConfig ip: 127.0.0.1 agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 response: ""
+DEBUG - 2025-08-10 06:12:24 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-08-10 06:12:24 --> type: GET post: [] page: /systemConfig ip: 127.0.0.1 agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 response: ""
+DEBUG - 2025-08-10 06:12:25 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-08-10 06:12:25 --> type: GET post: [] page: /systemConfig ip: 127.0.0.1 agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 response: ""
+DEBUG - 2025-08-10 06:12:26 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-08-10 06:12:26 --> type: GET post: [] page: /systemConfig ip: 127.0.0.1 agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 response: ""
+DEBUG - 2025-08-10 06:12:26 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-08-10 06:12:26 --> type: GET post: [] page: /systemConfig ip: 127.0.0.1 agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 response: ""
+DEBUG - 2025-08-10 06:12:26 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-08-10 06:12:26 --> type: GET post: [] page: /systemConfig ip: 127.0.0.1 agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 response: ""
+DEBUG - 2025-08-10 06:12:30 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-08-10 06:12:30 --> type: GET post: [] page: /systemConfig ip: 127.0.0.1 agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 response: ""
+DEBUG - 2025-08-10 06:13:53 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-08-10 06:13:53 --> type: GET post: [] page: /systemConfig ip: 127.0.0.1 agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 response: ""
+DEBUG - 2025-08-10 06:13:55 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-08-10 06:13:55 --> type: GET post: [] page: /systemConfig ip: 127.0.0.1 agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 response: ""
+DEBUG - 2025-08-10 06:13:55 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-08-10 06:13:55 --> type: GET post: [] page: /systemConfig ip: 127.0.0.1 agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 response: ""
+DEBUG - 2025-08-10 06:13:55 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-08-10 06:13:55 --> type: GET post: [] page: /systemConfig ip: 127.0.0.1 agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 response: ""
+DEBUG - 2025-08-10 06:14:02 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-08-10 06:14:02 --> type: GET post: [] page: /systemConfig ip: 127.0.0.1 agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 response: ""
+DEBUG - 2025-08-10 06:14:02 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-08-10 06:14:02 --> type: GET post: [] page: /systemConfig ip: 127.0.0.1 agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 response: ""
+DEBUG - 2025-08-10 06:14:03 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-08-10 06:14:03 --> type: GET post: [] page: /systemConfig ip: 127.0.0.1 agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 response: ""
+DEBUG - 2025-08-10 06:14:03 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-08-10 06:14:03 --> type: GET post: [] page: /systemConfig ip: 127.0.0.1 agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 response: ""
+DEBUG - 2025-08-10 06:14:03 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-08-10 06:14:03 --> type: GET post: [] page: /systemConfig ip: 127.0.0.1 agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 response: ""
+DEBUG - 2025-08-10 06:14:11 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-08-10 06:14:11 --> type: GET post: [] page: /systemConfig ip: 127.0.0.1 agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 response: ""
+DEBUG - 2025-08-10 06:14:11 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-08-10 06:14:11 --> type: GET post: [] page: /systemConfig ip: 127.0.0.1 agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 response: ""
+DEBUG - 2025-08-10 06:14:12 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-08-10 06:14:12 --> type: GET post: [] page: /systemConfig ip: 127.0.0.1 agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 response: ""
+DEBUG - 2025-08-10 06:14:12 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-08-10 06:14:12 --> type: GET post: [] page: /systemConfig ip: 127.0.0.1 agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 response: ""
+DEBUG - 2025-08-10 06:14:13 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-08-10 06:14:13 --> type: GET post: [] page: /systemConfig ip: 127.0.0.1 agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 response: ""
+DEBUG - 2025-08-10 06:14:13 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-08-10 06:14:13 --> type: GET post: [] page: /systemConfig ip: 127.0.0.1 agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 response: ""
+DEBUG - 2025-08-10 06:14:14 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-08-10 06:14:14 --> type: GET post: [] page: /systemConfig ip: 127.0.0.1 agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 response: ""
+DEBUG - 2025-08-10 06:15:54 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-08-10 06:15:54 --> type: GET post: [] page: /systemConfig ip: 127.0.0.1 agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 response: ""
+DEBUG - 2025-08-10 06:15:54 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-08-10 06:15:54 --> type: GET post: [] page: /systemConfig ip: 127.0.0.1 agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 response: ""
+DEBUG - 2025-08-10 06:15:54 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-08-10 06:15:54 --> type: GET post: [] page: /systemConfig ip: 127.0.0.1 agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 response: ""
+DEBUG - 2025-08-10 06:16:31 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-08-10 06:16:31 --> type: GET post: [] page: /systemConfig ip: 127.0.0.1 agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 response: ""
+DEBUG - 2025-08-10 06:17:00 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-08-10 06:17:00 --> type: GET post: [] page: /systemConfig ip: 127.0.0.1 agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 response: ""
+DEBUG - 2025-08-10 06:17:05 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-08-10 06:17:05 --> type: GET post: [] page: /systemConfig?systemConfigJson=%7B%22title%22%3A%22laycms123%22%2C%22footer%22%3A%22%C2%A92025%20%E7%9A%96ICP%E5%A4%8718011458%E5%8F%B7-4%22%2C%22logo%22%3A%22%2Fpublic%2Flogo_1.png%22%7D ip: 127.0.0.1 agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 response: ""
+DEBUG - 2025-08-10 06:17:05 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-08-10 06:17:05 --> type: GET post: [] page: /systemConfig ip: 127.0.0.1 agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 response: ""
+DEBUG - 2025-08-10 06:17:07 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-08-10 06:17:07 --> type: GET post: [] page: /systemConfig ip: 127.0.0.1 agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 response: ""
+DEBUG - 2025-08-10 06:17:08 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-08-10 06:17:08 --> type: GET post: [] page: /systemConfig ip: 127.0.0.1 agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 response: ""
+DEBUG - 2025-08-10 06:17:08 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-08-10 06:17:08 --> type: GET post: [] page: /systemConfig ip: 127.0.0.1 agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 response: ""
+DEBUG - 2025-08-10 06:17:09 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-08-10 06:17:09 --> type: GET post: [] page: /systemConfig ip: 127.0.0.1 agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 response: ""
+DEBUG - 2025-08-10 06:17:09 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-08-10 06:17:09 --> type: GET post: [] page: /systemConfig ip: 127.0.0.1 agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 response: ""
+DEBUG - 2025-08-10 06:17:17 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-08-10 06:17:17 --> type: GET post: [] page: /systemConfig?systemConfigJson=%7B%22title%22%3A%22laycms123%22%2C%22footer%22%3A%22%C2%A92025%20%E7%9A%96ICP%E5%A4%8718011458%E5%8F%B7-4%22%2C%22logo%22%3A%22%2Fpublic%2Flogo_1.png%22%7D ip: 127.0.0.1 agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 response: ""
+DEBUG - 2025-08-10 06:17:17 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-08-10 06:17:17 --> type: GET post: [] page: /systemConfig ip: 127.0.0.1 agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 response: ""
+DEBUG - 2025-08-10 06:17:41 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-08-10 06:17:41 --> type: GET post: [] page: /systemConfig ip: 127.0.0.1 agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 response: ""
+DEBUG - 2025-08-10 06:17:46 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-08-10 06:17:46 --> type: GET post: [] page: /systemConfig?systemConfigJson=%7B%22title%22%3A%22laycms123%22%2C%22footer%22%3A%22%C2%A92025%20%E7%9A%96ICP%E5%A4%8718011458%E5%8F%B7-4%22%2C%22logo%22%3A%22%2Fpublic%2Flogo_1.png%22%7D ip: 127.0.0.1 agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 response: ""
+DEBUG - 2025-08-10 06:17:46 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-08-10 06:17:46 --> type: GET post: [] page: /systemConfig ip: 127.0.0.1 agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 response: ""
+DEBUG - 2025-08-10 06:17:57 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-08-10 06:17:57 --> type: GET post: [] page: /systemConfig?systemConfigJson=%7B%22title%22%3A%22laycms%22%2C%22footer%22%3A%22%C2%A92025%20%E7%9A%96ICP%E5%A4%8718011458%E5%8F%B7-4%22%2C%22logo%22%3A%22%2Fpublic%2Flogo_1.png%22%7D ip: 127.0.0.1 agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 response: ""
+DEBUG - 2025-08-10 06:17:57 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-08-10 06:17:57 --> type: GET post: [] page: /systemConfig ip: 127.0.0.1 agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 response: ""
+DEBUG - 2025-08-10 06:18:12 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-08-10 06:18:12 --> type: GET post: [] page: /backup ip: 127.0.0.1 agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 response: ""
+CRITICAL - 2025-08-10 06:18:12 --> ErrorException: Undefined variable $systemConfig
+[Method: GET, Route: backup]
+in APPPATH/Views/backup.php on line 5.
+ 1 APPPATH/Views/backup.php(5): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined variable $systemConfig', '/opt/homebrew/var/www/laycms/app/Views/backup.php', 5)
+ 2 SYSTEMPATH/View/View.php(226): include('/opt/homebrew/var/www/laycms/app/Views/backup.php')
+ 3 SYSTEMPATH/View/View.php(229): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH/Common.php(1167): CodeIgniter\View\View->render('backup', [], true)
+ 5 APPPATH/Controllers/Service.php(317): view('backup', [...])
+ 6 SYSTEMPATH/CodeIgniter.php(933): App\Controllers\Service->backup()
+ 7 SYSTEMPATH/CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Service))
+ 8 SYSTEMPATH/CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 SYSTEMPATH/Boot.php(363): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH/Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+11 FCPATH/index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))

@@ -20,20 +20,23 @@
 
 </style>
 <div class="layui-header layui-bg-cyan">
-  <a href="/"><div class="layui-logo layui-hide-xs layui-bg-black" style="background-image: url(/public/logo_1.png);background-size: 100% 100%;"></div></a>
+  <a href="/"><div class="layui-logo layui-hide-xs layui-bg-black" style="background-image: url(<?= $systemConfig['logo'] ?>);background-size: 100% 100%;"></div></a>
   <!-- 头部区域（可配合layui 已有的水平导航） <a href="/" style="color: #ffffff;"><img src="/public/logo.png" style="width: 80px;height: 40px;"></a>-->
   <ul class="layui-nav layui-layout-left">
+
     <!-- 移动端显示 -->
     <li class="layui-nav-item layui-show-xs-inline-block layui-hide-sm" lay-header-event="menuLeft">
       <i class="layui-icon layui-icon-spread-left"></i>
     </li>
+
     <li class="layui-nav-item layui-hide-xs <?php if (strpos($_SERVER['REQUEST_URI'], '/model/settings') !== false): ?>layui-this<?php endif ?>"><a href="/model/settings"><i class="layui-icon layui-icon-table"></i> 模型管理</a></li>
-    <li class="layui-nav-item layui-hide-xs"><a href="/users"><i class="layui-icon layui-icon-user"></i> 用户管理</a></li>
-    <li class="layui-nav-item layui-hide-xs"><a href="/users"><i class="layui-icon layui-icon-export"></i> 数据备份</a></li>
-    <li class="layui-nav-item layui-hide-xs"><a href="/users"><i class="layui-icon layui-icon-set"></i> 系统设置</a></li>
-    <!--      <li class="layui-nav-item layui-hide-xs"><a href="javascript:;">用户管理</a></li>-->
-    <!--      <li class="layui-nav-item layui-hide-xs"><a href="javascript:;">备份还原</a></li>-->
-    <!--      <li class="layui-nav-item layui-hide-xs"><a href="javascript:;">系统设置</a></li>-->
+
+    <li class="layui-nav-item layui-hide-xs <?php if (strpos($_SERVER['REQUEST_URI'], '/users') !== false): ?>layui-this<?php endif ?>"><a href="/users"><i class="layui-icon layui-icon-user"></i> 用户管理</a></li>
+
+    <li class="layui-nav-item layui-hide-xs <?php if (strpos($_SERVER['REQUEST_URI'], '/backup') !== false): ?>layui-this<?php endif ?>"><a href="/backup"><i class="layui-icon layui-icon-export"></i> 数据备份</a></li>
+
+    <li class="layui-nav-item layui-hide-xs <?php if (strpos($_SERVER['REQUEST_URI'], '/systemConfig') !== false): ?>layui-this<?php endif ?>"><a href="/systemConfig"><i class="layui-icon layui-icon-set"></i> 系统设置</a></li>
+
   </ul>
   <ul class="layui-nav layui-layout-right">
     <li class="layui-nav-item layui-hide layui-show-sm-inline-block">

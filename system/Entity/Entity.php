@@ -34,7 +34,7 @@ use JsonSerializable;
 use ReturnTypeWillChange;
 
 /**
- * Entity encapsulation, for use with CodeIgniter\Model
+ * Entity encapsulation, for use with CodeIgniter\Service
  *
  * @see \CodeIgniter\Entity\EntityTest
  */

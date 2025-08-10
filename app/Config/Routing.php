@@ -46,9 +46,9 @@ class Routing extends BaseRouting
      * The default controller to use when no other controller has been
      * specified.
      *
-     * Default: 'Model'
+     * Default: 'Service'
      */
-    public string $defaultController = 'Model';
+    public string $defaultController = 'Service';
 
     /**
      * For Defined Routes and Auto Routing.

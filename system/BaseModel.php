@@ -1655,7 +1655,7 @@ abstract class BaseModel
     }
 
     /**
-     * A simple event trigger for Model Events that allows additional
+     * A simple event trigger for Service Events that allows additional
      * data manipulation within the model. Specifically intended for
      * usage by child models this can be used to format data,
      * save/load related classes, etc.
