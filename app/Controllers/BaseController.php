@@ -134,9 +134,9 @@ abstract class BaseController extends Controller
 
   public function checkUserPermission()
   {
-    $user = empty($this->session->get('login'));
+    $user = $this->session->get('login');
 
-    if (empty($user)) {
+    if (!empty($user)) {
       if (strpos($_SERVER['REQUEST_URI'], '?') === false) {
         $currentPage = $_SERVER['REQUEST_URI'];
       }

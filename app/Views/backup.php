@@ -49,7 +49,7 @@
             </tr>
             <tr>
               <td>shell</td>
-              <td># 定时任务 <p>0 * * * * /www/backup/backupSql.sh<p>shell脚本<p><a href="/uploads/backupSql.sh" target="_blank">backupSql</a></td>
+              <td># 定时任务 <p>0 * * * * /www/backup/backupSql.sh<p># shell脚本<p><a href="/uploads/backupSql.sh" target="_blank">backupSql</a></td>
             </tr>
 
             </tbody>
