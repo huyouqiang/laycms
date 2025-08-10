@@ -134,31 +134,34 @@ abstract class BaseController extends Controller
 
   public function checkUserPermission()
   {
-    $user = $this->session->get('login');
+    $user = empty($this->session->get('login'));
 
-    if (strpos($_SERVER['REQUEST_URI'], '?') === false) {
-      $currentPage = $_SERVER['REQUEST_URI'];
-    }
-    else {
-      $currentPage = substr($_SERVER['REQUEST_URI'], 0, strpos($_SERVER['REQUEST_URI'], '?'));
-    }
+    if (empty($user)) {
+      if (strpos($_SERVER['REQUEST_URI'], '?') === false) {
+        $currentPage = $_SERVER['REQUEST_URI'];
+      }
+      else {
+        $currentPage = substr($_SERVER['REQUEST_URI'], 0, strpos($_SERVER['REQUEST_URI'], '?'));
+      }
 
-    if (strpos($user['pages'],  $currentPage) === false && strpos($_SERVER['REQUEST_URI'], '/model/data') === false && $user['pages'] != '*') {
+      if (strpos($user['pages'],  $currentPage) === false && strpos($_SERVER['REQUEST_URI'], '/model/data') === false && $user['pages'] != '*') {
 //      print_r($user['pages']);
 //      die();
-      header('Location: /noPermission');
-    }
-
-    if (strpos($_SERVER['REQUEST_URI'], '/model/data') !== false) {
-      $currentModel = substr($_SERVER['REQUEST_URI'], strripos($_SERVER['REQUEST_URI'], '/') + 1);
-//      print_r($user['models']);
-//      die();
-      if (strpos($user['models'],  $currentModel) === false && $user['models'] != '*') {
         header('Location: /noPermission');
       }
+
+      if (strpos($_SERVER['REQUEST_URI'], '/model/data') !== false) {
+        $currentModel = substr($_SERVER['REQUEST_URI'], strripos($_SERVER['REQUEST_URI'], '/') + 1);
+//      print_r($user['models']);
+//      die();
+        if (strpos($user['models'],  $currentModel) === false && $user['models'] != '*') {
+          header('Location: /noPermission');
+        }
+      }
     }
-
-
+    else {
+      return true;
+    }
 
   }
 
