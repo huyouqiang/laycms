@@ -46,8 +46,8 @@
                   <tr>
                     <th>模型标识</th>
                     <th>模型名称</th>
-                    <th>模型排序</th>
-                    <th>字段列表</th>
+<!--                    <th>模型排序</th>-->
+<!--                    <th>字段列表</th>-->
                   </tr>
                   </thead>
                   <tbody>
@@ -55,14 +55,14 @@
                   <tr>
                     <td><?= $value1['name_en'] ?></td>
                     <td><?= $value1['name_ch'] ?></td>
-                    <td><?= $key1+1 ?></td>
-                    <td>
-                      <div class="layui-btn-group">
-                        <button type="button" class="layui-btn layui-btn-primary layui-btn-sm">
-                          <i class="layui-icon layui-icon-table"></i>
-                        </button>
-                      </div>
-                    </td>
+<!--                    <td>--><?php //= $key1+1 ?><!--</td>-->
+<!--                    <td>-->
+<!--                      <div class="layui-btn-group">-->
+<!--                        <button type="button" class="layui-btn layui-btn-primary layui-btn-sm">-->
+<!--                          <i class="layui-icon layui-icon-table"></i>-->
+<!--                        </button>-->
+<!--                      </div>-->
+<!--                    </td>-->
                   </tr>
                   <?php endforeach ?>
 

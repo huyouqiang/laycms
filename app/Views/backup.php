@@ -24,11 +24,11 @@
           </span>
         </div>
         <div class="layui-card-body">
-          <div class="layui-btn-group" style="margin-bottom: 10px;">
-            <a type="button" class="layui-btn layui-btn-primary layui-btn-sm" href="#" lay-header-event="modelJson">
-              <i class="layui-icon layui-icon-addition"></i>开始备份
-            </a>
-          </div>
+<!--          <div class="layui-btn-group" style="margin-bottom: 10px;">-->
+<!--            <a type="button" class="layui-btn layui-btn-primary layui-btn-sm" href="#" lay-header-event="modelJson">-->
+<!--              <i class="layui-icon layui-icon-addition"></i>开始备份-->
+<!--            </a>-->
+<!--          </div>-->
 
           <table class="layui-table">
             <colgroup>
@@ -38,21 +38,19 @@
             </colgroup>
             <thead>
             <tr>
-              <th>账号</th>
-              <th>密码</th>
-              <th>模型</th>
-              <th>页面</th>
+              <th>类型</th>
+              <th>代码</th>
             </tr>
             </thead>
             <tbody>
-            <?php foreach ($users as $key => $value): ?>
             <tr>
-              <td><?= $value['userName'] ?></td>
-              <td><?= $value['passWord'] ?></td>
-              <td><?= $value['models'] ?></td>
-              <td><?= $value['pages'] ?></td>
+              <td>mysqldump</td>
+              <td>mysqldump -h127.0.0.1 -uroot -p123456 laycms > backup_20250809_104017.sql</td>
             </tr>
-            <?php endforeach ?>
+            <tr>
+              <td>shell</td>
+              <td># 定时任务 <p>0 * * * * /www/backup/backupSql.sh<p>shell脚本<p><a href="/uploads/backupSql.sh" target="_blank">backupSql</a></td>
+            </tr>
 
             </tbody>
           </table>

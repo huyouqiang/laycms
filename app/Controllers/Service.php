@@ -297,6 +297,9 @@ class Service extends BaseController
     $this->checkUserPermission();
     $res = $this->staticData();
     $get = $this->get;
+
+
+
     return view('backup', $res);
   }
 
