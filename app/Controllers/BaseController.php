@@ -146,4 +146,15 @@ abstract class BaseController extends Controller
 
   //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
+  public function staticData()
+  {
+    $res = ['menus' => json_decode($this->cache->get('models'),true)];
+    $res['systemConfig'] = json_decode($this->cache->get('systemConfig'), true);
+    $res['sqlVersion'] = $this->db->query("select VERSION() as sqlVersion")->getRowArray();
+    $res['users'] = json_decode($this->cache->get('users'),true);
+    return $res;
+  }
+
+  //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
 }

@@ -9,9 +9,7 @@ class Service extends BaseController
   {
     $this->checkLogin();
 
-    $res = ['menus' => json_decode($this->cache->get('models'),true)];
-    $res['sqlVersion'] = $this->db->query("select VERSION() as sqlVersion")->getRowArray();
-//    print_r($sqlVersion);
+    $res = $this->staticData();
 
     $this->accessLog($res);
     return view('index', $res);
@@ -22,9 +20,9 @@ class Service extends BaseController
   public function data($modelName)
   {
     $this->checkLogin();
-    $this->checkUserPermission();
-
     $get = $this->get;
+    $res = $this->staticData();
+
     if ( isset($get['page']) ) {
       $page = isset($get['page']) ? (($get['page']-1)*$get['limit']):0;
       $fieldArr = $this->_modelFields($modelName);
@@ -128,8 +126,9 @@ class Service extends BaseController
       return $this->response->setJSON($res);
     }
 
-
-    return view('model_data', ['menus' => json_decode($this->cache->get('models'),true), 'modelName' => $modelName, 'fieldJson' => $fieldJson]);
+    $res['modelName'] = $modelName;
+    $res['fieldJson'] = $fieldJson;
+    return view('model_data', $res);
   }
 
   //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -261,44 +260,23 @@ class Service extends BaseController
   public function settings()
   {
     $this->checkLogin();
-    return view('model_list', ['menus' => json_decode($this->cache->get('models'), true)]);
+    $res = $this->staticData();
+    return view('model_list', $res);
   }
 
   //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   public function users()
   {
-    $this->checkLogin();
-    $this->checkUserPermission();
     $get = $this->get;
-
-    $json = [
-      "0" => [
-        "userName" => "adminer",
-        "passWord" => "123456",
-        "models" => "*",
-        "pages" => "*"
-      ],
-      "1" => [
-        "userName" => "guest",
-        "passWord" => "123456",
-        "models" => "usr_student",
-        "pages" => "/model/data"
-      ]
-    ];
-
-//    $this->cache->save('users', json_encode($json), 60*60*24*365*10);
+    $res = $this->staticData();
 
     if (isset($get['usersJson'])) {
-//      print_r($get['usersJson']);
-//      die();
       $this->cache->save('users', $get['usersJson'], 60*60*24*365*10);
       $res = ['code' => '1', 'msg' => '保存成功'];
       return $this->response->setJSON($res);
     }
     else {
-      $res['menus'] = json_decode($this->cache->get('models'), true);
-      $res['users'] = json_decode($this->cache->get('users'), true);
       return view('users', $res);
     }
 
@@ -310,14 +288,9 @@ class Service extends BaseController
   public function backup()
   {
     $this->checkLogin();
-
+    $res = $this->staticData();
     $get = $this->get;
-    $res['menus'] = json_decode($this->cache->get('models'), true);
-    $res['users'] = json_decode($this->cache->get('users'), true);
     return view('backup', $res);
-
-
-
   }
 
   //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -326,6 +299,8 @@ class Service extends BaseController
   {
     $this->checkLogin();
     $get = $this->get;
+    $res = $this->staticData();
+
 
     if (isset($get['systemConfigJson'])) {
       $this->cache->save('systemConfig', $get['systemConfigJson'], 60*60*24*365*10);
@@ -333,8 +308,6 @@ class Service extends BaseController
       return $this->response->setJSON($res);
     }
     else {
-      $res['menus'] = json_decode($this->cache->get('models'), true);
-      $res['systemConfig'] = json_decode($this->cache->get('systemConfig'), true);
       return view('systemConfig', $res);
     }
 
@@ -491,7 +464,6 @@ order by
   {
     $this->checkLogin();
     $rowDetail = $this->db->query("select * from {$modelName} where id='{$rowId}'")->getRowArray();
-
     return $rowDetail;
   }
 
@@ -500,8 +472,7 @@ order by
   public function login()
   {
     $get = $this->get;
-
-
+    $res = $this->staticData();
 
     if (isset($get['userName']) && !empty($get['userName'])) {
 
@@ -522,8 +493,6 @@ order by
     }
     else {
       $this->session->remove('login');
-      $res = ['menus' => json_decode($this->cache->get('models'),true)];
-
       $this->accessLog($res);
       return view('login', $res);
     }
@@ -535,10 +504,8 @@ order by
   public function noPermission()
   {
     $get = $this->get;
-    $res['menus'] = json_decode($this->cache->get('models'),true);
+    $res = $this->staticData();
     $res['msg'] = '您没有操作这里的权限';
-//    print_r($res);
-//    die();
     return view('noPermission', $res);
   }
 
