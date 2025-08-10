@@ -128,6 +128,8 @@ class Service extends BaseController
 
     $res['modelName'] = $modelName;
     $res['fieldJson'] = $fieldJson;
+
+    $this->checkUserPermission();
     return view('model_data', $res);
   }
 
@@ -260,6 +262,7 @@ class Service extends BaseController
   public function settings()
   {
     $this->checkLogin();
+    $this->checkUserPermission();
     $res = $this->staticData();
     return view('model_list', $res);
   }
@@ -268,8 +271,11 @@ class Service extends BaseController
 
   public function users()
   {
-    $get = $this->get;
+    $this->checkLogin();
+    $this->checkUserPermission();
     $res = $this->staticData();
+    $get = $this->get;
+
 
     if (isset($get['usersJson'])) {
       $this->cache->save('users', $get['usersJson'], 60*60*24*365*10);
@@ -288,6 +294,7 @@ class Service extends BaseController
   public function backup()
   {
     $this->checkLogin();
+    $this->checkUserPermission();
     $res = $this->staticData();
     $get = $this->get;
     return view('backup', $res);
@@ -300,7 +307,7 @@ class Service extends BaseController
     $this->checkLogin();
     $get = $this->get;
     $res = $this->staticData();
-
+    $this->checkUserPermission();
 
     if (isset($get['systemConfigJson'])) {
       $this->cache->save('systemConfig', $get['systemConfigJson'], 60*60*24*365*10);

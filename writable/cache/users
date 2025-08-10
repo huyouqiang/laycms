@@ -1,1 +1,1 @@
-a:3:{s:4:"time";i:1754807030;s:3:"ttl";i:315360000;s:4:"data";s:157:"[{"userName":"adminer","passWord":"123456","models":"*","pages":"*"},{"userName":"guest","passWord":"123456","models":"usr_student","pages":"\/model\/data"}]";}
+a:3:{s:4:"time";i:1754810457;s:3:"ttl";i:315360000;s:4:"data";s:170:"[{"userName":"adminer","passWord":"123456","models":"*","pages":"*"},{"userName":"guest","passWord":"123456","models":"usr_student","pages":"/model/data,/users,/backup"}]";}
