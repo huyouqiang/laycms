@@ -446,24 +446,25 @@ class Service extends BaseController
 
   private function _modelFields($modelName)
   {
+    $database = $this->db->database;
     $fieldArr = $this->db->query("SELECT
-  C.COLUMN_NAME as field,
-  C.COLUMN_COMMENT,
-  C.COLUMN_KEY,
-  left(C.COLUMN_COMMENT, locate('[', C.COLUMN_COMMENT) -1) as title,
-  '' as width,
-  if(C.COLUMN_NAME='id','left','') as fixed,
-  if(K.REFERENCED_TABLE_NAME<>C.TABLE_NAME,K.REFERENCED_TABLE_NAME,'') as priTab,
-  if(K.REFERENCED_TABLE_NAME<>C.TABLE_NAME,K.REFERENCED_COLUMN_NAME,'') as priTabKey
-FROM
-  INFORMATION_SCHEMA.COLUMNS C
-left JOIN information_schema.KEY_COLUMN_USAGE K
-ON C.COLUMN_NAME=K.CONSTRAINT_NAME
-WHERE
-  C.TABLE_SCHEMA = 'laycms'
-  AND C.TABLE_NAME = '{$modelName}'
-order by
-  C.ordinal_position asc")->getResultArray();
+                                        C.COLUMN_NAME as field,
+                                        C.COLUMN_COMMENT,
+                                        C.COLUMN_KEY,
+                                        left(C.COLUMN_COMMENT, locate('[', C.COLUMN_COMMENT) -1) as title,
+                                        '' as width,
+                                        if(C.COLUMN_NAME='id','left','') as fixed,
+                                        if(K.REFERENCED_TABLE_NAME<>C.TABLE_NAME,K.REFERENCED_TABLE_NAME,'') as priTab,
+                                        if(K.REFERENCED_TABLE_NAME<>C.TABLE_NAME,K.REFERENCED_COLUMN_NAME,'') as priTabKey
+                                      FROM
+                                        INFORMATION_SCHEMA.COLUMNS C
+                                      left JOIN information_schema.KEY_COLUMN_USAGE K
+                                      ON C.COLUMN_NAME=K.CONSTRAINT_NAME
+                                      WHERE
+                                        C.TABLE_SCHEMA = '".$database."'
+                                        AND C.TABLE_NAME = '{$modelName}'
+                                      order by
+                                        C.ordinal_position asc")->getResultArray();
 
     return $fieldArr;
   }
@@ -523,15 +524,16 @@ order by
 
   private function _childTab($modelName)
   {
+    $database = $this->db->database;
     $tabArr = $this->db->query("SELECT
-  TABLE_NAME as tabName
-FROM
-  information_schema.KEY_COLUMN_USAGE
-where
-  CONSTRAINT_SCHEMA = 'laycms'
-  and REFERENCED_TABLE_NAME = '{$modelName}'
-group by
-  TABLE_NAME")->getResultArray();
+                                      TABLE_NAME as tabName
+                                    FROM
+                                      information_schema.KEY_COLUMN_USAGE
+                                    where
+                                      CONSTRAINT_SCHEMA = '".$database."'
+                                      and REFERENCED_TABLE_NAME = '{$modelName}'
+                                    group by
+                                      TABLE_NAME")->getResultArray();
 
     return $tabArr;
   }

@@ -52,7 +52,8 @@ abstract class BaseController extends Controller
 
   public function __construct(){
 
-    $db = db_connect();
+//    $db = db_connect();
+    $db = \Config\Database::connect();
     $request = \Config\Services::request();
     $session = \Config\Services::session();
 

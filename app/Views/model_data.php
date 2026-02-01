@@ -204,7 +204,7 @@
 
       }
       else if (obj.event === 'search') {
-        layer.msg('搜索');
+        // layer.msg('搜索');
         $.ajax({
           type: "get",                      //请求类型
           url: "/model/rowform/<?= $modelName ?>/0?t=search",           //URL

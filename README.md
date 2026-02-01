@@ -152,6 +152,48 @@
   </tbody>
 </table>
 
+#### 数据库
+
+```bash
+# 数据库配置文件
+/app/config/Database.php
+
+# 示例
+public array $default = [
+        'DSN'          => '',
+        'hostname'     => 'localhost',
+        'username'     => 'root',
+        'password'     => '20262026',
+        'database'     => 'laycms',
+        'DBDriver'     => 'MySQLi',
+        'DBPrefix'     => '',
+        'port'         => 3306,
+        'pConnect'     => false,
+        'DBDebug'      => true,
+        'charset'      => 'utf8mb4',
+        'DBCollat'     => 'utf8mb4_general_ci',
+        'swapPre'      => '',
+        'encrypt'      => false,
+        'compress'     => false,
+        'strictOn'     => false,
+        'failover'     => [],
+        'numberNative' => false,
+        'foundRows'    => false,
+        'dateFormat'   => [
+            'date'     => 'Y-m-d',
+            'datetime' => 'Y-m-d H:i:s',
+            'time'     => 'H:i:s',
+        ],
+    ];
+```
+
+#### 文件权限
+
+```bash
+# 模型数据、用户管理、系统设置数据
+chmod 777 /writable/cache
+```
+
 #### 更新日志
 
 <table class="layui-table">
