@@ -30,7 +30,7 @@
 <!--            </a>-->
 <!--          </div>-->
 
-          <table class="layui-table">
+          <table class="layui-table layui-table-hover">
             <colgroup>
               <col width="150">
               <col width="150">

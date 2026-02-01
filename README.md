@@ -73,3 +73,98 @@
   <td>下拉框[select|1=男&2=女]</td>
 </tr>
 </table>
+
+#### 模型管理
+
+```bash
+# group:分组，name_en:表名，name_ch:表名别名，显示主表，子表自动识别
+[
+  {
+    "group": "学生分组1",
+    "model": [
+      {
+        "name_en": "usr_student",
+        "name_ch": "学生列表1"
+      }
+    ]
+  },
+  {
+    "group": "学生分组2",
+    "model": [
+      {
+        "name_en": "usr_school",
+        "name_ch": "学校列表1"
+      }
+    ]
+  }
+]
+```
+
+#### 用户管理
+
+```bash
+# 根用户操作其他用户信息
+# models:数据表，pages:页面
+[
+  {
+    "userName": "adminer",
+    "passWord": "123456",
+    "models": "*",
+    "pages": "*"
+  },
+  {
+    "userName": "guest",
+    "passWord": "123456",
+    "models": "usr_student,usr_school",
+    "pages": "/model/data,/backup"
+  }
+]
+```
+
+<table class="layui-table">
+  <colgroup>
+    <col width="150">
+    <col width="150">
+    <col>
+  </colgroup>
+  <thead>
+  <tr>
+    <th>账号</th>
+    <th>密码</th>
+    <th>模型</th>
+    <th>页面</th>
+  </tr>
+  </thead>
+  <tbody>
+              <tr>
+    <td>adminer</td>
+    <td>123456</td>
+    <td>*</td>
+    <td>*</td>
+  </tr>
+              <tr>
+    <td>guest</td>
+    <td>123456</td>
+    <td>usr_student,usr_school</td>
+    <td>/model/data,/backup</td>
+  </tr>
+
+  </tbody>
+</table>
+
+#### 更新日志
+
+<table class="layui-table">
+  <thead>
+  <tr>
+    <th>日期</th>
+    <th>功能</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr>
+    <td>2026-02-01</td>
+    <td>实现基本功能，包括：模型管理、用户管理、数据管理、系统设置</td>
+  </tr>
+  </tbody>
+</table>

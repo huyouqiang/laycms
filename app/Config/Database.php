@@ -26,7 +26,7 @@ class Database extends Config
      */
     public array $default = [
         'DSN'          => '',
-        'hostname'     => '106.14.144.248',
+        'hostname'     => 'localhost',
         'username'     => 'root',
         'password'     => '2026$$!!Hu',
         'database'     => 'laycms',
