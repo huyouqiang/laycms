@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title><?= $systemConfig['title'] ?> - 数据表格</title>
+  <title><?= $systemConfig['title'] ?> - <?= $modelNameCh ?></title>
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -22,7 +22,7 @@
           <span class="layui-breadcrumb">
             <a href="/">首页</a>
             <a href="">模型</a>
-            <a><cite><?= $modelName ?></cite></a>
+            <a><cite><?= $modelNameCh ?></cite></a>
           </span>
         </div>
         <div class="layui-card-body">
@@ -272,35 +272,43 @@
         var othis = lay(this);
         var data = checkStatus.data;
         console.log(data);
-        layer.confirm('真的删除这些行么', function(index) {
-          $.each(data, function(index, obj) {
 
-            console.log(obj.id);
-            $.ajax({
-              type: "GET",                      //请求类型
-              url: "/model/rowdel/<?= $modelName ?>/" + obj.id,           //URL
-              dataType: "json",
-              data: '',   //传递的参数
-              success: function (res) {          //data就是返回的json类型的数据
-                if (res.code == '1') {
-                  layer.msg(res.msg);
-                } else {
-                  layer.msg(res.msg);
+        if  (data.length == 0) {
+          layer.msg("请先选中要删除的行");
+          return false;
+        }
+
+        layer.confirm('真的删除这些行么', function(index) {
+
+            $.each(data, function(index, obj) {
+
+              console.log(obj.id);
+              $.ajax({
+                type: "GET",                      //请求类型
+                url: "/model/rowdel/<?= $modelName ?>/" + obj.id,           //URL
+                dataType: "json",
+                data: '',   //传递的参数
+                success: function (res) {          //data就是返回的json类型的数据
+                  if (res.code == '1') {
+                    layer.msg(res.msg);
+                  } else {
+                    layer.msg(res.msg);
+                  }
                 }
-              }
+              });
+
+            });
+            table.reload('test', {
+              page: {
+                curr: 1 // 重新从第 1 页开始
+              },
+              where: {
+
+                //test: '新的 test2',
+                //token: '新的 token2'
+              } // 搜索的字段
             });
 
-          });
-          table.reload('test', {
-            page: {
-              curr: 1 // 重新从第 1 页开始
-            },
-            where: {
-
-              //test: '新的 test2',
-              //token: '新的 token2'
-            } // 搜索的字段
-          });
         });
 
 

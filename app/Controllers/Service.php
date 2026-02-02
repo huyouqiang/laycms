@@ -22,8 +22,10 @@ class Service extends BaseController
     $this->checkLogin();
     $get = $this->get;
     $res = $this->staticData();
+    $tabInfo = $this->_tabInfo($modelName);
 
     if ( isset($get['page']) ) {
+      $get['page'] = $get['page'] == '' ? 1:$get['page'];
       $page = isset($get['page']) ? (($get['page']-1)*$get['limit']):0;
       $fieldArr = $this->_modelFields($modelName);
       $where = " ";
@@ -128,6 +130,9 @@ class Service extends BaseController
 
     $res['modelName'] = $modelName;
     $res['fieldJson'] = $fieldJson;
+    $res['modelNameCh'] = $tabInfo['0']['TABLE_COMMENT'] == '' ? $modelName : $tabInfo['0']['TABLE_COMMENT'];
+//    print_r($res);
+//    die();
 
     $this->checkUserPermission();
     return view('model_data', $res);
@@ -138,6 +143,8 @@ class Service extends BaseController
   public function rowForm($modelName, $rowId)
   {
     $this->checkLogin();
+    $tabInfo = $this->_tabInfo($modelName);
+    $modelNameCh = $tabInfo['0']['TABLE_COMMENT'] == '' ? $modelName : $tabInfo['0']['TABLE_COMMENT'];
 
     $get = $this->get;
     $rowData = $this->rowDetail($modelName, $rowId);
@@ -181,19 +188,19 @@ class Service extends BaseController
     $body[] = ['content' => $rowHtml];
     $header = [];
     if (isset($get['t']) && $get['t'] == 'child') {
-      $header[] = ['title' => $modelName . '&nbsp;<span class="layui-badge-rim layui-bg-gray">子表</span>'];
+      $header[] = ['title' => $modelNameCh . '&nbsp;<span class="layui-badge-rim layui-bg-gray">子</span>'];
     }
     else if ( isset($get['t']) && $get['t'] == 'searchChild' ) {
-      $header[] = ['title' => $modelName . '&nbsp;<span class="layui-badge-rim layui-bg-gray">子表</span>'];
+      $header[] = ['title' => $modelNameCh . '&nbsp;<span class="layui-badge-rim layui-bg-gray">子</span>'];
     }
     else {
-      $header[] = ['title' => $modelName . '&nbsp;<span class="layui-badge-rim layui-bg-cyan">主表</span>'];
+      $header[] = ['title' => $modelNameCh . '&nbsp;<span class="layui-badge-rim layui-bg-cyan">主</span>'];
     }
 
     if ($rowId != 0) {
       $child = $this->_childTab($modelName);
       foreach ($child as $k => $v) {
-        $header[] = ['title' => $v['tabName'].'&nbsp;<span class="layui-badge-rim layui-bg-gray">子表</span>'];
+        $header[] = ['title' => $v['tabName'].'&nbsp;<span class="layui-badge-rim layui-bg-gray">子</span>'];
         $body[] = ['content' => '<table class="layui-hide" id="'.$v['tabName'].'"></table><script type="text/html" id="toolbarDemo"><div class="layui-btn-group"><button type="button" class="layui-btn layui-btn-primary layui-btn-sm" lay-event="add"><i class="layui-icon layui-icon-add-1"></i> </button> <button type="button" class="layui-btn layui-btn-primary layui-btn-sm" lay-event="batchDelete"> <i class="layui-icon layui-icon-delete"></i></button> <button type="button" class="layui-btn layui-btn-primary layui-btn-sm" lay-event="search"><i class="layui-icon layui-icon-search"></i></button><button type="button" class="layui-btn layui-btn-primary layui-btn-sm" lay-event="reload"><i class="layui-icon layui-icon-refresh"></i></button></div></script>'];
       }
     }
@@ -363,13 +370,16 @@ class Service extends BaseController
   {
     $form = '';
     foreach ($fieldArr as $key => $value) {
+//      print_r($value);
 
       $fieldType = substr($value['COLUMN_COMMENT'], strpos($value['COLUMN_COMMENT'], '[')+1, strpos($value['COLUMN_COMMENT'], ']')-(strpos($value['COLUMN_COMMENT'], '[')+1));
       $fieldTypeArr = explode('|', $fieldType);
+//      print_r($fieldTypeArr);
       $inputValue = empty($rowData) ? '':' value="'.$rowData[$value['field']].'"';
       $foreignKey = '';
       $layVerify = empty($search) ? '' : '';
-      $readOnly = !empty($child) && !empty($value['priTabKey']) ? 'readonly' : '';
+//      $readOnly = !empty($child) && !empty($value['priTabKey']) ? 'readonly' : '';
+      $readOnly = $value['COLUMN_KEY'] == 'PRI' ? 'readonly' : '';
 
       switch ($fieldTypeArr['0']) {
         case 'input':
@@ -605,5 +615,18 @@ class Service extends BaseController
   }
 
   //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+  private function  _tabInfo($modelName)
+  {
+    $database = $this->db->database;
+    $tabInfo = $this->db->query("SELECT
+                                          TABLE_NAME,
+                                          TABLE_COMMENT
+                                      FROM information_schema.TABLES
+                                      WHERE TABLE_SCHEMA = '".$database."'
+                                        AND TABLE_NAME   = '".$modelName."'")->getResultArray();
+
+    return $tabInfo;
+  }
 
 }

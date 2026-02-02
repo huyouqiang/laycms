@@ -9,7 +9,7 @@
 > nginx/apache/php8/mysql8
 
 #### 数据类型
-> 写好字段的`注释`，自动生成`表单控件`，注释`基本格式`：字段中文[form控件类型|其他属性]
+> 写好字段的`注释`，自动生成`表单控件`，注释`基本格式`：字段中文[form控件类型|其他属性]，系统保留字：`page,limit`,注意字段不要重名
 
 <table>
 <tr>
@@ -192,6 +192,9 @@ public array $default = [
 ```bash
 # 模型数据、用户管理、系统设置数据
 chmod 777 /writable/cache
+
+# 上传文件夹
+chmod 777 /uploads
 ```
 
 #### 更新日志
