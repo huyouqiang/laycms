@@ -32,6 +32,8 @@ Route::middleware(['auth.cms'])->group(function () {
         Route::get('/create', [FormController::class, 'create'])->middleware('permission:forms.create')->name('create');
         Route::get('/{form}/related-columns', [FormRelationController::class, 'getRelatedColumns'])->middleware('permission:forms.read')->name('related-columns');
         Route::post('/', [FormController::class, 'store'])->middleware('permission:forms.create')->name('store');
+        Route::post('/{form}/add-index', [FormController::class, 'addIndex'])->middleware('permission:forms.update')->name('add-index');
+        Route::delete('/{form}/drop-index', [FormController::class, 'dropIndex'])->middleware('permission:forms.update')->name('drop-index');
         Route::get('/{form}', [FormController::class, 'edit'])->middleware('permission:forms.read')->name('edit');
         Route::put('/{form}', [FormController::class, 'update'])->middleware('permission:forms.update')->name('update');
         Route::delete('/{form}', [FormController::class, 'destroy'])->middleware('permission:forms.delete')->name('destroy');

@@ -67,6 +67,61 @@
     </div>
 </div>
 
+<div class="card mt-4">
+    <div class="card-header">添加索引</div>
+    <div class="card-body">
+        @if(!empty($tableIndexes))
+        <div class="mb-4">
+            <label class="form-label">已添加的索引</label>
+            <table class="table table-sm table-bordered mb-0">
+                <thead><tr><th>索引名称</th><th>对应字段</th><th>索引类型</th><th>操作</th></tr></thead>
+                <tbody>
+                    @foreach($tableIndexes as $idx)
+                    <tr>
+                        <td>{{ $idx['name'] }}</td>
+                        <td>{{ $idx['column'] }}</td>
+                        <td>{{ $idx['type'] }}</td>
+                        <td>
+                            @if($idx['name'] !== 'PRIMARY')
+                            <form action="{{ route('forms.drop-index', $form) }}" method="POST" class="d-inline" onsubmit="return confirm('确定删除索引 {{ $idx['name'] }}？');">
+                                @csrf
+                                @method('DELETE')
+                                <input type="hidden" name="index_name" value="{{ $idx['name'] }}">
+                                <button type="submit" class="btn btn-sm btn-outline-danger">删除</button>
+                            </form>
+                            @else
+                            <span class="text-secondary">-</span>
+                            @endif
+                        </td>
+                    </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
+        @endif
+        @if(!empty($tableColumns))
+        <form action="{{ route('forms.add-index', $form) }}" method="POST" class="d-flex gap-2 align-items-end flex-wrap">
+            @csrf
+            <div class="flex-grow-1" style="min-width:200px">
+                <label class="form-label">选择字段</label>
+                <select name="column_name" class="form-select" required>
+                    <option value="">请选择要添加索引的字段</option>
+                    @foreach($tableColumns as $col)
+                    <option value="{{ $col }}">{{ $col }}</option>
+                    @endforeach
+                </select>
+            </div>
+            <div>
+                <button type="submit" class="btn btn-primary">添加索引</button>
+            </div>
+        </form>
+        <small class="text-secondary mt-2 d-block">为数据表 {{ $form->table_name }} 的字段添加 MySQL 索引，以提升查询性能。</small>
+        @else
+        <p class="text-secondary mb-0">数据表 {{ $form->table_name }} 暂无可用字段。</p>
+        @endif
+    </div>
+</div>
+
 <div class="modal fade" id="relationModal" tabindex="-1">
     <div class="modal-dialog">
         <div class="modal-content">

@@ -22,7 +22,7 @@ class CmsAuth
             }
             return redirect()->route('login');
         }
-        $user = CmsUser::find($userId);
+        $user = CmsUser::with('userGroup')->find($userId);
         if (!$user || !$user->is_active) {
             Session::forget('cms_user_id');
             return redirect()->route('login');

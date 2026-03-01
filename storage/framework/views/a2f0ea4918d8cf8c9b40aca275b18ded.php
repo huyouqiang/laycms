@@ -39,6 +39,17 @@
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown"><?php echo e($cms_user->nickname ?? $cms_user->username); ?></a>
                     <ul class="dropdown-menu dropdown-menu-end">
+                        <li class="px-3 py-2 text-muted small">
+                            <?php if($cms_user->is_root): ?>
+                                角色：超级管理员
+                            <?php elseif($cms_user->userGroup): ?>
+                                角色：<?php echo e($cms_user->userGroup->name); ?>
+
+                            <?php else: ?>
+                                角色：-
+                            <?php endif; ?>
+                        </li>
+                        <li><hr class="dropdown-divider"></li>
                         <li><a class="dropdown-item" href="<?php echo e(route('logout')); ?>">退出登录</a></li>
                     </ul>
                 </li>

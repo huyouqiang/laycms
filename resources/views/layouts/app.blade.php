@@ -39,6 +39,16 @@
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">{{ $cms_user->nickname ?? $cms_user->username }}</a>
                     <ul class="dropdown-menu dropdown-menu-end">
+                        <li class="px-3 py-2 text-muted small">
+                            @if($cms_user->is_root)
+                                角色：超级管理员
+                            @elseif($cms_user->userGroup)
+                                角色：{{ $cms_user->userGroup->name }}
+                            @else
+                                角色：-
+                            @endif
+                        </li>
+                        <li><hr class="dropdown-divider"></li>
                         <li><a class="dropdown-item" href="{{ route('logout') }}">退出登录</a></li>
                     </ul>
                 </li>
