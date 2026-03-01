@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>登录 - LayCMS</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     <style>
         body { background: #F5F7FA; min-height: 100vh; display: flex; align-items: center; justify-content: center; }
@@ -24,7 +25,7 @@
                     <label class="form-label">密码</label>
                     <input type="password" name="password" class="form-control" placeholder="请输入密码" required>
                 </div>
-                <button type="submit" class="btn btn-primary w-100">登录</button>
+                <button type="submit" class="btn btn-primary w-100"><i class="bi bi-box-arrow-in-right me-1"></i>登录</button>
             </form>
         </div>
     </div>

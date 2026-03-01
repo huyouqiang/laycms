@@ -22,8 +22,8 @@
                 @include('table-data.field-control', ['field' => $field, 'value' => $row?->{$field->field_name} ?? old($field->field_name) ?? ''])
             </div>
             @endforeach
-            <button type="submit" class="btn btn-primary">保存</button>
-            <a href="{{ route('table-data.index', $tableName) }}" class="btn btn-secondary">返回</a>
+            <button type="submit" class="btn btn-primary"><i class="bi bi-check-lg me-1"></i>保存</button>
+            <a href="{{ route('table-data.index', $tableName) }}" class="btn btn-secondary"><i class="bi bi-arrow-left me-1"></i>返回</a>
         </form>
     </div>
 </div>

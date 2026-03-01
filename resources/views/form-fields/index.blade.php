@@ -7,9 +7,9 @@
     <div class="card-header d-flex justify-content-between align-items-center">
         <span>{{ $form->name }} - 字段配置</span>
         <div>
-            <a href="{{ route('table-data.index', $form->table_name) }}" class="btn btn-sm btn-outline-primary">数据管理</a>
+            <a href="{{ route('table-data.index', $form->table_name) }}" class="btn btn-sm btn-outline-primary"><i class="bi bi-table me-1"></i>数据管理</a>
             @if($cms_user->is_root || $cms_user->hasPermission('_forms', 'update'))
-            <button type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#fieldModal" id="btnAdd">添加字段</button>
+            <button type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#fieldModal" id="btnAdd"><i class="bi bi-plus-lg me-1"></i>添加字段</button>
             @endif
         </div>
     </div>
@@ -27,12 +27,12 @@
                     <td>{{ $field->is_list_visible ? '是' : '否' }}</td>
                     <td>
                         @if($cms_user->is_root || $cms_user->hasPermission('_forms', 'update'))
-                        <button type="button" class="btn btn-sm btn-outline-secondary edit-field" data-field='@json($field)'>编辑</button>
+                        <button type="button" class="btn btn-sm btn-outline-secondary edit-field" data-field='@json($field)'><i class="bi bi-pencil me-1"></i>编辑</button>
                         @endif
                         @if($cms_user->is_root || $cms_user->hasPermission('_forms', 'delete'))
                         <form action="{{ route('form-fields.destroy', $field) }}" method="POST" class="d-inline" onsubmit="return confirm('确定删除？');">
                             @csrf @method('DELETE')
-                            <button type="submit" class="btn btn-sm btn-outline-danger">删除</button>
+                            <button type="submit" class="btn btn-sm btn-outline-danger"><i class="bi bi-trash me-1"></i>删除</button>
                         </form>
                         @endif
                     </td>
@@ -98,8 +98,8 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
-                    <button type="submit" class="btn btn-primary">保存</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><i class="bi bi-x-lg me-1"></i>取消</button>
+                    <button type="submit" class="btn btn-primary"><i class="bi bi-check-lg me-1"></i>保存</button>
                 </div>
             </form>
         </div>

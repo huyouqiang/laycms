@@ -7,7 +7,7 @@
         <div class="d-flex gap-2">
             <input type="text" id="searchInput" class="form-control form-control-sm" style="width:150px" placeholder="搜索">
             <?php if($cms_user->is_root || $cms_user->canAccessTable($form->table_name, 'create')): ?>
-            <a href="<?php echo e(route('table-data.create', $form->table_name)); ?>" class="btn btn-sm btn-primary">新增</a>
+            <a href="<?php echo e(route('table-data.create', $form->table_name)); ?>" class="btn btn-sm btn-primary"><i class="bi bi-plus-lg me-1"></i>新增</a>
             <?php endif; ?>
         </div>
     </div>
@@ -93,8 +93,8 @@ $(function(){
                     tr.append($('<td></td>')[r.t === 'html' ? 'html' : 'text'](r.v));
                 });
                 var actions = $('<td></td>');
-                if(canEdit) actions.append($('<a class="btn btn-sm btn-outline-primary me-1"></a>').text('编辑').attr('href', url+'/'+row.id+'/edit'));
-                if(canDel) actions.append($('<button class="btn btn-sm btn-outline-danger"></button>').text('删除').on('click', function(){ if(confirm('确定删除？')) $.post(url+'/'+row.id, {_token:'<?php echo e(csrf_token()); ?>',_method:'DELETE'}, function(){ loadData(); }); }));
+                if(canEdit) actions.append($('<a class="btn btn-sm btn-outline-primary me-1"></a>').html('<i class="bi bi-pencil me-1"></i>编辑').attr('href', url+'/'+row.id+'/edit'));
+                if(canDel) actions.append($('<button class="btn btn-sm btn-outline-danger"></button>').html('<i class="bi bi-trash me-1"></i>删除').on('click', function(){ if(confirm('确定删除？')) $.post(url+'/'+row.id, {_token:'<?php echo e(csrf_token()); ?>',_method:'DELETE'}, function(){ loadData(); }); }));
                 tr.append(actions);
                 tbody.append(tr);
             });

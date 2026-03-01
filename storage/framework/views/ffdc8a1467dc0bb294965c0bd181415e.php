@@ -5,7 +5,7 @@
     <div class="card-header d-flex justify-content-between align-items-center">
         <span>表单列表</span>
         <?php if($cms_user->is_root || $cms_user->hasPermission('_forms', 'create')): ?>
-        <a href="<?php echo e(route('forms.create')); ?>" class="btn btn-sm btn-primary">新建表单</a>
+        <a href="<?php echo e(route('forms.create')); ?>" class="btn btn-sm btn-primary"><i class="bi bi-plus-lg me-1"></i>新建表单</a>
         <?php endif; ?>
     </div>
     <div class="card-body p-0">
@@ -20,15 +20,15 @@
                     <td><?php echo e($f->table_name); ?></td>
                     <td><?php echo e($f->fields_count); ?></td>
                     <td>
-                        <a href="<?php echo e(route('table-data.index', $f->table_name)); ?>" class="btn btn-sm btn-outline-primary">数据</a>
-                        <a href="<?php echo e(route('form-fields.index', $f)); ?>" class="btn btn-sm btn-outline-secondary">字段</a>
+                        <a href="<?php echo e(route('table-data.index', $f->table_name)); ?>" class="btn btn-sm btn-outline-primary"><i class="bi bi-table me-1"></i>数据</a>
+                        <a href="<?php echo e(route('form-fields.index', $f)); ?>" class="btn btn-sm btn-outline-secondary"><i class="bi bi-list-ul me-1"></i>字段</a>
                         <?php if($cms_user->is_root || $cms_user->hasPermission('_forms', 'update')): ?>
-                        <a href="<?php echo e(route('forms.edit', $f)); ?>" class="btn btn-sm btn-outline-secondary">编辑</a>
+                        <a href="<?php echo e(route('forms.edit', $f)); ?>" class="btn btn-sm btn-outline-secondary"><i class="bi bi-pencil me-1"></i>编辑</a>
                         <?php endif; ?>
                         <?php if($cms_user->is_root || $cms_user->hasPermission('_forms', 'delete')): ?>
                         <form action="<?php echo e(route('forms.destroy', $f)); ?>" method="POST" class="d-inline" onsubmit="return confirm('确定删除？');">
                             <?php echo csrf_field(); ?> <?php echo method_field('DELETE'); ?>
-                            <button type="submit" class="btn btn-sm btn-outline-danger">删除</button>
+                            <button type="submit" class="btn btn-sm btn-outline-danger"><i class="bi bi-trash me-1"></i>删除</button>
                         </form>
                         <?php endif; ?>
                     </td>

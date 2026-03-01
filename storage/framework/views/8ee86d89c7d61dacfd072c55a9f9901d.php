@@ -21,8 +21,8 @@
                 <?php echo $__env->make('table-data.field-control', ['field' => $field, 'value' => $row?->{$field->field_name} ?? old($field->field_name) ?? ''], \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
             </div>
             <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-            <button type="submit" class="btn btn-primary">保存</button>
-            <a href="<?php echo e(route('table-data.index', $tableName)); ?>" class="btn btn-secondary">返回</a>
+            <button type="submit" class="btn btn-primary"><i class="bi bi-check-lg me-1"></i>保存</button>
+            <a href="<?php echo e(route('table-data.index', $tableName)); ?>" class="btn btn-secondary"><i class="bi bi-arrow-left me-1"></i>返回</a>
         </form>
     </div>
 </div>

@@ -95,6 +95,8 @@ p, span, div, label, td, th, li, a, button, input, select, textarea { font-size:
 }
 .admin-sidebar .sidebar-group-items.show { max-height: 500px; }
 .admin-sidebar .sidebar-item { padding-left: 36px !important; font-size: 13px !important; }
+.admin-sidebar .sidebar-group-icon,
+.admin-sidebar .sidebar-item-icon { width: 1.1em; flex-shrink: 0; }
 .admin-sidebar .nav-link {
   font-size: 14px !important;
   padding: 12px 20px;

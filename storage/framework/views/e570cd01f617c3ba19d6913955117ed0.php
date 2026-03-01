@@ -9,9 +9,9 @@
             <div class="card-header"><?php echo e($form->name); ?></div>
             <div class="card-body">
                 <p class="card-text"><?php echo e($form->description ?? '暂无描述'); ?></p>
-                <a href="<?php echo e(route('table-data.index', $form->table_name)); ?>" class="btn btn-sm btn-primary">管理数据</a>
+                <a href="<?php echo e(route('table-data.index', $form->table_name)); ?>" class="btn btn-sm btn-primary"><i class="bi bi-table me-1"></i>管理数据</a>
                 <?php if($cms_user->is_root || $cms_user->hasPermission('_forms', 'read')): ?>
-                <a href="<?php echo e(route('form-fields.index', $form)); ?>" class="btn btn-sm btn-outline-primary">字段配置</a>
+                <a href="<?php echo e(route('form-fields.index', $form)); ?>" class="btn btn-sm btn-outline-primary"><i class="bi bi-sliders me-1"></i>字段配置</a>
                 <?php endif; ?>
             </div>
         </div>

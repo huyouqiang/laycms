@@ -6,38 +6,39 @@
     <meta name="csrf-token" content="<?php echo e(csrf_token()); ?>">
     <title><?php echo $__env->yieldContent('title', 'LayCMS'); ?> - LayCMS</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
     <link href="<?php echo e(asset('css/app.css')); ?>" rel="stylesheet">
 </head>
 <body>
     <nav class="navbar navbar-expand-lg navbar-light navbar-with-sidebar">
         <div class="navbar-brand-wrap">
-            <a class="navbar-brand" href="<?php echo e(route('dashboard')); ?>">LayCMS</a>
+            <a class="navbar-brand d-flex align-items-center gap-2" href="<?php echo e(route('dashboard')); ?>"><i class="bi bi-grid-3x3-gap"></i> LayCMS</a>
         </div>
         <div class="navbar-nav-wrap">
             <div class="navbar-nav me-auto">
-                <a class="nav-link" href="<?php echo e(route('dashboard')); ?>">首页</a>
+                <a class="nav-link d-flex align-items-center gap-1" href="<?php echo e(route('dashboard')); ?>"><i class="bi bi-house-door"></i> 首页</a>
                 <?php if($cms_user->is_root || $cms_user->hasPermission('_forms', 'read')): ?>
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">表单管理</a>
+                    <a class="nav-link dropdown-toggle d-flex align-items-center gap-1" href="#" data-bs-toggle="dropdown"><i class="bi bi-ui-checks"></i> 表单管理</a>
                     <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="<?php echo e(route('form-groups.index')); ?>">表单分组</a></li>
-                        <li><a class="dropdown-item" href="<?php echo e(route('forms.index')); ?>">表单列表</a></li>
+                        <li><a class="dropdown-item d-flex align-items-center gap-2" href="<?php echo e(route('form-groups.index')); ?>"><i class="bi bi-folder2"></i> 表单分组</a></li>
+                        <li><a class="dropdown-item d-flex align-items-center gap-2" href="<?php echo e(route('forms.index')); ?>"><i class="bi bi-file-earmark-text"></i> 表单列表</a></li>
                     </ul>
                 </li>
                 <?php endif; ?>
                 <?php if($cms_user->is_root || $cms_user->hasPermission('_users', 'read')): ?>
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">用户管理</a>
+                    <a class="nav-link dropdown-toggle d-flex align-items-center gap-1" href="#" data-bs-toggle="dropdown"><i class="bi bi-people"></i> 用户管理</a>
                     <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="<?php echo e(route('user-groups.index')); ?>">用户组</a></li>
-                        <li><a class="dropdown-item" href="<?php echo e(route('users.index')); ?>">用户列表</a></li>
+                        <li><a class="dropdown-item d-flex align-items-center gap-2" href="<?php echo e(route('user-groups.index')); ?>"><i class="bi bi-person-badge"></i> 用户组</a></li>
+                        <li><a class="dropdown-item d-flex align-items-center gap-2" href="<?php echo e(route('users.index')); ?>"><i class="bi bi-person-lines-fill"></i> 用户列表</a></li>
                     </ul>
                 </li>
                 <?php endif; ?>
             </div>
             <div class="navbar-nav">
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown"><?php echo e($cms_user->nickname ?? $cms_user->username); ?></a>
+                    <a class="nav-link dropdown-toggle d-flex align-items-center gap-1" href="#" data-bs-toggle="dropdown"><i class="bi bi-person-circle"></i> <?php echo e($cms_user->nickname ?? $cms_user->username); ?></a>
                     <ul class="dropdown-menu dropdown-menu-end">
                         <li class="px-3 py-2 text-muted small">
                             <?php if($cms_user->is_root): ?>
@@ -50,7 +51,7 @@
                             <?php endif; ?>
                         </li>
                         <li><hr class="dropdown-divider"></li>
-                        <li><a class="dropdown-item" href="<?php echo e(route('logout')); ?>">退出登录</a></li>
+                        <li><a class="dropdown-item d-flex align-items-center gap-2" href="<?php echo e(route('logout')); ?>"><i class="bi bi-box-arrow-right"></i> 退出登录</a></li>
                     </ul>
                 </li>
             </div>
@@ -63,7 +64,8 @@
                 <?php $__currentLoopData = $menu_form_groups ?? []; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $grp): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                 <?php $hasCurrent = $grp->forms->contains(fn($f) => $f->table_name === $currentTable); ?>
                 <div class="sidebar-group<?php echo e($hasCurrent ? ' expanded' : ''); ?>" data-group-id="<?php echo e($grp->id); ?>">
-                    <a class="nav-link sidebar-group-toggle" href="javascript:;" title="<?php echo e($grp->name); ?>">
+                    <a class="nav-link sidebar-group-toggle d-flex align-items-center" href="javascript:;" title="<?php echo e($grp->name); ?>">
+                        <i class="bi bi-folder2-open me-2 sidebar-group-icon"></i>
                         <span class="sidebar-text"><?php echo e($grp->name); ?></span>
                         <span class="sidebar-first" data-first="<?php echo e(mb_substr($grp->name, 0, 1)); ?>"></span>
                         <svg class="sidebar-group-arrow ms-auto" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
@@ -71,7 +73,7 @@
                     <div class="sidebar-group-items<?php echo e($hasCurrent ? ' show' : ''); ?>">
                         <?php $__currentLoopData = $grp->forms ?? []; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $f): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                         <?php if($cms_user->is_root || $cms_user->canAccessTable($f->table_name, 'read')): ?>
-                        <a class="nav-link sidebar-item<?php echo e((request()->route('tableName') ?? '') === $f->table_name ? ' active' : ''); ?>" href="<?php echo e(route('table-data.index', $f->table_name)); ?>" title="<?php echo e($f->name); ?>"><span class="sidebar-text"><?php echo e($f->name); ?></span><span class="sidebar-first" data-first="<?php echo e(mb_substr($f->name, 0, 1)); ?>"></span></a>
+                        <a class="nav-link sidebar-item d-flex align-items-center<?php echo e((request()->route('tableName') ?? '') === $f->table_name ? ' active' : ''); ?>" href="<?php echo e(route('table-data.index', $f->table_name)); ?>" title="<?php echo e($f->name); ?>"><i class="bi bi-table me-2 sidebar-item-icon"></i><span class="sidebar-text"><?php echo e($f->name); ?></span><span class="sidebar-first" data-first="<?php echo e(mb_substr($f->name, 0, 1)); ?>"></span></a>
                         <?php endif; ?>
                         <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                     </div>

@@ -29,8 +29,8 @@
                 <label class="form-label">描述</label>
                 <input type="text" name="description" class="form-control" value="{{ old('description') }}" placeholder="可选">
             </div>
-            <button type="submit" class="btn btn-primary">创建</button>
-            <a href="{{ route('forms.index') }}" class="btn btn-secondary">返回</a>
+            <button type="submit" class="btn btn-primary"><i class="bi bi-plus-circle me-1"></i>创建</button>
+            <a href="{{ route('forms.index') }}" class="btn btn-secondary"><i class="bi bi-arrow-left me-1"></i>返回</a>
         </form>
     </div>
 </div>

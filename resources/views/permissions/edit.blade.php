@@ -29,8 +29,8 @@
                 </table>
             </div>
             <div class="mt-3">
-                <button type="submit" class="btn btn-primary">保存权限</button>
-                <a href="{{ route('user-groups.index') }}" class="btn btn-secondary">返回</a>
+                <button type="submit" class="btn btn-primary"><i class="bi bi-check-lg me-1"></i>保存权限</button>
+                <a href="{{ route('user-groups.index') }}" class="btn btn-secondary"><i class="bi bi-arrow-left me-1"></i>返回</a>
             </div>
         </form>
     </div>

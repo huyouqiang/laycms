@@ -3,7 +3,7 @@
 <?php $__env->startSection('content'); ?>
 <div class="card">
     <div class="card-header">
-        <button type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#groupModal" id="btnAdd">新建分组</button>
+        <button type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#groupModal" id="btnAdd"><i class="bi bi-plus-lg me-1"></i>新建分组</button>
     </div>
     <div class="card-body p-0">
         <table class="table table-hover mb-0">
@@ -16,10 +16,10 @@
                     <td><?php echo e($g->sort_order); ?></td>
                     <td><?php echo e($g->forms_count); ?></td>
                     <td>
-                        <button type="button" class="btn btn-sm btn-outline-secondary edit-group" data-group='<?php echo json_encode($g, 15, 512) ?>'>编辑</button>
+                        <button type="button" class="btn btn-sm btn-outline-secondary edit-group" data-group='<?php echo json_encode($g, 15, 512) ?>'><i class="bi bi-pencil me-1"></i>编辑</button>
                         <form action="<?php echo e(route('form-groups.destroy', $g)); ?>" method="POST" class="d-inline" onsubmit="return confirm('确定删除？');">
                             <?php echo csrf_field(); ?> <?php echo method_field('DELETE'); ?>
-                            <button type="submit" class="btn btn-sm btn-outline-danger" <?php echo e($g->forms_count > 0 ? 'disabled title="该分组下有表单"' : ''); ?>>删除</button>
+                            <button type="submit" class="btn btn-sm btn-outline-danger" <?php echo e($g->forms_count > 0 ? 'disabled title="该分组下有表单"' : ''); ?>><i class="bi bi-trash me-1"></i>删除</button>
                         </form>
                     </td>
                 </tr>
@@ -49,8 +49,8 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
-                    <button type="submit" class="btn btn-primary">保存</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><i class="bi bi-x-lg me-1"></i>取消</button>
+                    <button type="submit" class="btn btn-primary"><i class="bi bi-check-lg me-1"></i>保存</button>
                 </div>
             </form>
         </div>

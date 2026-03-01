@@ -6,38 +6,39 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>@yield('title', 'LayCMS') - LayCMS</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
 </head>
 <body>
     <nav class="navbar navbar-expand-lg navbar-light navbar-with-sidebar">
         <div class="navbar-brand-wrap">
-            <a class="navbar-brand" href="{{ route('dashboard') }}">LayCMS</a>
+            <a class="navbar-brand d-flex align-items-center gap-2" href="{{ route('dashboard') }}"><i class="bi bi-grid-3x3-gap"></i> LayCMS</a>
         </div>
         <div class="navbar-nav-wrap">
             <div class="navbar-nav me-auto">
-                <a class="nav-link" href="{{ route('dashboard') }}">首页</a>
+                <a class="nav-link d-flex align-items-center gap-1" href="{{ route('dashboard') }}"><i class="bi bi-house-door"></i> 首页</a>
                 @if($cms_user->is_root || $cms_user->hasPermission('_forms', 'read'))
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">表单管理</a>
+                    <a class="nav-link dropdown-toggle d-flex align-items-center gap-1" href="#" data-bs-toggle="dropdown"><i class="bi bi-ui-checks"></i> 表单管理</a>
                     <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="{{ route('form-groups.index') }}">表单分组</a></li>
-                        <li><a class="dropdown-item" href="{{ route('forms.index') }}">表单列表</a></li>
+                        <li><a class="dropdown-item d-flex align-items-center gap-2" href="{{ route('form-groups.index') }}"><i class="bi bi-folder2"></i> 表单分组</a></li>
+                        <li><a class="dropdown-item d-flex align-items-center gap-2" href="{{ route('forms.index') }}"><i class="bi bi-file-earmark-text"></i> 表单列表</a></li>
                     </ul>
                 </li>
                 @endif
                 @if($cms_user->is_root || $cms_user->hasPermission('_users', 'read'))
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">用户管理</a>
+                    <a class="nav-link dropdown-toggle d-flex align-items-center gap-1" href="#" data-bs-toggle="dropdown"><i class="bi bi-people"></i> 用户管理</a>
                     <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="{{ route('user-groups.index') }}">用户组</a></li>
-                        <li><a class="dropdown-item" href="{{ route('users.index') }}">用户列表</a></li>
+                        <li><a class="dropdown-item d-flex align-items-center gap-2" href="{{ route('user-groups.index') }}"><i class="bi bi-person-badge"></i> 用户组</a></li>
+                        <li><a class="dropdown-item d-flex align-items-center gap-2" href="{{ route('users.index') }}"><i class="bi bi-person-lines-fill"></i> 用户列表</a></li>
                     </ul>
                 </li>
                 @endif
             </div>
             <div class="navbar-nav">
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">{{ $cms_user->nickname ?? $cms_user->username }}</a>
+                    <a class="nav-link dropdown-toggle d-flex align-items-center gap-1" href="#" data-bs-toggle="dropdown"><i class="bi bi-person-circle"></i> {{ $cms_user->nickname ?? $cms_user->username }}</a>
                     <ul class="dropdown-menu dropdown-menu-end">
                         <li class="px-3 py-2 text-muted small">
                             @if($cms_user->is_root)
@@ -49,7 +50,7 @@
                             @endif
                         </li>
                         <li><hr class="dropdown-divider"></li>
-                        <li><a class="dropdown-item" href="{{ route('logout') }}">退出登录</a></li>
+                        <li><a class="dropdown-item d-flex align-items-center gap-2" href="{{ route('logout') }}"><i class="bi bi-box-arrow-right"></i> 退出登录</a></li>
                     </ul>
                 </li>
             </div>
@@ -62,7 +63,8 @@
                 @foreach($menu_form_groups ?? [] as $grp)
                 @php $hasCurrent = $grp->forms->contains(fn($f) => $f->table_name === $currentTable); @endphp
                 <div class="sidebar-group{{ $hasCurrent ? ' expanded' : '' }}" data-group-id="{{ $grp->id }}">
-                    <a class="nav-link sidebar-group-toggle" href="javascript:;" title="{{ $grp->name }}">
+                    <a class="nav-link sidebar-group-toggle d-flex align-items-center" href="javascript:;" title="{{ $grp->name }}">
+                        <i class="bi bi-folder2-open me-2 sidebar-group-icon"></i>
                         <span class="sidebar-text">{{ $grp->name }}</span>
                         <span class="sidebar-first" data-first="{{ mb_substr($grp->name, 0, 1) }}"></span>
                         <svg class="sidebar-group-arrow ms-auto" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
@@ -70,7 +72,7 @@
                     <div class="sidebar-group-items{{ $hasCurrent ? ' show' : '' }}">
                         @foreach($grp->forms ?? [] as $f)
                         @if($cms_user->is_root || $cms_user->canAccessTable($f->table_name, 'read'))
-                        <a class="nav-link sidebar-item{{ (request()->route('tableName') ?? '') === $f->table_name ? ' active' : '' }}" href="{{ route('table-data.index', $f->table_name) }}" title="{{ $f->name }}"><span class="sidebar-text">{{ $f->name }}</span><span class="sidebar-first" data-first="{{ mb_substr($f->name, 0, 1) }}"></span></a>
+                        <a class="nav-link sidebar-item d-flex align-items-center{{ (request()->route('tableName') ?? '') === $f->table_name ? ' active' : '' }}" href="{{ route('table-data.index', $f->table_name) }}" title="{{ $f->name }}"><i class="bi bi-table me-2 sidebar-item-icon"></i><span class="sidebar-text">{{ $f->name }}</span><span class="sidebar-first" data-first="{{ mb_substr($f->name, 0, 1) }}"></span></a>
                         @endif
                         @endforeach
                     </div>

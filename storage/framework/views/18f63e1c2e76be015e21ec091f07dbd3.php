@@ -3,7 +3,7 @@
 <?php $__env->startSection('content'); ?>
 <div class="card">
     <div class="card-header">
-        <button type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#userModal" id="btnAdd">新建用户</button>
+        <button type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#userModal" id="btnAdd"><i class="bi bi-person-plus me-1"></i>新建用户</button>
     </div>
     <div class="card-body p-0">
         <table class="table table-hover mb-0">
@@ -19,10 +19,10 @@
                     <td><?php echo e($u->is_active ? '正常' : '禁用'); ?></td>
                     <td>
                         <?php if(!$u->is_root): ?>
-                        <button type="button" class="btn btn-sm btn-outline-secondary edit-user" data-user='<?php echo json_encode($u, 15, 512) ?>'>编辑</button>
+                        <button type="button" class="btn btn-sm btn-outline-secondary edit-user" data-user='<?php echo json_encode($u, 15, 512) ?>'><i class="bi bi-pencil me-1"></i>编辑</button>
                         <form action="<?php echo e(route('users.destroy', $u)); ?>" method="POST" class="d-inline" onsubmit="return confirm('确定删除？');">
                             <?php echo csrf_field(); ?> <?php echo method_field('DELETE'); ?>
-                            <button type="submit" class="btn btn-sm btn-outline-danger">删除</button>
+                            <button type="submit" class="btn btn-sm btn-outline-danger"><i class="bi bi-trash me-1"></i>删除</button>
                         </form>
                         <?php else: ?>
                         <span class="badge bg-secondary">不可操作</span>
@@ -73,8 +73,8 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
-                    <button type="submit" class="btn btn-primary">保存</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><i class="bi bi-x-lg me-1"></i>取消</button>
+                    <button type="submit" class="btn btn-primary"><i class="bi bi-check-lg me-1"></i>保存</button>
                 </div>
             </form>
         </div>
