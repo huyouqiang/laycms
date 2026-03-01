@@ -11,9 +11,6 @@
 <body>
     <nav class="navbar navbar-expand-lg navbar-light">
         <div class="container-fluid">
-            <button type="button" class="btn btn-link text-secondary p-0 me-2 sidebar-toggle" id="sidebarToggle" title="收起/展开侧边栏" aria-label="收起/展开侧边栏">
-                <svg class="sidebar-toggle-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
-            </button>
             <a class="navbar-brand" href="<?php echo e(route('dashboard')); ?>">LayCMS</a>
             <div class="navbar-nav me-auto">
                 <a class="nav-link" href="<?php echo e(route('dashboard')); ?>">首页</a>
@@ -50,7 +47,6 @@
     <div class="d-flex sidebar-wrapper">
         <aside class="admin-sidebar" id="adminSidebar" data-current-table="<?php echo e($currentTable); ?>">
             <nav class="nav flex-column pt-2 sidebar-nav">
-                <span class="sidebar-label px-3 text-secondary small">表单管理</span>
                 <?php $__currentLoopData = $menu_form_groups ?? []; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $grp): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                 <?php $hasCurrent = $grp->forms->contains(fn($f) => $f->table_name === $currentTable); ?>
                 <div class="sidebar-group<?php echo e($hasCurrent ? ' expanded' : ''); ?>" data-group-id="<?php echo e($grp->id); ?>">
@@ -84,17 +80,6 @@
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-    (function(){
-        var key = 'laycms_sidebar_collapsed';
-        var sidebar = document.getElementById('adminSidebar');
-        var toggle = document.getElementById('sidebarToggle');
-        if (!sidebar || !toggle) return;
-        var collapsed = localStorage.getItem(key) === '1';
-        function apply(){ sidebar.classList.toggle('collapsed', collapsed); }
-        function save(){ localStorage.setItem(key, collapsed ? '1' : '0'); }
-        apply();
-        toggle.addEventListener('click', function(){ collapsed = !collapsed; apply(); save(); });
-    })();
     (function(){
         var key = 'laycms_sidebar_groups';
         var stored = localStorage.getItem(key);
