@@ -317,3 +317,24 @@ main {
 }
 .relation-dropdown .list-group-item { border-radius: 0; cursor: pointer; }
 .relation-dropdown .list-group-item:hover { background: var(--el-fill-base); }
+
+/* 数据列表 - 字段过多时在表格区域内显示横向滚动条，表头固定 */
+.table-data-scroll {
+  overflow: auto;
+  -webkit-overflow-scrolling: touch;
+  max-height: calc(100vh - 220px);
+}
+.table-data-scroll .table {
+  min-width: max-content;
+}
+.table-data-scroll .table thead th {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  background: var(--el-fill-base);
+  box-shadow: 0 1px 0 var(--el-border-lighter);
+  white-space: nowrap;
+}
+.table-data-scroll .table tbody td {
+  white-space: nowrap;
+}

@@ -49,7 +49,7 @@
         </div>
         @break
     @case('editor')
-        <textarea name="{{ $name }}" class="form-control" style="min-height:200px">{{ $value }}</textarea>
+        <textarea name="{{ $name }}" id="ckeditor-{{ $name }}" class="form-control ckeditor-field" style="min-height:200px">{{ $value }}</textarea>
         @break
     @case('file')
         <div class="file-upload-wrap d-flex align-items-center gap-2 flex-wrap" data-name="{{ $name }}">

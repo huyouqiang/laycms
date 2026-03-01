@@ -49,7 +49,7 @@
         </div>
         <?php break; ?>
     <?php case ('editor'): ?>
-        <textarea name="<?php echo e($name); ?>" class="form-control" style="min-height:200px"><?php echo e($value); ?></textarea>
+        <textarea name="<?php echo e($name); ?>" id="ckeditor-<?php echo e($name); ?>" class="form-control ckeditor-field" style="min-height:200px"><?php echo e($value); ?></textarea>
         <?php break; ?>
     <?php case ('file'): ?>
         <div class="file-upload-wrap d-flex align-items-center gap-2 flex-wrap" data-name="<?php echo e($name); ?>">

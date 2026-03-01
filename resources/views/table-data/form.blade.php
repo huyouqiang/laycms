@@ -23,8 +23,34 @@
 @endsection
 
 @push('scripts')
+@if($form->fields->contains('form_control', 'editor'))
+<script src="https://cdn.ckeditor.com/4.22.1/full/ckeditor.js"></script>
+<script src="https://cdn.ckeditor.com/4.22.1/full/lang/zh-cn.js"></script>
+@endif
 <script>
 $(function(){
+    @if($form->fields->contains('form_control', 'editor'))
+    $('.ckeditor-field').each(function(){
+        CKEDITOR.replace(this.id, {
+            versionCheck: false,
+            height: 300,
+            language: 'zh-cn',
+            toolbar: [
+                { name: 'document', items: ['Source'] },
+                { name: 'clipboard', items: ['Cut', 'Copy', 'Paste', 'PasteText', 'PasteFromWord', '-', 'Undo', 'Redo'] },
+                { name: 'editing', items: ['Find', 'Replace', '-', 'SelectAll'] },
+                { name: 'basicstyles', items: ['Bold', 'Italic', 'Underline', 'Strike', 'Subscript', 'Superscript', '-', 'RemoveFormat'] },
+                { name: 'paragraph', items: ['NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'Blockquote', 'CreateDiv', '-', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock'] },
+                { name: 'links', items: ['Link', 'Unlink', 'Anchor'] },
+                { name: 'insert', items: ['Image', 'Table', 'HorizontalRule', 'Smiley', 'SpecialChar', 'PageBreak', 'Iframe'] },
+                '/',
+                { name: 'styles', items: ['Styles', 'Format', 'Font', 'FontSize'] },
+                { name: 'colors', items: ['TextColor', 'BGColor'] },
+                { name: 'tools', items: ['Maximize', 'ShowBlocks'] }
+            ]
+        });
+    });
+    @endif
     var searchTimer;
     $('.relation-autocomplete').each(function(){
         var $wrap = $(this);
@@ -102,6 +128,12 @@ $(function(){
         $wrap.find('.file-path-input').val('');
         $wrap.find('.file-path-display').text('未上传');
         $(this).hide();
+    });
+
+    $('form').on('submit', function(){
+        if (typeof CKEDITOR !== 'undefined') {
+            for (var i in CKEDITOR.instances) { CKEDITOR.instances[i].updateElement(); }
+        }
     });
 });
 </script>
