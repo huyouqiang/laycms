@@ -27,9 +27,9 @@
                 <label class="form-label">描述</label>
                 <input type="text" name="description" class="form-control" value="<?php echo e(old('description', $form->description)); ?>">
             </div>
-            <button type="submit" class="btn btn-primary">保存</button>
-            <a href="<?php echo e(route('forms.index')); ?>" class="btn btn-secondary">返回</a>
-            <a href="<?php echo e(route('form-fields.index', $form)); ?>" class="btn btn-outline-primary">配置字段</a>
+            <button type="submit" class="btn btn-primary"><i class="bi bi-check-lg me-1"></i>保存</button>
+            <a href="<?php echo e(route('forms.index')); ?>" class="btn btn-secondary"><i class="bi bi-arrow-left me-1"></i>返回</a>
+            <a href="<?php echo e(route('form-fields.index', $form)); ?>" class="btn btn-outline-primary"><i class="bi bi-sliders me-1"></i>配置字段</a>
         </form>
     </div>
 </div>
@@ -38,7 +38,7 @@
 <div class="card mt-4">
     <div class="card-header d-flex justify-content-between align-items-center">
         <span>关联表单（MySQL 外键）</span>
-        <button type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#relationModal" id="btnAddRelation">添加关联</button>
+        <button type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#relationModal" id="btnAddRelation"><i class="bi bi-link-45deg me-1"></i>添加关联</button>
     </div>
     <div class="card-body p-0">
         <table class="table table-hover mb-0">
@@ -52,7 +52,7 @@
                     <td>
                         <form action="<?php echo e(route('form-relations.destroy', $rel)); ?>" method="POST" class="d-inline" onsubmit="return confirm('确定删除此关联？将移除数据库外键约束。');">
                             <?php echo csrf_field(); ?> <?php echo method_field('DELETE'); ?>
-                            <button type="submit" class="btn btn-sm btn-outline-danger">删除</button>
+                            <button type="submit" class="btn btn-sm btn-outline-danger"><i class="bi bi-trash me-1"></i>删除</button>
                         </form>
                     </td>
                 </tr>
@@ -85,7 +85,7 @@
                                 <?php echo csrf_field(); ?>
                                 <?php echo method_field('DELETE'); ?>
                                 <input type="hidden" name="index_name" value="<?php echo e($idx['name']); ?>">
-                                <button type="submit" class="btn btn-sm btn-outline-danger">删除</button>
+                                <button type="submit" class="btn btn-sm btn-outline-danger"><i class="bi bi-trash me-1"></i>删除</button>
                             </form>
                             <?php else: ?>
                             <span class="text-secondary">-</span>
@@ -110,7 +110,7 @@
                 </select>
             </div>
             <div>
-                <button type="submit" class="btn btn-primary">添加索引</button>
+                <button type="submit" class="btn btn-primary"><i class="bi bi-database-add me-1"></i>添加索引</button>
             </div>
         </form>
         <small class="text-secondary mt-2 d-block">为数据表 <?php echo e($form->table_name); ?> 的字段添加 MySQL 索引，以提升查询性能。</small>
@@ -163,8 +163,8 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
-                    <button type="submit" class="btn btn-primary">添加</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><i class="bi bi-x-lg me-1"></i>取消</button>
+                    <button type="submit" class="btn btn-primary"><i class="bi bi-plus-lg me-1"></i>添加</button>
                 </div>
             </form>
         </div>

@@ -5,7 +5,7 @@
     "keywords": ["laravel", "cms", "layui", "form"],
     "license": "MIT",
     "require": {
-        "php": "^8.1",
+        "php": "^8.3",
         "guzzlehttp/guzzle": "^7.2",
         "laravel/framework": "^10.0",
         "laravel/sanctum": "^3.2",
@@ -55,6 +55,9 @@
         }
     },
     "config": {
+        "platform": {
+            "php": "8.3.0"
+        },
         "optimize-autoloader": true,
         "preferred-install": "dist",
         "sort-packages": true,
