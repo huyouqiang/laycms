@@ -34,6 +34,11 @@
 </div>
 @endsection
 
+@php
+    $listFieldsData = $form->fields->where('is_list_visible', true)->map(function($f) {
+        return ['name' => $f->field_name, 'control' => $f->form_control, 'opts' => $f->getOptionsArray()];
+    })->values();
+@endphp
 @push('scripts')
 <script>
 $(function(){
@@ -42,6 +47,34 @@ $(function(){
     var canEdit = {{ ($cms_user->is_root || $cms_user->canAccessTable($form->table_name, 'update')) ? 'true' : 'false' }};
     var canDel = {{ ($cms_user->is_root || $cms_user->canAccessTable($form->table_name, 'delete')) ? 'true' : 'false' }};
     var page = 1, limit = 15, total = 0;
+    var listFields = @json($listFieldsData) || [];
+    var baseUrl = '{{ url("/") }}'.replace(/\/$/, '');
+
+    function formatCellVal(row, field) {
+        var val = row[field.name];
+        if (val === undefined || val === null || val === '') return { t: 'text', v: '-' };
+        if (field.control === 'file' && val) {
+            var href = baseUrl + '/' + String(val).replace(/^\//, '');
+            var escaped = $('<div>').text(val).html();
+            return { t: 'html', v: '<a href="' + href + '" target="_blank" rel="noopener">' + escaped + '</a>' };
+        }
+        if ((field.control === 'radio' || field.control === 'select') && field.opts && typeof field.opts === 'object') {
+            var k = String(val);
+            return { t: 'text', v: field.opts[k] !== undefined ? field.opts[k] : val };
+        }
+        if (field.control === 'checkbox' && field.opts && typeof field.opts === 'object') {
+            var arr;
+            if (typeof val === 'string') {
+                try { arr = JSON.parse(val); } catch(e) { arr = [val]; }
+                arr = Array.isArray(arr) ? arr : [val];
+            } else {
+                arr = Array.isArray(val) ? val : [val];
+            }
+            var txt = arr.map(function(k){ return field.opts[String(k)] !== undefined ? field.opts[String(k)] : k; }).join('/') || val;
+            return { t: 'text', v: txt };
+        }
+        return { t: 'text', v: val };
+    }
 
     function loadData(){
         $.get(url, { page: page, limit: limit, search: $('#searchInput').val() }, function(res){
@@ -50,9 +83,10 @@ $(function(){
                 var tr = $('<tr></tr>');
                 tr.append($('<td></td>').text((page-1)*limit + i + 1));
                 tr.append($('<td></td>').text(row.id));
-                @foreach($form->fields->where('is_list_visible', true) as $f)
-                tr.append($('<td></td>').text(row.{{ $f->field_name }} || '-'));
-                @endforeach
+                listFields.forEach(function(f){
+                    var r = formatCellVal(row, f);
+                    tr.append($('<td></td>')[r.t === 'html' ? 'html' : 'text'](r.v));
+                });
                 var actions = $('<td></td>');
                 if(canEdit) actions.append($('<a class="btn btn-sm btn-outline-primary me-1"></a>').text('编辑').attr('href', url+'/'+row.id+'/edit'));
                 if(canDel) actions.append($('<button class="btn btn-sm btn-outline-danger"></button>').text('删除').on('click', function(){ if(confirm('确定删除？')) $.post(url+'/'+row.id, {_token:'{{ csrf_token() }}',_method:'DELETE'}, function(){ loadData(); }); }));

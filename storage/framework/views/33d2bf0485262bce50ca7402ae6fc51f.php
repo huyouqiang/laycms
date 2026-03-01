@@ -51,27 +51,36 @@
     <?php case ('editor'): ?>
         <textarea name="<?php echo e($name); ?>" class="form-control" style="min-height:200px"><?php echo e($value); ?></textarea>
         <?php break; ?>
+    <?php case ('file'): ?>
+        <div class="file-upload-wrap d-flex align-items-center gap-2 flex-wrap" data-name="<?php echo e($name); ?>">
+            <input type="hidden" name="<?php echo e($name); ?>" value="<?php echo e($value); ?>" class="file-path-input" <?php echo e($field->is_required ? 'required' : ''); ?>>
+            <label class="btn btn-sm btn-outline-primary mb-0">
+                <input type="file" class="file-upload-input d-none" accept="*/*">选择文件
+            </label>
+            <span class="file-path-display text-secondary small"><?php echo $value ? '<a href="'.asset($value).'" target="_blank" rel="noopener">'.$value.'</a>' : '未上传'; ?></span>
+            <a href="javascript:;" class="file-clear-link small" style="<?php echo e($value ? '' : 'display:none'); ?>">清除</a>
+        </div>
+        <?php break; ?>
     <?php case ('relation'): ?>
         <?php
             $rel = $field->relation ?? null;
-            $relOpts = [];
+            $refCol = 'id';
+            $displayCol = 'id';
+            $initLabel = '';
             if ($rel && $rel->relatedForm && \Illuminate\Support\Facades\Schema::hasTable($rel->relatedForm->table_name)) {
-                $rows = \Illuminate\Support\Facades\DB::table($rel->relatedForm->table_name)->orderBy('id')->get();
                 $refCol = $rel->related_field_name ?: 'id';
                 $displayCol = \Illuminate\Support\Arr::first($rel->relatedForm->fields ?? [], fn($f) => $f->is_list_visible)?->field_name ?? $refCol;
-                foreach ($rows as $r) {
-                    $val = $r->{$refCol} ?? $r->id ?? '';
-                    $label = isset($r->{$displayCol}) ? $r->{$displayCol} : $val;
-                    $relOpts[$val] = $label;
+                if ($value !== '' && $value !== null) {
+                    $initRow = \Illuminate\Support\Facades\DB::table($rel->relatedForm->table_name)->where($refCol, $value)->first();
+                    $initLabel = $initRow && isset($initRow->{$displayCol}) ? $initRow->{$displayCol} : (string)$value;
                 }
             }
         ?>
-        <select name="<?php echo e($name); ?>" class="form-select" <?php echo e($field->is_required ? 'required' : ''); ?>>
-            <option value="">请选择</option>
-            <?php $__currentLoopData = $relOpts; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $k => $v): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-            <option value="<?php echo e($k); ?>" <?php echo e((string)$value === (string)$k ? 'selected' : ''); ?>><?php echo e($v); ?></option>
-            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-        </select>
+        <div class="relation-autocomplete" data-table="<?php echo e($rel && $rel->relatedForm ? $rel->relatedForm->table_name : ''); ?>" data-ref="<?php echo e($refCol); ?>" data-display="<?php echo e($displayCol); ?>" data-name="<?php echo e($name); ?>" data-required="<?php echo e($field->is_required ? '1' : '0'); ?>">
+            <input type="hidden" name="<?php echo e($name); ?>" value="<?php echo e($value); ?>" class="relation-value" <?php echo e($field->is_required ? 'required' : ''); ?>>
+            <input type="text" class="form-control relation-input" placeholder="输入搜索或选择" value="<?php echo e($initLabel); ?>" autocomplete="off">
+            <div class="relation-dropdown list-group"></div>
+        </div>
         <?php break; ?>
     <?php default: ?>
         <input type="text" name="<?php echo e($name); ?>" value="<?php echo e(is_array($value) ? json_encode($value) : $value); ?>" class="form-control" placeholder="<?php echo e($field->label); ?>">

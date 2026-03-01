@@ -31,11 +31,28 @@ p, span, div, label, td, th, li, a, button, input, select, textarea { font-size:
 /* 顶部导航 - Element 风格（白色背景 + 阴影） */
 .navbar {
   background: #fff !important;
-  padding: 0 20px;
+  padding: 0;
   min-height: 50px;
   border: none;
   border-radius: 0;
   box-shadow: 0 1px 4px rgba(0,0,0,.12);
+  display: flex;
+  align-items: stretch;
+}
+.navbar-with-sidebar .navbar-brand-wrap {
+  width: 210px;
+  min-width: 210px;
+  display: flex;
+  align-items: center;
+  padding-left: 20px;
+  border-right: 1px solid var(--el-border-lighter);
+}
+.navbar-with-sidebar .navbar-nav-wrap {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px;
 }
 .navbar-brand {
   font-size: 18px !important;
@@ -58,19 +75,15 @@ p, span, div, label, td, th, li, a, button, input, select, textarea { font-size:
 .navbar .dropdown-item:hover { background: var(--el-fill-base); }
 .navbar .dropdown-item { color: var(--el-text-regular); }
 
-/* 侧边栏 - Element 管理后台风格 #304156 */
+/* 侧边栏 - 仿导航栏风格（白底、边框） */
 .admin-sidebar {
   width: 210px;
   min-width: 210px;
   min-height: calc(100vh - 50px);
-  background: var(--el-sidebar) !important;
-  box-shadow: 1px 0 4px rgba(0,0,0,.08);
-  transition: width .3s, min-width .3s;
+  background: #fff !important;
+  border-right: 1px solid var(--el-border-lighter);
+  box-shadow: 1px 0 2px rgba(0,0,0,.05);
   overflow: hidden;
-}
-.admin-sidebar.collapsed {
-  width: 64px;
-  min-width: 64px;
 }
 .admin-sidebar .sidebar-group-toggle { justify-content: space-between; }
 .admin-sidebar .sidebar-group-arrow { flex-shrink: 0; transition: transform .2s; }
@@ -85,50 +98,24 @@ p, span, div, label, td, th, li, a, button, input, select, textarea { font-size:
 .admin-sidebar .nav-link {
   font-size: 14px !important;
   padding: 12px 20px;
-  color: #bfcbd9;
+  color: var(--el-text-regular);
   border-left: 3px solid transparent;
   white-space: nowrap;
   display: flex;
   align-items: center;
 }
 .admin-sidebar .nav-link:hover {
-  color: #fff;
-  background: rgba(255,255,255,.08);
+  color: var(--el-color-primary);
+  background: var(--el-fill-base);
   border-left-color: var(--el-color-primary);
 }
 .admin-sidebar .nav-link.active {
   color: var(--el-color-primary);
-  background: rgba(64,158,255,.1);
+  background: #ecf5ff;
   border-left-color: var(--el-color-primary);
 }
 .admin-sidebar .sidebar-text { transition: opacity .2s; }
 .admin-sidebar .sidebar-first { display: none; }
-.admin-sidebar.collapsed .sidebar-text { opacity: 0; width: 0; overflow: hidden; }
-.admin-sidebar.collapsed .sidebar-first {
-  display: inline-block;
-  font-size: 14px;
-  color: inherit;
-  min-width: 1em;
-}
-.admin-sidebar.collapsed .sidebar-first::before { content: attr(data-first); }
-.admin-sidebar .text-secondary, .admin-sidebar .sidebar-label {
-  font-size: 12px !important;
-  color: #8a9aad !important;
-  padding: 10px 20px 5px;
-  white-space: nowrap;
-  transition: opacity .2s;
-}
-.admin-sidebar.collapsed .sidebar-label { opacity: 0; width: 0; overflow: hidden; padding: 0; }
-.admin-sidebar.collapsed .nav-link { padding: 12px; justify-content: center; }
-.admin-sidebar.collapsed .sidebar-group-arrow { display: none; }
-.admin-sidebar.collapsed .sidebar-group-items { display: none !important; max-height: none !important; }
-.sidebar-toggle {
-  text-decoration: none !important;
-  border: none;
-  background: none;
-  cursor: pointer;
-}
-.sidebar-toggle:hover { color: var(--el-color-primary) !important; }
 
 /* 主内容区 - el-main */
 main {
@@ -310,3 +297,23 @@ main {
   background: var(--el-color-primary) !important;
   border-color: var(--el-color-primary) !important;
 }
+
+/* 关联字段 autocomplete */
+.relation-autocomplete { position: relative; }
+.relation-dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  max-height: 200px;
+  overflow-y: auto;
+  z-index: 1050;
+  display: none;
+  margin-top: 2px;
+  border: 1px solid var(--el-border-base);
+  border-radius: var(--el-border-radius);
+  box-shadow: 0 2px 12px rgba(0,0,0,.1);
+  background: #fff;
+}
+.relation-dropdown .list-group-item { border-radius: 0; cursor: pointer; }
+.relation-dropdown .list-group-item:hover { background: var(--el-fill-base); }

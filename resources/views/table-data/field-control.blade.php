@@ -51,27 +51,36 @@
     @case('editor')
         <textarea name="{{ $name }}" class="form-control" style="min-height:200px">{{ $value }}</textarea>
         @break
+    @case('file')
+        <div class="file-upload-wrap d-flex align-items-center gap-2 flex-wrap" data-name="{{ $name }}">
+            <input type="hidden" name="{{ $name }}" value="{{ $value }}" class="file-path-input" {{ $field->is_required ? 'required' : '' }}>
+            <label class="btn btn-sm btn-outline-primary mb-0">
+                <input type="file" class="file-upload-input d-none" accept="*/*">选择文件
+            </label>
+            <span class="file-path-display text-secondary small">{!! $value ? '<a href="'.asset($value).'" target="_blank" rel="noopener">'.$value.'</a>' : '未上传' !!}</span>
+            <a href="javascript:;" class="file-clear-link small" style="{{ $value ? '' : 'display:none' }}">清除</a>
+        </div>
+        @break
     @case('relation')
         @php
             $rel = $field->relation ?? null;
-            $relOpts = [];
+            $refCol = 'id';
+            $displayCol = 'id';
+            $initLabel = '';
             if ($rel && $rel->relatedForm && \Illuminate\Support\Facades\Schema::hasTable($rel->relatedForm->table_name)) {
-                $rows = \Illuminate\Support\Facades\DB::table($rel->relatedForm->table_name)->orderBy('id')->get();
                 $refCol = $rel->related_field_name ?: 'id';
                 $displayCol = \Illuminate\Support\Arr::first($rel->relatedForm->fields ?? [], fn($f) => $f->is_list_visible)?->field_name ?? $refCol;
-                foreach ($rows as $r) {
-                    $val = $r->{$refCol} ?? $r->id ?? '';
-                    $label = isset($r->{$displayCol}) ? $r->{$displayCol} : $val;
-                    $relOpts[$val] = $label;
+                if ($value !== '' && $value !== null) {
+                    $initRow = \Illuminate\Support\Facades\DB::table($rel->relatedForm->table_name)->where($refCol, $value)->first();
+                    $initLabel = $initRow && isset($initRow->{$displayCol}) ? $initRow->{$displayCol} : (string)$value;
                 }
             }
         @endphp
-        <select name="{{ $name }}" class="form-select" {{ $field->is_required ? 'required' : '' }}>
-            <option value="">请选择</option>
-            @foreach($relOpts as $k => $v)
-            <option value="{{ $k }}" {{ (string)$value === (string)$k ? 'selected' : '' }}>{{ $v }}</option>
-            @endforeach
-        </select>
+        <div class="relation-autocomplete" data-table="{{ $rel && $rel->relatedForm ? $rel->relatedForm->table_name : '' }}" data-ref="{{ $refCol }}" data-display="{{ $displayCol }}" data-name="{{ $name }}" data-required="{{ $field->is_required ? '1' : '0' }}">
+            <input type="hidden" name="{{ $name }}" value="{{ $value }}" class="relation-value" {{ $field->is_required ? 'required' : '' }}>
+            <input type="text" class="form-control relation-input" placeholder="输入搜索或选择" value="{{ $initLabel }}" autocomplete="off">
+            <div class="relation-dropdown list-group"></div>
+        </div>
         @break
     @default
         <input type="text" name="{{ $name }}" value="{{ is_array($value) ? json_encode($value) : $value }}" class="form-control" placeholder="{{ $field->label }}">

@@ -9,9 +9,11 @@
     <link href="<?php echo e(asset('css/app.css')); ?>" rel="stylesheet">
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-light">
-        <div class="container-fluid">
+    <nav class="navbar navbar-expand-lg navbar-light navbar-with-sidebar">
+        <div class="navbar-brand-wrap">
             <a class="navbar-brand" href="<?php echo e(route('dashboard')); ?>">LayCMS</a>
+        </div>
+        <div class="navbar-nav-wrap">
             <div class="navbar-nav me-auto">
                 <a class="nav-link" href="<?php echo e(route('dashboard')); ?>">首页</a>
                 <?php if($cms_user->is_root || $cms_user->hasPermission('_forms', 'read')): ?>

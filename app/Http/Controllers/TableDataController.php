@@ -78,6 +78,36 @@ class TableDataController extends Controller
         return redirect()->route('table-data.index', $tableName)->with('success', '更新成功');
     }
 
+    public function relationOptions(Request $request)
+    {
+        $request->validate([
+            'table' => 'required|string',
+            'ref' => 'required|string',
+            'display' => 'required|string',
+            'q' => 'nullable|string|max:200',
+        ]);
+        $table = $request->table;
+        if (!Form::where('table_name', $table)->exists()) {
+            return response()->json(['data' => []]);
+        }
+        if (!\Illuminate\Support\Facades\Schema::hasTable($table)) {
+            return response()->json(['data' => []]);
+        }
+        $refCol = $request->ref;
+        $displayCol = $request->display;
+        $q = trim($request->q ?? '');
+        $query = DB::table($table)->select($refCol, $displayCol)->orderBy('id');
+        if ($q !== '') {
+            $query->where(function ($qb) use ($displayCol, $refCol, $q) {
+                $qb->where($displayCol, 'like', '%' . $q . '%')
+                    ->orWhere($refCol, 'like', '%' . $q . '%');
+            });
+        }
+        $rows = $query->limit(50)->get();
+        $data = $rows->map(fn ($r) => ['value' => $r->{$refCol}, 'label' => $r->{$displayCol} ?? (string) $r->{$refCol}]);
+        return response()->json(['data' => $data]);
+    }
+
     public function destroy(string $tableName, int $id)
     {
         DB::table($tableName)->where('id', $id)->delete();

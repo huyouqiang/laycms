@@ -32,6 +32,11 @@
 </div>
 <?php $__env->stopSection(); ?>
 
+<?php
+    $listFieldsData = $form->fields->where('is_list_visible', true)->map(function($f) {
+        return ['name' => $f->field_name, 'control' => $f->form_control, 'opts' => $f->getOptionsArray()];
+    })->values();
+?>
 <?php $__env->startPush('scripts'); ?>
 <script>
 $(function(){
@@ -40,6 +45,27 @@ $(function(){
     var canEdit = <?php echo e(($cms_user->is_root || $cms_user->canAccessTable($form->table_name, 'update')) ? 'true' : 'false'); ?>;
     var canDel = <?php echo e(($cms_user->is_root || $cms_user->canAccessTable($form->table_name, 'delete')) ? 'true' : 'false'); ?>;
     var page = 1, limit = 15, total = 0;
+    var listFields = <?php echo json_encode($listFieldsData, 15, 512) ?> || [];
+
+    function formatCellVal(row, field) {
+        var val = row[field.name];
+        if (val === undefined || val === null || val === '') return '-';
+        if ((field.control === 'radio' || field.control === 'select') && field.opts && typeof field.opts === 'object') {
+            var k = String(val);
+            return field.opts[k] !== undefined ? field.opts[k] : val;
+        }
+        if (field.control === 'checkbox' && field.opts && typeof field.opts === 'object') {
+            var arr;
+            if (typeof val === 'string') {
+                try { arr = JSON.parse(val); } catch(e) { arr = [val]; }
+                arr = Array.isArray(arr) ? arr : [val];
+            } else {
+                arr = Array.isArray(val) ? val : [val];
+            }
+            return arr.map(function(k){ return field.opts[String(k)] !== undefined ? field.opts[String(k)] : k; }).join('/') || val;
+        }
+        return val;
+    }
 
     function loadData(){
         $.get(url, { page: page, limit: limit, search: $('#searchInput').val() }, function(res){
@@ -48,9 +74,9 @@ $(function(){
                 var tr = $('<tr></tr>');
                 tr.append($('<td></td>').text((page-1)*limit + i + 1));
                 tr.append($('<td></td>').text(row.id));
-                <?php $__currentLoopData = $form->fields->where('is_list_visible', true); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $f): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                tr.append($('<td></td>').text(row.<?php echo e($f->field_name); ?> || '-'));
-                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                listFields.forEach(function(f){
+                    tr.append($('<td></td>').text(formatCellVal(row, f)));
+                });
                 var actions = $('<td></td>');
                 if(canEdit) actions.append($('<a class="btn btn-sm btn-outline-primary me-1"></a>').text('编辑').attr('href', url+'/'+row.id+'/edit'));
                 if(canDel) actions.append($('<button class="btn btn-sm btn-outline-danger"></button>').text('删除').on('click', function(){ if(confirm('确定删除？')) $.post(url+'/'+row.id, {_token:'<?php echo e(csrf_token()); ?>',_method:'DELETE'}, function(){ loadData(); }); }));

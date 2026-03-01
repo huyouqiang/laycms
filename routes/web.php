@@ -6,6 +6,7 @@ use App\Http\Controllers\FormFieldController;
 use App\Http\Controllers\FormGroupController;
 use App\Http\Controllers\FormRelationController;
 use App\Http\Controllers\TableDataController;
+use App\Http\Controllers\UploadController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\UserGroupController;
 use App\Http\Controllers\PermissionController;
@@ -48,7 +49,10 @@ Route::middleware(['auth.cms'])->group(function () {
         Route::delete('/{field}', [FormFieldController::class, 'destroy'])->middleware('permission:forms.delete')->name('destroy');
     });
 
+    Route::post('/api/upload', [UploadController::class, 'store'])->name('upload.store');
+
     Route::prefix('table-data')->name('table-data.')->group(function () {
+        Route::get('/relation-options', [TableDataController::class, 'relationOptions'])->middleware('auth.cms')->name('relation-options');
         Route::get('/{tableName}', [TableDataController::class, 'index'])->middleware('table.permission:read')->name('index');
         Route::get('/{tableName}/create', [TableDataController::class, 'create'])->middleware('table.permission:create')->name('create');
         Route::post('/{tableName}', [TableDataController::class, 'store'])->middleware('table.permission:create')->name('store');
