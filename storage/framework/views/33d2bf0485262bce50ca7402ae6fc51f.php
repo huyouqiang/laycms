@@ -58,7 +58,7 @@
                 <i class="bi bi-upload me-1"></i>
                 <input type="file" class="file-upload-input d-none" accept="*/*">选择文件
             </label>
-            <span class="file-path-display text-secondary small"><?php echo $value ? '<a href="'.asset($value).'" target="_blank" rel="noopener">'.$value.'</a>' : '未上传'; ?></span>
+            <span class="file-path-display text-secondary small"><?php echo $value ? '<a href="'.rtrim(request()->getSchemeAndHttpHost().request()->getBasePath(),'/').'/'.ltrim($value,'/').'" target="_blank" rel="noopener">'.$value.'</a>' : '未上传'; ?></span>
             <a href="javascript:;" class="file-clear-link small" style="<?php echo e($value ? '' : 'display:none'); ?>"><i class="bi bi-x-circle me-1"></i>清除</a>
         </div>
         <?php break; ?>
