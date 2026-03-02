@@ -1,0 +1,197 @@
+{% extends "layouts/app.html" %}
+{% block title %}{{ form.name }} - 字段配置{% endblock %}
+{% block content %}
+<div class="card">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <div>
+            <a href="{{ url_for('forms_index') }}" class="text-secondary me-2"><i class="bi bi-arrow-left"></i></a>
+            <span>{{ form.name }}</span>
+            <span class="text-muted small ms-2">字段配置</span>
+        </div>
+        {% if cms_user.is_root or can('_forms', 'update') %}
+        <button type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#fieldModal" id="btnAdd"><i class="bi bi-plus-lg me-1"></i>新增字段</button>
+        {% endif %}
+    </div>
+    <div class="card-body p-0">
+        <table class="table table-hover mb-0">
+            <thead><tr><th>排序</th><th>字段名</th><th>标签</th><th>控件类型</th><th>必填</th><th>列表显示</th><th>操作</th></tr></thead>
+            <tbody>
+                {% for f in form.fields|sort(attribute='sort_order') %}
+                <tr>
+                    <td>{{ f.sort_order }}</td>
+                    <td><code>{{ f.field_name }}</code></td>
+                    <td>{{ f.label }}</td>
+                    <td>{{ f.form_control }}</td>
+                    <td>{{ '是' if f.is_required else '否' }}</td>
+                    <td>{{ '是' if f.is_list_visible else '否' }}</td>
+                    <td>
+                        {% if cms_user.is_root or can('_forms', 'update') %}
+                        <button type="button" class="btn btn-sm btn-outline-secondary btn-edit-field" data-field='{{ {"id": f.id, "label": f.label, "form_control": f.form_control, "options": f.options or "", "attributes": f.attributes or "", "sort_order": f.sort_order, "is_required": f.is_required, "is_list_visible": f.is_list_visible}|tojson }}'><i class="bi bi-pencil me-1"></i>编辑</button>
+                        {% endif %}
+                        {% if cms_user.is_root or can('_forms', 'delete') %}
+                        <form class="d-inline form-delete-field" data-url="{{ url_for('form_fields_destroy', field_id=f.id) }}">
+                            <button type="button" class="btn btn-sm btn-outline-danger btn-delete-field"><i class="bi bi-trash me-1"></i>删除</button>
+                        </form>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="modal fade" id="fieldModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="fieldModalTitle">新增字段</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <form id="fieldForm">
+                <div class="modal-body">
+                    <input type="hidden" name="field_id" id="fieldId">
+                    <input type="hidden" name="form_id" value="{{ form.id }}">
+                    <div class="row">
+                        <div class="col-md-6 mb-3" id="wrapFieldName">
+                            <label class="form-label">字段名 <span class="text-danger">*</span></label>
+                            <input type="text" name="field_name" id="fieldName" class="form-control" pattern="[a-z][a-z0-9_]*" placeholder="如：my_field" required>
+                            <small class="text-muted">小写字母、数字、下划线，以字母开头</small>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">标签 <span class="text-danger">*</span></label>
+                            <input type="text" name="label" id="fieldLabel" class="form-control" required>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">控件类型</label>
+                            <select name="form_control" id="formControl" class="form-select">
+                                <option value="input">单行文本</option>
+                                <option value="textarea">多行文本</option>
+                                <option value="number">数字</option>
+                                <option value="date">日期</option>
+                                <option value="datetime">日期时间</option>
+                                <option value="select">下拉框</option>
+                                <option value="radio">单选</option>
+                                <option value="checkbox">复选框</option>
+                                <option value="file">文件上传</option>
+                                <option value="editor">富文本</option>
+                                <option value="relation">关联</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">排序</label>
+                            <input type="number" name="sort_order" id="sortOrder" class="form-control" value="0" min="0">
+                        </div>
+                    </div>
+                    <div class="mb-3" id="wrapOptions">
+                        <label class="form-label">选项（JSON，用于 select/radio/checkbox）</label>
+                        <textarea name="options" id="fieldOptions" class="form-control font-monospace small" rows="3" placeholder='{"1":"选项1","2":"选项2"}'></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">HTML 属性</label>
+                        <input type="text" name="attributes" id="fieldAttributes" class="form-control" placeholder="如：placeholder=请输入">
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <div class="form-check">
+                                <input type="checkbox" name="is_required" id="isRequired" class="form-check-input" value="1">
+                                <label class="form-check-label" for="isRequired">必填</label>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <div class="form-check">
+                                <input type="checkbox" name="is_list_visible" id="isListVisible" class="form-check-input" value="1" checked>
+                                <label class="form-check-label" for="isListVisible">列表显示</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><i class="bi bi-x-lg me-1"></i>取消</button>
+                    <button type="submit" class="btn btn-primary"><i class="bi bi-check-lg me-1"></i>保存</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+$(function(){
+    var formId = {{ form.id }};
+    var needOptions = ['select','radio','checkbox'];
+    function toggleOptions(){ $('#wrapOptions').toggle(needOptions.indexOf($('#formControl').val())>=0); }
+    $('#formControl').on('change', toggleOptions);
+    toggleOptions();
+
+    $('#btnAdd').on('click', function(){
+        $('#fieldModalTitle').text('新增字段');
+        $('#fieldId').val('');
+        $('#wrapFieldName').show();
+        $('#fieldName').prop('required', true).val('');
+        $('#fieldForm')[0].reset();
+        $('#fieldForm input[name="form_id"]').val(formId);
+        $('#sortOrder').val(0);
+        $('#isListVisible').prop('checked', true);
+    });
+
+    $('.btn-edit-field').on('click', function(){
+        var f = $(this).data('field');
+        if (typeof f === 'string') f = JSON.parse(f);
+        $('#fieldModalTitle').text('编辑字段');
+        $('#fieldId').val(f.id);
+        $('#wrapFieldName').hide();
+        $('#fieldName').prop('required', false);
+        $('#fieldLabel').val(f.label);
+        $('#formControl').val(f.form_control || 'input');
+        $('#fieldOptions').val(f.options || '');
+        $('#fieldAttributes').val(f.attributes || '');
+        $('#sortOrder').val(f.sort_order || 0);
+        $('#isRequired').prop('checked', !!f.is_required);
+        $('#isListVisible').prop('checked', f.is_list_visible !== false);
+        toggleOptions();
+        new bootstrap.Modal(document.getElementById('fieldModal')).show();
+    });
+
+    $('#fieldForm').on('submit', function(e){
+        e.preventDefault();
+        var fid = $('#fieldId').val();
+        var data = {
+            csrf_token: '{{ csrf_token() }}',
+            form_id: formId,
+            field_name: $('#fieldName').val(),
+            label: $('#fieldLabel').val(),
+            form_control: $('#formControl').val(),
+            options: $('#fieldOptions').val(),
+            attributes: $('#fieldAttributes').val(),
+            sort_order: $('#sortOrder').val() || 0,
+            is_required: $('#isRequired').prop('checked'),
+            is_list_visible: $('#isListVisible').prop('checked')
+        };
+        var url, method;
+        if (fid) {
+            url = '/form-fields/field/' + fid;
+            method = 'PUT';
+            delete data.field_name;
+        } else {
+            url = '/form-fields';
+            method = 'POST';
+        }
+        $.ajax({ url: url, method: method, data: data })
+            .done(function(){ location.reload(); })
+            .fail(function(x){ alert((x.responseJSON && x.responseJSON.msg) || '保存失败'); });
+    });
+
+    $('.btn-delete-field').on('click', function(){
+        if (!confirm('确定删除该字段？数据表中对应列也会被删除。')) return;
+        var url = $(this).closest('form').data('url');
+        $.ajax({ url: url, method: 'DELETE' })
+            .done(function(){ location.reload(); })
+            .fail(function(x){ alert((x.responseJSON && x.responseJSON.msg) || '删除失败'); });
+    });
+});
+</script>
+{% endblock %}

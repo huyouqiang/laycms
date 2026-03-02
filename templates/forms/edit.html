@@ -1,0 +1,227 @@
+{% extends "layouts/app.html" %}
+{% block title %}编辑表单 - {{ form.name }}{% endblock %}
+{% block content %}
+<div class="card">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <span>编辑表单</span>
+        <a href="{{ url_for('form_fields_index', form_id=form.id) }}" class="btn btn-sm btn-outline-primary"><i class="bi bi-list-ul me-1"></i>字段配置</a>
+    </div>
+    <div class="card-body">
+        <form id="formEdit" action="{{ url_for('forms_edit', id=form.id) }}" method="POST">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">表单分组</label>
+                    <select name="form_group_id" class="form-select" required>
+                        {% for g in form_groups or [] %}
+                        <option value="{{ g.id }}" {% if form.form_group_id == g.id %}selected{% endif %}>{{ g.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">排序</label>
+                    <input type="number" name="sort_order" class="form-control" value="{{ form.sort_order or 0 }}" min="0">
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">表单名称</label>
+                    <input type="text" name="name" class="form-control" value="{{ form.name }}" required>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">数据表名</label>
+                    <input type="text" name="table_name" class="form-control" value="{{ form.table_name }}" placeholder="小写字母数字下划线" readonly>
+                </div>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">描述</label>
+                <input type="text" name="description" class="form-control" value="{{ form.description or '' }}" placeholder="可选">
+            </div>
+            <button type="submit" class="btn btn-primary"><i class="bi bi-check-lg me-1"></i>保存</button>
+            <a href="{{ url_for('forms_index') }}" class="btn btn-secondary"><i class="bi bi-arrow-left me-1"></i>返回</a>
+        </form>
+    </div>
+</div>
+
+<div class="card mt-3">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <span>数据表结构</span>
+        <a href="{{ url_for('table_data_index', table_name=form.table_name) }}" class="btn btn-sm btn-outline-primary"><i class="bi bi-table me-1"></i>查看数据</a>
+    </div>
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table class="table table-sm mb-0">
+                <thead><tr><th>列名</th></tr></thead>
+                <tbody>
+                    {% for col in table_columns or [] %}
+                    <tr><td><code>{{ col }}</code></td></tr>
+                    {% else %}
+                    <tr><td class="text-muted">暂无列信息</td></tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div class="card mt-3">
+    <div class="card-header">索引</div>
+    <div class="card-body">
+        <div class="mb-3">
+            <form id="formAddIndex" class="d-inline-flex gap-2 align-items-center">
+                <select name="column_name" class="form-select form-select-sm" style="width:auto">
+                    <option value="">选择字段</option>
+                    {% for col in table_columns or [] %}
+                    <option value="{{ col }}">{{ col }}</option>
+                    {% endfor %}
+                </select>
+                <button type="submit" class="btn btn-sm btn-outline-primary"><i class="bi bi-plus me-1"></i>添加索引</button>
+            </form>
+        </div>
+        <table class="table table-sm">
+            <thead><tr><th>索引名</th><th>列</th><th>类型</th><th>操作</th></tr></thead>
+            <tbody>
+                {% for idx in table_indexes or [] %}
+                <tr>
+                    <td><code>{{ idx.name }}</code></td>
+                    <td>{{ idx.column }}</td>
+                    <td>{{ idx.type }}</td>
+                    <td>
+                        {% if idx.name != 'PRIMARY' %}
+                        <button type="button" class="btn btn-sm btn-outline-danger btn-drop-index" data-index="{{ idx.name }}"><i class="bi bi-trash"></i></button>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% else %}
+                <tr><td colspan="4" class="text-muted">暂无索引</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="card mt-3">
+    <div class="card-header">外键关联</div>
+    <div class="card-body">
+        <div class="mb-3">
+            <form id="formAddFk" class="row g-2 align-items-end">
+                <div class="col-auto">
+                    <label class="form-label small mb-0">本表字段</label>
+                    <select name="field_name" id="fkLocalField" class="form-select form-select-sm" style="min-width:120px" required>
+                        <option value="">选择字段</option>
+                        {% for col in table_columns or [] %}
+                        <option value="{{ col }}">{{ col }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-auto">
+                    <label class="form-label small mb-0">关联表</label>
+                    <select name="related_form_id" id="fkRelatedForm" class="form-select form-select-sm" style="min-width:140px" required>
+                        <option value="">选择表</option>
+                        {% for f in other_forms or [] %}
+                        <option value="{{ f.id }}">{{ f.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-auto">
+                    <label class="form-label small mb-0">关联表字段</label>
+                    <select name="related_field_name" id="fkRelatedField" class="form-select form-select-sm" style="min-width:120px" required disabled>
+                        <option value="">先选关联表</option>
+                    </select>
+                </div>
+                <div class="col-auto">
+                    <button type="submit" class="btn btn-sm btn-outline-primary"><i class="bi bi-link-45deg me-1"></i>添加外键</button>
+                </div>
+            </form>
+        </div>
+        <table class="table table-sm">
+            <thead><tr><th>本表字段</th><th>关联表</th><th>关联字段</th><th>操作</th></tr></thead>
+            <tbody>
+                {% for rel in form.relations or [] %}
+                <tr>
+                    <td><code>{{ rel.form_field.field_name if rel.form_field else '-' }}</code></td>
+                    <td>{{ rel.related_form.name if rel.related_form else '-' }}</td>
+                    <td><code>{{ rel.related_field_name }}</code></td>
+                    <td>
+                        <button type="button" class="btn btn-sm btn-outline-danger btn-drop-fk" data-rel-id="{{ rel.id }}"><i class="bi bi-trash"></i></button>
+                    </td>
+                </tr>
+                {% else %}
+                <tr><td colspan="4" class="text-muted">暂无外键关联</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+$(function(){
+    var formId = {{ form.id }};
+
+    $('#formEdit').on('submit', function(e){
+        e.preventDefault();
+        var $f = $(this);
+        $.ajax({ url: '/forms/' + formId, method: 'PUT', data: $f.serialize() })
+            .done(function(){ location.reload(); })
+            .fail(function(x){ alert((x.responseJSON && x.responseJSON.msg) || '保存失败'); });
+    });
+
+    $('#formAddIndex').on('submit', function(e){
+        e.preventDefault();
+        var col = $(this).find('[name=column_name]').val();
+        if (!col) { alert('请选择字段'); return; }
+        $.ajax({ url: '/forms/' + formId + '/add-index', method: 'POST', data: { csrf_token: '{{ csrf_token() }}', column_name: col } })
+            .done(function(){ location.reload(); })
+            .fail(function(x){ alert((x.responseJSON && x.responseJSON.msg) || '添加失败'); });
+    });
+
+    $('.btn-drop-index').on('click', function(){
+        if (!confirm('确定删除该索引？')) return;
+        var idx = $(this).data('index');
+        $.ajax({ url: '/forms/' + formId + '/drop-index', method: 'DELETE', data: { csrf_token: '{{ csrf_token() }}', index_name: idx } })
+            .done(function(){ location.reload(); })
+            .fail(function(x){ alert((x.responseJSON && x.responseJSON.msg) || '删除失败'); });
+    });
+
+    $('#fkRelatedForm').on('change', function(){
+        var fid = $(this).val();
+        var $sel = $('#fkRelatedField').prop('disabled', !fid).html('<option value="">加载中...</option>');
+        if (!fid) { $sel.html('<option value="">先选关联表</option>'); return; }
+        $.get('/forms/' + fid + '/related-columns').done(function(res){
+            var opts = '<option value="">选择字段</option>';
+            (res.columns || []).forEach(function(c){ opts += '<option value="'+c+'">'+c+'</option>'; });
+            $sel.html(opts);
+        }).fail(function(){ $sel.html('<option value="">加载失败</option>'); });
+    });
+
+    $('#formAddFk').on('submit', function(e){
+        e.preventDefault();
+        var data = {
+            csrf_token: '{{ csrf_token() }}',
+            form_id: formId,
+            field_name: $('#fkLocalField').val(),
+            form_field_id: 0,
+            related_form_id: $('#fkRelatedForm').val(),
+            related_field_name: $('#fkRelatedField').val()
+        };
+        if (!data.field_name || !data.related_form_id || !data.related_field_name) {
+            alert('请完整选择本表字段、关联表和关联字段');
+            return;
+        }
+        $.ajax({ url: '/form-relations', method: 'POST', data: data })
+            .done(function(){ location.reload(); })
+            .fail(function(x){ alert((x.responseJSON && x.responseJSON.msg) || '添加失败'); });
+    });
+
+    $('.btn-drop-fk').on('click', function(){
+        if (!confirm('确定删除该外键关联？')) return;
+        var rid = $(this).data('rel-id');
+        $.ajax({ url: '/form-relations/' + rid, method: 'DELETE' })
+            .done(function(){ location.reload(); })
+            .fail(function(x){ alert((x.responseJSON && x.responseJSON.msg) || '删除失败'); });
+    });
+});
+</script>
+{% endblock %}

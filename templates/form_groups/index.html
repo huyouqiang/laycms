@@ -1,0 +1,93 @@
+{% extends "layouts/app.html" %}
+{% block title %}表单分组{% endblock %}
+{% block content %}
+<div class="card">
+    <div class="card-header">
+        <button type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#groupModal" id="btnAdd"><i class="bi bi-plus-lg me-1"></i>新建分组</button>
+    </div>
+    <div class="card-body p-0">
+        <table class="table table-hover mb-0">
+            <thead><tr><th>ID</th><th>分组名称</th><th>排序</th><th>表单数</th><th>操作</th></tr></thead>
+            <tbody>
+                {% for g in groups %}
+                <tr>
+                    <td>{{ g.id }}</td>
+                    <td>{{ g.name }}</td>
+                    <td>{{ g.sort_order }}</td>
+                    <td>{{ g.forms|length }}</td>
+                    <td>
+                        <button type="button" class="btn btn-sm btn-outline-secondary edit-group" data-group='{{ {"id": g.id, "name": g.name, "sort_order": g.sort_order}|tojson }}'><i class="bi bi-pencil me-1"></i>编辑</button>
+                        <form class="d-inline form-delete-group" data-url="{{ url_for('form_groups_destroy', group_id=g.id) }}">
+                            <button type="button" class="btn btn-sm btn-outline-danger btn-delete-group" {% if g.forms|length > 0 %}disabled title="该分组下有表单"{% endif %}><i class="bi bi-trash me-1"></i>删除</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="modal fade" id="groupModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="groupModalTitle">新建分组</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <form id="groupForm">
+                <div class="modal-body">
+                    <input type="hidden" name="group_id" id="groupId">
+                    <div class="mb-3">
+                        <label class="form-label">分组名称</label>
+                        <input type="text" name="name" id="groupName" class="form-control" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">排序</label>
+                        <input type="number" name="sort_order" id="groupSortOrder" class="form-control" value="0" min="0">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><i class="bi bi-x-lg me-1"></i>取消</button>
+                    <button type="submit" class="btn btn-primary"><i class="bi bi-check-lg me-1"></i>保存</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+$(function(){
+    $('#btnAdd').on('click', function(){
+        $('#groupModalTitle').text('新建分组');
+        $('#groupId').val('');
+        $('#groupForm')[0].reset();
+        $('#groupSortOrder').val(0);
+    });
+    $('.edit-group').on('click', function(){
+        var g = $(this).data('group');
+        if (typeof g === 'string') g = JSON.parse(g);
+        $('#groupModalTitle').text('编辑分组');
+        $('#groupId').val(g.id);
+        $('#groupName').val(g.name);
+        $('#groupSortOrder').val(g.sort_order || 0);
+        new bootstrap.Modal(document.getElementById('groupModal')).show();
+    });
+    $('#groupForm').on('submit', function(e){
+        e.preventDefault();
+        var gid = $('#groupId').val();
+        var data = { csrf_token: '{{ csrf_token() }}', _method: gid ? 'PUT' : 'POST', name: $('#groupName').val(), sort_order: $('#groupSortOrder').val() || 0 };
+        $.post(gid ? '/form-groups/'+gid : '{{ url_for("form_groups_index") }}', data).done(function(){ location.reload(); }).fail(function(x){ alert((x.responseJSON && x.responseJSON.msg) || '保存失败'); });
+    });
+    $('.btn-delete-group').on('click', function(){
+        var btn = $(this);
+        if (btn.prop('disabled')) return;
+        if (!confirm('确定删除？')) return;
+        var url = btn.closest('form').data('url');
+        $.ajax({ url: url, method: 'DELETE' }).done(function(){ location.reload(); }).fail(function(x){ alert((x.responseJSON && x.responseJSON.msg) || '删除失败'); });
+    });
+});
+</script>
+{% endblock %}

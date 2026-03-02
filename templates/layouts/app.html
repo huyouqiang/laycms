@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <title>{% block title %}LayCMS{% endblock %} - LayCMS</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light navbar-with-sidebar">
+        <div class="navbar-brand-wrap">
+            <a class="navbar-brand d-flex align-items-center gap-2" href="{{ url_for('dashboard') }}"><i class="bi bi-grid-3x3-gap"></i> LayCMS</a>
+        </div>
+        <div class="navbar-nav-wrap">
+            <div class="navbar-nav me-auto">
+                <a class="nav-link d-flex align-items-center gap-1" href="{{ url_for('dashboard') }}"><i class="bi bi-house-door"></i> 首页</a>
+                {% if cms_user and (cms_user.is_root or can('_forms', 'read')) %}
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle d-flex align-items-center gap-1" href="#" data-bs-toggle="dropdown"><i class="bi bi-ui-checks"></i> 表单管理</a>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item d-flex align-items-center gap-2" href="{{ url_for('form_groups_index') }}"><i class="bi bi-folder2"></i> 表单分组</a></li>
+                        <li><a class="dropdown-item d-flex align-items-center gap-2" href="{{ url_for('forms_index') }}"><i class="bi bi-file-earmark-text"></i> 表单列表</a></li>
+                    </ul>
+                </li>
+                {% endif %}
+                {% if cms_user and (cms_user.is_root or can('_users', 'read')) %}
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle d-flex align-items-center gap-1" href="#" data-bs-toggle="dropdown"><i class="bi bi-people"></i> 用户管理</a>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item d-flex align-items-center gap-2" href="{{ url_for('user_groups_index') }}"><i class="bi bi-person-badge"></i> 用户组</a></li>
+                        <li><a class="dropdown-item d-flex align-items-center gap-2" href="{{ url_for('users_index') }}"><i class="bi bi-person-lines-fill"></i> 用户列表</a></li>
+                    </ul>
+                </li>
+                {% endif %}
+            </div>
+            <div class="navbar-nav">
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle d-flex align-items-center gap-1" href="#" data-bs-toggle="dropdown"><i class="bi bi-person-circle"></i> {{ cms_user.nickname or cms_user.username }}</a>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        <li class="px-3 py-2 text-muted small">
+                            {% if cms_user.is_root %}
+                            角色：超级管理员
+                            {% elif cms_user.user_group %}
+                            角色：{{ cms_user.user_group.name }}
+                            {% else %}
+                            角色：-
+                            {% endif %}
+                        </li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item d-flex align-items-center gap-2" href="{{ url_for('logout') }}"><i class="bi bi-box-arrow-right"></i> 退出登录</a></li>
+                    </ul>
+                </li>
+            </div>
+        </div>
+    </nav>
+    {% set current_table = request.path_params.get('table_name') or request.path_params.get('tableName') or tableName|default('') %}
+    <div class="d-flex sidebar-wrapper">
+        <aside class="admin-sidebar" id="adminSidebar" data-current-table="{{ current_table }}">
+            <nav class="nav flex-column pt-2 sidebar-nav">
+                {% for grp in menu_form_groups or [] %}
+                {% set grp_forms = grp.forms|default([]) %}
+                {% set table_names = grp_forms|map(attribute='table_name')|list %}
+                {% set has_current = grp_forms and (current_table in table_names) %}
+                <div class="sidebar-group{% if has_current %} expanded{% endif %}" data-group-id="{{ grp.id }}">
+                    <a class="nav-link sidebar-group-toggle d-flex align-items-center" href="javascript:;" title="{{ grp.name }}">
+                        <i class="bi bi-folder2-open me-2 sidebar-group-icon"></i>
+                        <span class="sidebar-text">{{ grp.name }}</span>
+                        <span class="sidebar-first" data-first="{{ grp.name[0:1] if grp.name else '' }}"></span>
+                        <svg class="sidebar-group-arrow ms-auto" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+                    </a>
+                    <div class="sidebar-group-items{% if has_current %} show{% endif %}">
+                        {% for f in grp_forms %}
+                        {% if cms_user.is_root or can_access_table(f.table_name, 'read') %}
+                        <a class="nav-link sidebar-item d-flex align-items-center{% if current_table == f.table_name %} active{% endif %}" href="{{ url_for('table_data_index', table_name=f.table_name) }}" title="{{ f.name }}"><i class="bi bi-table me-2 sidebar-item-icon"></i><span class="sidebar-text">{{ f.name }}</span><span class="sidebar-first" data-first="{{ f.name[0] if f.name else '' }}"></span></a>
+                        {% endif %}
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endfor %}
+            </nav>
+        </aside>
+        <main class="flex-grow-1">
+            {% if request.session.get('success') %}
+            <div class="alert alert-success">{{ request.session.pop('success', '') }}</div>
+            {% endif %}
+            {% if request.session.get('errors') %}
+            <div class="alert alert-danger">{% for e in request.session.pop('errors', []) %} {{ e }} {% endfor %}</div>
+            {% endif %}
+            {% block content %}{% endblock %}
+        </main>
+    </div>
+    {% block modals %}{% endblock %}
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+    (function(){
+        var key = 'laycms_sidebar_groups';
+        var stored = localStorage.getItem(key);
+        var expanded;
+        try { expanded = stored ? JSON.parse(stored) : null; } catch(e) { expanded = null; }
+        if (expanded === null) {
+            expanded = []; document.querySelectorAll('.sidebar-group[data-group-id]').forEach(function(g){ expanded.push(g.dataset.groupId); });
+        }
+        document.querySelectorAll('.sidebar-group.expanded[data-group-id]').forEach(function(g){ if (expanded.indexOf(g.dataset.groupId) < 0) expanded.push(g.dataset.groupId); });
+        if (!stored) localStorage.setItem(key, JSON.stringify(expanded));
+        function save(){ localStorage.setItem(key, JSON.stringify(expanded)); }
+        document.querySelectorAll('.sidebar-group-toggle').forEach(function(btn){
+            var group = btn.closest('.sidebar-group');
+            var id = group?.dataset?.groupId;
+            if (!id) return;
+            var items = group?.querySelector('.sidebar-group-items');
+            var isExp = expanded.indexOf(id) >= 0;
+            if (items) items.classList.toggle('show', isExp);
+            if (group) group.classList.toggle('expanded', isExp);
+            btn.addEventListener('click', function(e){ e.preventDefault();
+                var i = expanded.indexOf(id);
+                if (i >= 0) expanded.splice(i,1); else expanded.push(id);
+                isExp = expanded.indexOf(id) >= 0;
+                if (items) items.classList.toggle('show', isExp);
+                if (group) group.classList.toggle('expanded', isExp);
+                save();
+            });
+        });
+    })();
+    </script>
+    {% block scripts %}{% endblock %}
+</body>
+</html>

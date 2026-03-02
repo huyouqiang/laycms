@@ -1,0 +1,21 @@
+{% extends "layouts/app.html" %}
+{% block title %}首页{% endblock %}
+{% block content %}
+<div class="alert alert-info">欢迎使用 LayCMS 动态表单管理系统</div>
+<div class="row g-3">
+    {% for form in forms %}
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-header">{{ form.name }}</div>
+            <div class="card-body">
+                <p class="card-text">{{ form.description or '暂无描述' }}</p>
+                <a href="{{ url_for('table_data_index', table_name=form.table_name) }}" class="btn btn-sm btn-primary"><i class="bi bi-table me-1"></i>管理数据</a>
+                {% if cms_user.is_root or can('_forms', 'read') %}
+                <a href="{{ url_for('form_fields_index', form_id=form.id) }}" class="btn btn-sm btn-outline-primary"><i class="bi bi-sliders me-1"></i>字段配置</a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

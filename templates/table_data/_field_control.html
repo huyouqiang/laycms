@@ -1,0 +1,45 @@
+{% macro render(field, value) %}
+{% set name = field.field_name %}
+{% set opts = field.get_options_array() %}
+{% set value = value or '' %}
+{% if field.form_control == 'textarea' %}
+<textarea name="{{ name }}" class="form-control" placeholder="{{ field.label }}" {{ 'required' if field.is_required else '' }}>{{ value }}</textarea>
+{% elif field.form_control == 'number' %}
+<input type="number" name="{{ name }}" value="{{ value }}" class="form-control" placeholder="{{ field.label }}" {{ 'required' if field.is_required else '' }}>
+{% elif field.form_control == 'date' %}
+<input type="date" name="{{ name }}" value="{{ value }}" class="form-control" {{ 'required' if field.is_required else '' }}>
+{% elif field.form_control == 'datetime' %}
+{% set val_str = value|string if value else '' %}
+{% set dt_val = val_str[:19].replace(' ', 'T') if val_str|length > 10 else val_str %}
+<input type="datetime-local" name="{{ name }}" value="{{ dt_val }}" class="form-control" step="1" {{ 'required' if field.is_required else '' }}>
+{% elif field.form_control == 'select' %}
+<select name="{{ name }}" class="form-select" {{ 'required' if field.is_required else '' }}>
+<option value="">请选择</option>
+{% for k, v in opts.items() %}
+<option value="{{ k }}" {{ 'selected' if value|string == k|string else '' }}>{{ v }}</option>
+{% endfor %}
+</select>
+{% elif field.form_control == 'radio' %}
+<div class="d-flex gap-3 flex-wrap" data-required="{{ '1' if field.is_required else '0' }}">
+{% for k, v in opts.items() %}
+<div class="form-check"><input type="radio" name="{{ name }}" value="{{ k }}" class="form-check-input" id="radio_{{ name }}_{{ k }}" {{ 'required' if field.is_required and loop.first else '' }}{{ ' checked' if value|string == k|string else '' }}><label class="form-check-label" for="radio_{{ name }}_{{ k }}">{{ v }}</label></div>
+{% endfor %}
+</div>
+{% elif field.form_control == 'checkbox' %}
+{% set checked_vals = value|fromjson %}
+{% set checked_str_set = checked_vals|map('string')|list %}
+<div class="d-flex gap-3 flex-wrap">
+{% for k, v in opts.items() %}
+<div class="form-check"><input type="checkbox" name="{{ name }}[]" value="{{ k }}" class="form-check-input" id="cb_{{ name }}_{{ k }}" {{ 'checked' if (k|string) in checked_str_set else '' }}><label class="form-check-label" for="cb_{{ name }}_{{ k }}">{{ v }}</label></div>
+{% endfor %}
+</div>
+{% elif field.form_control == 'editor' %}
+<textarea name="{{ name }}" id="ckeditor-{{ name }}" class="form-control ckeditor-field" style="min-height:200px" {{ 'required' if field.is_required else '' }}>{{ value }}</textarea>
+{% elif field.form_control == 'file' %}
+<div class="file-upload-wrap d-flex align-items-center gap-2 flex-wrap" data-name="{{ name }}" data-required="{{ '1' if field.is_required else '0' }}"><input type="hidden" name="{{ name }}" value="{{ value }}" class="file-path-input" {{ 'required' if field.is_required else '' }}><label class="btn btn-sm btn-outline-primary mb-0"><i class="bi bi-upload me-1"></i><input type="file" class="file-upload-input d-none" accept="*/*">选择文件</label><span class="file-path-display text-secondary small">{% if value %}<a href="{{ asset(value) }}" target="_blank">{{ value }}</a>{% else %}未上传{% endif %}</span><a href="javascript:;" class="file-clear-link small">清除</a></div>
+{% elif field.form_control == 'relation' %}
+<div class="relation-autocomplete" data-table="{{ field.relation.related_form.table_name if field.relation and field.relation.related_form else '' }}" data-ref="{{ field.relation.related_field_name or 'id' if field.relation else 'id' }}" data-display="name" data-name="{{ name }}" data-required="{{ '1' if field.is_required else '0' }}"><input type="hidden" name="{{ name }}" value="{{ value }}" class="relation-value" {{ 'required' if field.is_required else '' }}><input type="text" class="form-control relation-input" placeholder="输入搜索" value="" autocomplete="off"><div class="relation-dropdown list-group"></div></div>
+{% else %}
+<input type="text" name="{{ name }}" value="{{ value }}" class="form-control" placeholder="{{ field.label }}" {{ 'required' if field.is_required else '' }}>
+{% endif %}
+{% endmacro %}

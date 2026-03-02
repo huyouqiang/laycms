@@ -1,0 +1,51 @@
+{% extends "layouts/app.html" %}
+{% block title %}用户组{% endblock %}
+{% block content %}
+<div class="card">
+    <div class="card-header"><button type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#groupModal" id="btnAdd"><i class="bi bi-plus-lg me-1"></i>新建用户组</button></div>
+    <div class="card-body p-0">
+        <table class="table table-hover mb-0">
+            <thead><tr><th>ID</th><th>名称</th><th>描述</th><th>操作</th></tr></thead>
+            <tbody>
+                {% for g in groups %}
+                <tr>
+                    <td>{{ g.id }}</td>
+                    <td>{{ g.name }}</td>
+                    <td>{{ g.description or '-' }}</td>
+                    <td>
+                        <button type="button" class="btn btn-sm btn-outline-secondary edit-grp" data-g='{{ {"id":g.id,"name":g.name,"description":g.description}|tojson }}'><i class="bi bi-pencil me-1"></i>编辑</button>
+                        <a href="{{ url_for('permissions_edit', group_id=g.id) }}" class="btn btn-sm btn-outline-primary"><i class="bi bi-shield-lock me-1"></i>权限</a>
+                        <button type="button" class="btn btn-sm btn-outline-danger btn-del-grp" data-id="{{ g.id }}"><i class="bi bi-trash me-1"></i>删除</button>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+<div class="modal fade" id="groupModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header"><h5 class="modal-title">新建用户组</h5><button type="button" class="btn-close" data-bs-dismiss="modal"></button></div>
+            <form id="groupForm">
+                <div class="modal-body">
+                    <input type="hidden" id="groupId">
+                    <div class="mb-3"><label class="form-label">名称</label><input type="text" name="name" id="groupName" class="form-control" required></div>
+                    <div class="mb-3"><label class="form-label">描述</label><input type="text" name="description" id="groupDesc" class="form-control"></div>
+                </div>
+                <div class="modal-footer"><button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button><button type="submit" class="btn btn-primary">保存</button></div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block scripts %}
+<script>
+$(function(){
+    $('#btnAdd').on('click', function(){ $('#groupId').val(''); $('#groupForm')[0].reset(); });
+    $('.edit-grp').on('click', function(){ var g=$(this).data('g'); if(typeof g==='string')g=JSON.parse(g); $('#groupId').val(g.id); $('#groupName').val(g.name); $('#groupDesc').val(g.description||''); new bootstrap.Modal(document.getElementById('groupModal')).show(); });
+    $('.btn-del-grp').on('click', function(){ if(!confirm('确定删除？'))return; $.ajax({url:'/user-groups/'+$(this).data('id'),method:'DELETE'}).done(function(){location.reload();}).fail(function(x){ alert((x.responseJSON && x.responseJSON.msg) || '删除失败'); }); });
+    $('#groupForm').on('submit', function(e){ e.preventDefault(); var gid=$('#groupId').val(); var d={csrf_token:'{{ csrf_token() }}',name:$('#groupName').val(),description:$('#groupDesc').val()}; (gid?$.ajax({url:'/user-groups/'+gid,method:'PUT',data:d}):$.post('/user-groups',d)).done(function(){location.reload();}); });
+});
+</script>
+{% endblock %}

@@ -1,0 +1,130 @@
+{% extends "layouts/app.html" %}
+{% from "table_data/_field_control.html" import render as render_field %}
+{% block title %}{{ '编辑' if row else '新增' }} - {{ form.name }}{% endblock %}
+{% block content %}
+<div class="card">
+    <div class="card-header">{{ '编辑' if row else '新增' }} {{ form.name }}</div>
+    <div class="card-body">
+        <form id="dataForm" data-is-edit="{{ '1' if row else '0' }}" action="{{ url_for('table_data_index', table_name=tableName) }}{{ '/' ~ row.id if row else '' }}" method="POST">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            {% for field in form.fields %}
+            <div class="mb-3">
+                <label class="form-label{{ ' required' if field.is_required else '' }}">
+                    {% if field.form_control == 'relation' %}<i class="bi bi-link-45deg text-primary me-1" title="关联字段"></i>{% endif %}
+                    {{ field.label }}
+                </label>
+                {{ render_field(field, row.get(field.field_name) if row else '') }}
+            </div>
+            {% endfor %}
+            <button type="submit" class="btn btn-primary"><i class="bi bi-check-lg me-1"></i>保存</button>
+            <a href="{{ url_for('table_data_index', table_name=tableName) }}" class="btn btn-secondary"><i class="bi bi-arrow-left me-1"></i>返回</a>
+        </form>
+    </div>
+</div>
+{% endblock %}
+{% block scripts %}
+<script src="https://cdn.ckeditor.com/4.22.1/full/ckeditor.js"></script>
+<script>
+$(function(){
+    if (typeof CKEDITOR !== 'undefined') {
+        CKEDITOR.config.versionCheck = false;
+        $('.ckeditor-field').each(function(){ CKEDITOR.replace(this.id, {height:200}); });
+    }
+    $('.file-upload-input').on('change', function(){
+        var file = this.files[0];
+        if (!file) return;
+        var $wrap = $(this).closest('.file-upload-wrap');
+        var $input = $wrap.find('.file-path-input');
+        var $display = $wrap.find('.file-path-display');
+        $display.html('<span class="text-muted">上传中...</span>');
+        var fd = new FormData();
+        fd.append('file', file);
+        $.ajax({ url: '/api/upload', method: 'POST', data: fd, processData: false, contentType: false })
+            .done(function(res){
+                if (res.code === 0 && res.path) {
+                    $input.val(res.path);
+                    var href = (res.path.indexOf('/') === 0 ? res.path : '/' + res.path);
+                    $display.html('<a href="' + href + '" target="_blank" rel="noopener">' + $('<div>').text(res.path).html() + '</a>');
+                } else {
+                    $display.html('<span class="text-danger">' + (res.msg || '上传失败') + '</span>');
+                }
+            })
+            .fail(function(x){
+                var msg = (x.responseJSON && x.responseJSON.msg) || '上传失败';
+                $display.html('<span class="text-danger">' + msg + '</span>');
+            });
+        $(this).val('');
+    });
+    $('.file-clear-link').on('click', function(e){
+        e.preventDefault();
+        var $wrap = $(this).closest('.file-upload-wrap');
+        $wrap.find('.file-path-input').val('');
+        $wrap.find('.file-path-display').text('未上传');
+        $wrap.find('.file-upload-input').val('');
+    });
+    $('#dataForm').on('submit', function(e){
+        e.preventDefault();
+        if (typeof CKEDITOR !== 'undefined') {
+            for (var name in CKEDITOR.instances) { CKEDITOR.instances[name].updateElement(); }
+        }
+        var $f = $(this);
+        var url = $f.attr('action');
+        var isEdit = $f.data('is-edit') === 1 || $f.data('is-edit') === '1';
+        var data = new FormData(this);
+        $.ajax({ url: url, method: isEdit ? 'PUT' : 'POST', data: data, processData: false, contentType: false })
+            .done(function(){ window.location = '{{ url_for("table_data_index", table_name=tableName) }}'; })
+            .fail(function(x){ alert((x.responseJSON && x.responseJSON.msg) || '保存失败'); });
+    });
+
+    function initRelationAutocomplete(){
+        $('.relation-autocomplete').each(function(){
+            var $wrap = $(this);
+            var table = $wrap.data('table');
+            var ref = $wrap.data('ref') || 'id';
+            var display = $wrap.data('display') || 'name';
+            var $hidden = $wrap.find('.relation-value');
+            var $input = $wrap.find('.relation-input');
+            var $dropdown = $wrap.find('.relation-dropdown');
+            if (!table) return;
+            var fetchOptions = function(q){
+                $.get('/table-data/relation-options', { table: table, ref: ref, display: display, q: q || '' })
+                    .done(function(res){
+                        var items = res.data || [];
+                        $dropdown.empty();
+                        if (items.length === 0) {
+                            $dropdown.append($('<div class="list-group-item text-muted"></div>').text(q ? '无匹配' : '输入搜索'));
+                        } else {
+                            items.forEach(function(it){
+                                $dropdown.append($('<a href="javascript:;" class="list-group-item list-group-item-action"></a>')
+                                    .text(it.label || it.value).data('item', it).on('click', function(){
+                                        var item = $(this).data('item');
+                                        $hidden.val(item.value);
+                                        $input.val(item.label || item.value);
+                                        $dropdown.hide();
+                                    }));
+                            });
+                        }
+                        $dropdown.show();
+                    });
+            };
+            var curVal = $hidden.val();
+            if (curVal) {
+                $.get('/table-data/relation-options', { table: table, ref: ref, display: display, q: curVal })
+                    .done(function(res){
+                        var found = (res.data || []).find(function(it){ return String(it.value) === String(curVal); });
+                        $input.val(found ? (found.label || curVal) : curVal);
+                    });
+            }
+            $input.on('focus', function(){ if (!$input.val() || $dropdown.children().length) fetchOptions($input.val()); });
+            $input.on('input', function(){ var v = $input.val(); if (!v) $hidden.val(''); if (v.length >= 0) { clearTimeout($input.data('timer')); $input.data('timer', setTimeout(function(){ fetchOptions(v); }, 200)); } });
+            $input.on('blur', function(){ setTimeout(function(){ $dropdown.hide(); }, 150); });
+            $wrap.data('relationInit', true);
+        });
+        $(document).off('click.relationClose').on('click.relationClose', function(e){
+            if (!$(e.target).closest('.relation-autocomplete').length) $('.relation-dropdown').hide();
+        });
+    }
+    initRelationAutocomplete();
+});
+</script>
+{% endblock %}
