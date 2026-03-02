@@ -31,7 +31,9 @@ laycms/
 ├── .env                    # 环境变量（数据库、密钥等）
 ├── requirements.txt
 ├── sql/
-│   └── laycms.sql         # 数据库导出脚本
+│   ├── laycms.sql         # 数据库导出脚本
+│   ├── oa_seed.sql        # OA 办公系统初始化（可选）
+│   └── restaurant_seed.sql # 餐饮系统初始化（可选）
 ├── app_py/
 │   ├── config.py          # 配置
 │   ├── database.py        # 数据库连接
@@ -98,6 +100,22 @@ SECRET_KEY=your-secret-key-for-session
 mysql -u root -p -e "CREATE DATABASE IF NOT EXISTS laycms DEFAULT CHARSET utf8mb4;"
 mysql -u root -p laycms < sql/laycms.sql
 ```
+
+**可选：初始化 OA 办公系统 Demo**
+
+```bash
+mysql -u root -p laycms < sql/oa_seed.sql
+```
+
+将创建：部门、员工、公告、请假单、费用报销等表单及示例数据。
+
+**可选：初始化餐饮系统 Demo（单店）**
+
+```bash
+mysql -u root -p laycms < sql/restaurant_seed.sql
+```
+
+七大模块：基础信息（分类、单位、桌位）、商品（菜品）、订单（订单+明细）、库存（原材料、库存、流水）、会员、财务（收支）、员工。
 
 ### 5. 启动服务
 
