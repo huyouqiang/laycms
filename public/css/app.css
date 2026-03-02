@@ -75,15 +75,17 @@ p, span, div, label, td, th, li, a, button, input, select, textarea { font-size:
 .navbar .dropdown-item:hover { background: var(--el-fill-base); }
 .navbar .dropdown-item { color: var(--el-text-regular); }
 
-/* 侧边栏 - 仿导航栏风格（白底、边框） */
+/* 侧边栏 - 仿导航栏风格（白底、边框），高度为浏览器可视高度，超出显示滚动条 */
 .admin-sidebar {
   width: 210px;
   min-width: 210px;
-  min-height: calc(100vh - 50px);
+  height: calc(100vh - 50px);
+  max-height: calc(100vh - 50px);
   background: #fff !important;
   border-right: 1px solid var(--el-border-lighter);
   box-shadow: 1px 0 2px rgba(0,0,0,.05);
-  overflow: hidden;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 .admin-sidebar .sidebar-group-toggle { justify-content: space-between; }
 .admin-sidebar .sidebar-group-arrow { flex-shrink: 0; transition: transform .2s; }
@@ -119,11 +121,22 @@ p, span, div, label, td, th, li, a, button, input, select, textarea { font-size:
 .admin-sidebar .sidebar-text { transition: opacity .2s; }
 .admin-sidebar .sidebar-first { display: none; }
 
-/* 主内容区 - el-main */
+/* 侧边栏 + 主内容区容器，高度为浏览器可视高度 */
+.sidebar-wrapper {
+  height: calc(100vh - 50px);
+  max-height: calc(100vh - 50px);
+  overflow: hidden;
+}
+
+/* 主内容区 - 与侧边栏一致，高度为浏览器可视高度，超出显示滚动条 */
 main {
   background: var(--el-bg-page) !important;
   padding: 20px !important;
-  min-height: calc(100vh - 50px);
+  height: calc(100vh - 50px);
+  max-height: calc(100vh - 50px);
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 
 /* 卡片 - el-card 风格 */
