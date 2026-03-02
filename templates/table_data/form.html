@@ -12,6 +12,7 @@
                 <label class="form-label{{ ' required' if field.is_required else '' }}">
                     {% if field.form_control == 'relation' %}<i class="bi bi-link-45deg text-primary me-1" title="关联字段"></i>{% endif %}
                     {{ field.label }}
+                    <code class="text-muted small fw-normal ms-1 me-1" style="font-size:11px">({{ field.field_name }})</code>
                 </label>
                 {{ render_field(field, row.get(field.field_name) if row else '') }}
             </div>
