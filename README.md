@@ -10,6 +10,7 @@
 - **关联字段**：表单之间可建立关联（外键），支持下拉搜索
 - **用户与权限**：用户组、权限配置、表级读写删权限
 - **数据管理**：列表、搜索、新增、编辑、删除
+- **智能搜索**：普通字符串全字段 OR 模糊查询；输入 `where 条件` 可写自定义条件（防 SQL 注入）
 
 ## 技术栈
 
@@ -128,6 +129,13 @@ uvicorn main:app --reload --host 0.0.0.0 --port 8000
 - 核心表：`cms_forms`、`cms_form_fields`、`cms_form_groups`、`cms_form_relations`
 - 用户与权限：`cms_users`、`user_groups`、`group_permissions`
 - 业务表：根据表单配置动态创建（如 `school`、`class` 等）
+
+## 数据列表搜索
+
+- **普通字符串**：对当前表所有可见字段进行 OR 模糊匹配（`LIKE '%keyword%'`）
+- **where 条件**：以 `where ` 开头时解析为自定义条件，如 `where name='张三' and status=1`、`where id in (1,2,3)`
+- 支持操作符：`=`、`!=`、`<`、`>`、`<=`、`>=`、`like`、`in`
+- 需登录后才能查询
 
 ## 导出数据库
 

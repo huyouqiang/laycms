@@ -5,7 +5,7 @@
     <div class="card-header d-flex justify-content-between align-items-center flex-wrap gap-2">
         <span>{{ form.name }} 数据列表</span>
         <div class="d-flex gap-2">
-            <input type="text" id="searchInput" class="form-control form-control-sm" style="width:150px" placeholder="搜索">
+            <input type="text" id="searchInput" class="form-control form-control-sm" style="width:200px" placeholder="搜索 / 或 where 条件" title="普通字符串：全字段模糊搜索；输入 where col='val' 可写条件">
             {% if cms_user.is_root or can_access_table(form.table_name, 'create') %}
             <a href="{{ url_for('table_data_create', table_name=form.table_name) }}" class="btn btn-sm btn-primary"><i class="bi bi-plus-lg me-1"></i>新增</a>
             {% endif %}

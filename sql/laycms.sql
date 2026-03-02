@@ -29,10 +29,21 @@ CREATE TABLE `class` (
   `name` varchar(255) DEFAULT NULL,
   `age` bigint NOT NULL,
   `school_id` bigint unsigned DEFAULT NULL,
+  `rich_text_1` text,
+  `rich_text_2` text,
+  `img` varchar(500) DEFAULT NULL,
+  `gender` varchar(255) DEFAULT NULL,
+  `likes` varchar(255) DEFAULT NULL,
+  `date` date DEFAULT NULL,
+  `datetime` datetime DEFAULT NULL,
+  `textarea` text,
+  `school_id_1` bigint unsigned DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `idx_class_age` (`age`),
   KEY `fk_class_school_id` (`school_id`),
-  CONSTRAINT `fk_class_school_id` FOREIGN KEY (`school_id`) REFERENCES `school` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
+  KEY `fk_class_school_id_1` (`school_id_1`),
+  CONSTRAINT `fk_class_school_id` FOREIGN KEY (`school_id`) REFERENCES `school` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
+  CONSTRAINT `fk_class_school_id_1` FOREIGN KEY (`school_id_1`) REFERENCES `school` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -42,7 +53,7 @@ CREATE TABLE `class` (
 
 LOCK TABLES `class` WRITE;
 /*!40000 ALTER TABLE `class` DISABLE KEYS */;
-INSERT INTO `class` VALUES (1,'2026-03-02 08:17:36','2026-03-02 08:39:24','班级1',55,83),(2,'2026-03-02 08:45:38','2026-03-02 09:11:21','班级33',88,61);
+INSERT INTO `class` VALUES (1,'2026-03-02 08:17:36','2026-03-02 09:37:07','班级1',55,83,NULL,NULL,NULL,'2','[\"2\"]','2026-03-02','2026-03-02 17:37:04',NULL,NULL),(2,'2026-03-02 08:45:38','2026-03-02 09:39:04','班级33',88,61,'<p>123</p>\r\n','<p>456</p>\r\n','upload/20260302173150_da0898.webp','1','[\"1\", \"2\"]','2026-03-02','2026-03-02 17:36:54','123',61);
 /*!40000 ALTER TABLE `class` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -70,7 +81,7 @@ CREATE TABLE `cms_form_fields` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `cms_form_fields_form_id_field_name_unique` (`form_id`,`field_name`),
   CONSTRAINT `cms_form_fields_form_id_foreign` FOREIGN KEY (`form_id`) REFERENCES `cms_forms` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=32 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -79,7 +90,7 @@ CREATE TABLE `cms_form_fields` (
 
 LOCK TABLES `cms_form_fields` WRITE;
 /*!40000 ALTER TABLE `cms_form_fields` DISABLE KEYS */;
-INSERT INTO `cms_form_fields` VALUES (9,3,'name','名称','input',NULL,NULL,NULL,1,1,1,'2026-03-01 13:56:53','2026-03-01 13:56:53'),(20,4,'name','名称','input',NULL,NULL,NULL,1,1,1,NULL,NULL),(21,4,'age','年龄','number',NULL,NULL,NULL,2,1,1,NULL,NULL),(22,4,'school_id','学校id','relation',NULL,NULL,NULL,3,0,1,NULL,NULL);
+INSERT INTO `cms_form_fields` VALUES (9,3,'name','名称','input',NULL,NULL,NULL,1,1,1,'2026-03-01 13:56:53','2026-03-01 13:56:53'),(20,4,'name','名称','input',NULL,NULL,NULL,1,1,1,NULL,NULL),(21,4,'age','年龄','number',NULL,NULL,NULL,2,1,1,NULL,NULL),(22,4,'school_id','学校id','relation',NULL,NULL,NULL,3,0,1,NULL,NULL),(23,4,'rich_text_1','富文本1','editor',NULL,NULL,NULL,4,0,1,NULL,NULL),(24,4,'rich_text_2','富文本2','editor',NULL,NULL,NULL,5,0,1,NULL,NULL),(25,4,'img','图片','file',NULL,NULL,NULL,6,0,1,NULL,NULL),(26,4,'gender','性别','radio','{\"1\":\"男\",\"2\":\"女\"}',NULL,NULL,7,0,1,NULL,NULL),(27,4,'likes','爱好','checkbox','{\"1\":\"音乐\",\"2\":\"电影\"}',NULL,NULL,8,0,1,NULL,NULL),(28,4,'date','日期','date',NULL,NULL,NULL,9,0,1,NULL,NULL),(29,4,'datetime','日期时间','datetime',NULL,NULL,NULL,10,0,1,NULL,NULL),(30,4,'textarea','多行文本','textarea',NULL,NULL,NULL,11,0,1,NULL,NULL),(31,4,'school_id_1','学校id1','relation',NULL,NULL,NULL,12,0,1,NULL,NULL);
 /*!40000 ALTER TABLE `cms_form_fields` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -132,7 +143,7 @@ CREATE TABLE `cms_form_relations` (
   CONSTRAINT `cms_form_relations_form_field_id_foreign` FOREIGN KEY (`form_field_id`) REFERENCES `cms_form_fields` (`id`) ON DELETE CASCADE,
   CONSTRAINT `cms_form_relations_form_id_foreign` FOREIGN KEY (`form_id`) REFERENCES `cms_forms` (`id`) ON DELETE CASCADE,
   CONSTRAINT `cms_form_relations_related_form_id_foreign` FOREIGN KEY (`related_form_id`) REFERENCES `cms_forms` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -141,7 +152,7 @@ CREATE TABLE `cms_form_relations` (
 
 LOCK TABLES `cms_form_relations` WRITE;
 /*!40000 ALTER TABLE `cms_form_relations` DISABLE KEYS */;
-INSERT INTO `cms_form_relations` VALUES (6,4,22,3,'id',NULL,NULL);
+INSERT INTO `cms_form_relations` VALUES (6,4,22,3,'id',NULL,NULL),(7,4,31,3,'id',NULL,NULL);
 /*!40000 ALTER TABLE `cms_form_relations` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -365,4 +376,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2026-03-02 17:12:23
+-- Dump completed on 2026-03-02 17:39:55

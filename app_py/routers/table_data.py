@@ -8,7 +8,7 @@ from fastapi.responses import RedirectResponse, HTMLResponse, JSONResponse
 from sqlalchemy import text
 from sqlalchemy.orm import Session
 
-from app_py.database import get_db, db_execute_raw, db_fetchall, db_fetchone, table_exists, engine
+from app_py.database import get_db, get_table_columns, db_execute_raw, db_fetchall, db_fetchone, table_exists, engine
 from app_py.dependencies import require_auth, require_table_permission
 from app_py.models import CmsUser, Form
 from app_py.templating import templates, get_context
@@ -16,6 +16,119 @@ from app_py.utils import url_for, json_serializable
 
 router = APIRouter()
 _COLUMN_RE = re.compile(r"^[a-z][a-z0-9_]*$")
+
+# 危险 SQL 关键字，用于 where 解析时的黑名单
+_SQL_DANGEROUS = frozenset(
+    ";--*/\\union\\select\\drop\\truncate\\insert\\delete\\update\\exec\\alter\\create\\grant\\revoke".split("\\")
+)
+
+def _parse_single_condition(
+    tok: str, allowed: set, extra_params: dict, param_prefix: str, param_idx: list
+) -> Optional[str]:
+    """解析单个条件，返回 SQL 片段或 None。"""
+    m = re.match(
+        r"^\s*([a-z][a-z0-9_]*)\s*(=|\!=|<=|>=|<|>|like|in)\s*(.+)$",
+        tok.strip(),
+        re.I | re.DOTALL,
+    )
+    if not m:
+        return None
+    col, op, val_part = m.group(1), m.group(2).lower(), m.group(3).strip()
+    if col not in allowed:
+        return None
+
+    def _next():
+        key = f"{param_prefix}{param_idx[0]}"
+        param_idx[0] += 1
+        return key
+
+    if op == "in":
+        inn = re.match(r"^\s*\((.+)\)\s*$", val_part, re.DOTALL)
+        if not inn:
+            return None
+        items = re.split(r",\s*", inn.group(1))
+        placeholders = []
+        for it in items:
+            it = it.strip()
+            if it.startswith("'") and it.endswith("'"):
+                v = it[1:-1].replace("''", "'")
+            elif it.startswith('"') and it.endswith('"'):
+                v = it[1:-1].replace('""', '"')
+            elif it.replace("-", "").replace(".", "").isdigit():
+                v = int(it) if "." not in it else float(it)
+            else:
+                return None
+            k = _next()
+            placeholders.append(f":{k}")
+            extra_params[k] = v
+        return f"`{col}` IN (" + ", ".join(placeholders) + ")"
+    # = != < > <= >= like
+    if val_part.startswith("'") and val_part.endswith("'"):
+        v = val_part[1:-1].replace("''", "'")
+    elif val_part.startswith('"') and val_part.endswith('"'):
+        v = val_part[1:-1].replace('""', '"')
+    elif val_part.replace("-", "").replace(".", "").isdigit():
+        v = int(val_part) if "." not in val_part else float(val_part)
+    elif val_part.upper() == "NULL":
+        v = None
+    else:
+        return None
+    k = _next()
+    extra_params[k] = v
+    if op == "like":
+        return f"`{col}` LIKE :{k}"
+    if v is None:
+        if op == "=":
+            return f"`{col}` IS NULL"
+        if op == "!=":
+            return f"`{col}` IS NOT NULL"
+        return None
+    return f"`{col}` {op.upper()} :{k}"
+
+
+def _parse_safe_where(
+    raw_where: str,
+    allowed_columns: list,
+    params: dict,
+    param_prefix: str = "w",
+) -> tuple[str, dict]:
+    """
+    解析 where 子句，仅允许白名单列名 + 参数化值，防 SQL 注入。
+    支持: col = 'val', col = 123, col like '%val%', col in (1,2,3)
+    多条件用 and/or 连接。
+    返回 (where_sql, updated_params)，解析失败返回 ("", params)。
+    """
+    allowed = {c for c in allowed_columns if _COLUMN_RE.match(c)}
+    raw = raw_where.strip()
+    lower = raw.lower()
+    for d in _SQL_DANGEROUS:
+        if d in lower:
+            return "", params
+    if not raw:
+        return "", params
+
+    parts = re.split(r"\s+(and|or)\s+", raw, flags=re.I)
+    tokens = [parts[i].strip() for i in range(0, len(parts), 2) if i < len(parts)]
+    logic = [parts[i].lower() for i in range(1, len(parts), 2) if i < len(parts)]
+    if not tokens:
+        return "", params
+
+    extra_params = dict(params)
+    param_idx = [0]
+    conditions = []
+    for tok in tokens:
+        frag = _parse_single_condition(tok, allowed, extra_params, param_prefix, param_idx)
+        if frag is None:
+            return "", params
+        conditions.append(frag)
+
+    if len(conditions) == 1:
+        return conditions[0], extra_params
+    result = [conditions[0]]
+    for i in range(1, len(conditions)):
+        result.append(logic[i - 1] if i - 1 < len(logic) else "and")
+        result.append(conditions[i])
+    return " ".join(result), extra_params
 
 
 @router.get("/relation-options")
@@ -54,7 +167,7 @@ async def relation_options(
 async def index(
     request: Request,
     table_name: str,
-    search: Optional[str] = Query(None),
+    search: Optional[str] = Query(None, max_length=500),
     page: int = Query(1, ge=1),
     limit: int = Query(15, ge=1, le=100),
     current_user: CmsUser = Depends(require_table_permission("read")),
@@ -70,12 +183,24 @@ async def index(
     where_clause = ""
     params = {}
     if search:
-        search_fields = [f for f in form.fields if f.is_list_visible and f.form_control in ("input", "textarea", "editor")]
-        if search_fields:
-            conds = " OR ".join([f"`{f.field_name}` LIKE :s{i}" for i, f in enumerate(search_fields)])
-            where_clause = f" WHERE ({conds})"
-            for i, f in enumerate(search_fields):
-                params[f"s{i}"] = f"%{search}%"
+        search = search.strip()
+        if search.lower().startswith("where "):
+            raw_where = search[6:].strip()
+            allowed_cols = get_table_columns(table_name)
+            parsed_sql, params = _parse_safe_where(raw_where, allowed_cols, {}, "w")
+            if parsed_sql:
+                where_clause = f" WHERE ({parsed_sql})"
+        else:
+            search_fields = [f for f in form.fields if f.is_list_visible]
+            if search_fields:
+                conds = []
+                for i, f in enumerate(search_fields):
+                    if f.form_control in ("number", "relation"):
+                        conds.append(f"CAST(`{f.field_name}` AS CHAR) LIKE :s{i}")
+                    else:
+                        conds.append(f"`{f.field_name}` LIKE :s{i}")
+                    params[f"s{i}"] = f"%{search}%"
+                where_clause = f" WHERE ({' OR '.join(conds)})"
     count_sql = f"SELECT COUNT(*) FROM `{table_name}`{where_clause}"
     total = db_fetchone(count_sql, params)[0]
     data_sql = f"SELECT * FROM `{table_name}`{where_clause} ORDER BY id DESC LIMIT :lim OFFSET :off"
