@@ -257,6 +257,11 @@ main {
 }
 .form-check-label { font-size: 14px !important; }
 
+/* 数据表单字段行：分割线 + 上下间距 */
+.form-field-row.border-bottom {
+  border-color: var(--el-border-lighter, #EBEEF5) !important;
+}
+
 /* 弹窗 - el-dialog 风格 */
 .modal-content {
   border: none;
