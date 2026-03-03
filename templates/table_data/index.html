@@ -40,13 +40,18 @@ $(function(){
     var canDel = {{ 'true' if (cms_user.is_root or can_access_table(form.table_name, 'delete')) else 'false' }};
     var page = 1, limit = 50, total = 0;
     var listFields = {{ list_fields_data|tojson }} || [];
-    var baseUrl = (window.location.origin + window.location.pathname).replace(/\/$/, '').replace(/\/[^/]+$/, '');
 
     function formatCellVal(row, field) {
         var val = row[field.name];
         if (val === undefined || val === null || val === '') return { t: 'text', v: '-' };
         if (field.control === 'file' && val) {
-            var href = baseUrl + '/' + String(val).replace(/^\//, '');
+            var pathVal = String(val).trim();
+            var href;
+            if (pathVal.indexOf('http://') === 0 || pathVal.indexOf('https://') === 0) {
+                href = pathVal;
+            } else {
+                href = window.location.origin + (pathVal.charAt(0) === '/' ? pathVal : '/' + pathVal);
+            }
             var escaped = $('<div>').text(val).html();
             return { t: 'html', v: '<a href="' + href + '" target="_blank" rel="noopener">' + escaped + '</a>' };
         }
