@@ -31,12 +31,14 @@
             display: flex; flex-direction: column; justify-content: center;
             padding: 60px 56px;
             box-shadow: -4px 0 24px rgba(0,0,0,.06);
+            text-align: left;
         }
-        .login-title { font-size: 24px; font-weight: 600; color: #333; margin-bottom: 8px; }
-        .login-subtitle { font-size: 14px; color: #666; margin-bottom: 40px; }
+        .login-title { font-size: 24px; font-weight: 600; color: #333; margin-bottom: 8px; text-align: left; }
+        .login-subtitle { font-size: 14px; color: #666; margin-bottom: 40px; text-align: left; }
         .login-form .layui-input { height: 42px; }
-        .login-form .layui-form-label { width: 80px; padding: 9px 15px; }
-        .login-form .layui-input-block { margin-left: 100px; }
+        .login-form .layui-form-item { display: flex; flex-direction: column; align-items: stretch; }
+        .login-form .layui-form-item .layui-form-label { width: 100%; float: none; display: block; padding: 0 0 8px 0; text-align: left; }
+        .login-form .layui-form-item .layui-input-block { margin-left: 0; }
         .login-footer-right { margin-top: auto; font-size: 12px; color: #999; }
         @media (max-width: 992px) {
             .login-left { display: none; }

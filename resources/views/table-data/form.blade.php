@@ -4,8 +4,17 @@
 
 @section('content')
 <style>.layui-form-label-muted{color:#999;font-size:12px;font-weight:400;}</style>
+<style>.layui-card-header-back:hover{color:#004080!important;text-decoration:underline;}</style>
 <div class="layui-card">
-    <div class="layui-card-header">{{ $row ? '编辑' : '新增' }} {{ $form->name }}</div>
+    <div class="layui-card-header">
+        @if($row)
+        <i class="layui-icon layui-icon-edit"></i> {{ $form->name }}
+        <a href="{{ route('table-data.index', $tableName) }}" class="layui-card-header-back" style="margin-left:12px;font-size:13px;color:#003366;">返回</a>
+        @else
+        新增 {{ $form->name }}
+        <a href="{{ route('table-data.index', $tableName) }}" class="layui-card-header-back" style="margin-left:12px;font-size:13px;color:#003366;">返回</a>
+        @endif
+    </div>
     <div class="layui-card-body">
         <form class="layui-form" action="{{ $row ? route('table-data.update', [$tableName, $row->id]) : route('table-data.store', $tableName) }}" method="POST" style="max-width:800px;">
             @csrf

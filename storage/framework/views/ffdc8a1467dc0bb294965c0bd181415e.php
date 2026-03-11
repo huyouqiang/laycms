@@ -37,7 +37,7 @@
                         <?php if($cms_user->is_root || $cms_user->hasPermission('_forms', 'delete')): ?>
                         <form action="<?php echo e(route('forms.destroy', $f)); ?>" method="POST" style="display:inline;" onsubmit="return confirm('确定删除？');">
                             <?php echo csrf_field(); ?> <?php echo method_field('DELETE'); ?>
-                            <button type="submit" class="layui-btn layui-btn-xs layui-btn-danger"><i class="layui-icon layui-icon-delete"></i> 删除</button>
+                            <button type="submit" class="layui-btn layui-btn-xs layui-btn-primary"><i class="layui-icon layui-icon-delete"></i> 删除</button>
                         </form>
                         <?php endif; ?>
                     </td>

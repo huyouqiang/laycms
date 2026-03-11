@@ -22,7 +22,7 @@
                         <button type="button" class="layui-btn layui-btn-xs layui-btn-normal edit-group" data-group='@json($g)'><i class="layui-icon layui-icon-edit"></i> 编辑</button>
                         <form action="{{ route('user-groups.destroy', $g) }}" method="POST" style="display:inline;" onsubmit="return confirm('确定删除？');">
                             @csrf @method('DELETE')
-                            <button type="submit" class="layui-btn layui-btn-xs layui-btn-danger"><i class="layui-icon layui-icon-delete"></i> 删除</button>
+                            <button type="submit" class="layui-btn layui-btn-xs layui-btn-primary"><i class="layui-icon layui-icon-delete"></i> 删除</button>
                         </form>
                     </td>
                 </tr>

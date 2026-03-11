@@ -22,7 +22,7 @@
                         <button type="button" class="layui-btn layui-btn-xs layui-btn-primary edit-user" data-user='<?php echo json_encode($u, 15, 512) ?>'><i class="layui-icon layui-icon-edit"></i> 编辑</button>
                         <form action="<?php echo e(route('users.destroy', $u)); ?>" method="POST" style="display:inline;" onsubmit="return confirm('确定删除？');">
                             <?php echo csrf_field(); ?> <?php echo method_field('DELETE'); ?>
-                            <button type="submit" class="layui-btn layui-btn-xs layui-btn-danger"><i class="layui-icon layui-icon-delete"></i> 删除</button>
+                            <button type="submit" class="layui-btn layui-btn-xs layui-btn-primary"><i class="layui-icon layui-icon-delete"></i> 删除</button>
                         </form>
                         <?php else: ?>
                         <span class="layui-badge layui-bg-gray">不可操作</span>

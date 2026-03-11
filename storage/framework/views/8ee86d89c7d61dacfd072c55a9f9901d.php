@@ -2,8 +2,19 @@
 
 <?php $__env->startSection('content'); ?>
 <style>.layui-form-label-muted{color:#999;font-size:12px;font-weight:400;}</style>
+<style>.layui-card-header-back:hover{color:#004080!important;text-decoration:underline;}</style>
 <div class="layui-card">
-    <div class="layui-card-header"><?php echo e($row ? '编辑' : '新增'); ?> <?php echo e($form->name); ?></div>
+    <div class="layui-card-header">
+        <?php if($row): ?>
+        <i class="layui-icon layui-icon-edit"></i> <?php echo e($form->name); ?>
+
+        <a href="<?php echo e(route('table-data.index', $tableName)); ?>" class="layui-card-header-back" style="margin-left:12px;font-size:13px;color:#003366;">返回</a>
+        <?php else: ?>
+        新增 <?php echo e($form->name); ?>
+
+        <a href="<?php echo e(route('table-data.index', $tableName)); ?>" class="layui-card-header-back" style="margin-left:12px;font-size:13px;color:#003366;">返回</a>
+        <?php endif; ?>
+    </div>
     <div class="layui-card-body">
         <form class="layui-form" action="<?php echo e($row ? route('table-data.update', [$tableName, $row->id]) : route('table-data.store', $tableName)); ?>" method="POST" style="max-width:800px;">
             <?php echo csrf_field(); ?>

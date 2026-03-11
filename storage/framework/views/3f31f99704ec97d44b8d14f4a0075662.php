@@ -20,7 +20,7 @@
                         <button type="button" class="layui-btn layui-btn-xs layui-btn-normal edit-group" data-group='<?php echo json_encode($g, 15, 512) ?>'><i class="layui-icon layui-icon-edit"></i> 编辑</button>
                         <form action="<?php echo e(route('user-groups.destroy', $g)); ?>" method="POST" style="display:inline;" onsubmit="return confirm('确定删除？');">
                             <?php echo csrf_field(); ?> <?php echo method_field('DELETE'); ?>
-                            <button type="submit" class="layui-btn layui-btn-xs layui-btn-danger"><i class="layui-icon layui-icon-delete"></i> 删除</button>
+                            <button type="submit" class="layui-btn layui-btn-xs layui-btn-primary"><i class="layui-icon layui-icon-delete"></i> 删除</button>
                         </form>
                     </td>
                 </tr>

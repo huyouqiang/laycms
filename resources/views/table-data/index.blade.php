@@ -5,7 +5,7 @@
 @section('content')
 <div class="layui-card table-data-card">
     <div class="layui-card-header" style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;">
-        <span>{{ $form->name }} 数据列表</span>
+        <span><i class="layui-icon layui-icon-table"></i> {{ $form->name }}</span>
         <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
             <input type="text" id="searchInput" class="layui-input" style="width:160px;height:34px;display:inline-block;" placeholder="关键词搜索多字段">
             @foreach($form->fields->where('is_list_visible', true) as $f)
@@ -134,7 +134,7 @@ layui.use(['table', 'layer', 'jquery'], function(){
             if (canEdit || canDel) {
                 h += '<div class="layui-btn-group">';
                 if (canEdit) h += '<a class="layui-btn layui-btn-xs layui-btn-primary" href="' + url + '/' + d.id + '/edit"><i class="layui-icon layui-icon-edit"></i> 编辑</a>';
-                if (canDel) h += '<button type="button" class="layui-btn layui-btn-xs layui-btn-danger layui-btn-delete" data-id="' + d.id + '"><i class="layui-icon layui-icon-delete"></i> 删除</button>';
+                if (canDel) h += '<button type="button" class="layui-btn layui-btn-xs layui-btn-primary layui-btn-delete" data-id="' + d.id + '"><i class="layui-icon layui-icon-delete"></i> 删除</button>';
                 h += '</div>';
             } else h = '-';
             return h;

@@ -76,7 +76,7 @@
                     <td>
                         <form action="{{ route('form-relations.destroy', $rel) }}" method="POST" style="display:inline;" onsubmit="return confirm('确定删除此关联？将移除数据库外键约束。');">
                             @csrf @method('DELETE')
-                            <button type="submit" class="layui-btn layui-btn-xs layui-btn-danger"><i class="layui-icon layui-icon-delete"></i> 删除</button>
+                            <button type="submit" class="layui-btn layui-btn-xs layui-btn-primary"><i class="layui-icon layui-icon-delete"></i> 删除</button>
                         </form>
                     </td>
                 </tr>
@@ -108,7 +108,7 @@
                             <form action="{{ route('forms.drop-index', $form) }}" method="POST" style="display:inline;" onsubmit="return confirm('确定删除索引 {{ $idx['name'] }}？');">
                                 @csrf @method('DELETE')
                                 <input type="hidden" name="index_name" value="{{ $idx['name'] }}">
-                                <button type="submit" class="layui-btn layui-btn-xs layui-btn-danger"><i class="layui-icon layui-icon-delete"></i> 删除</button>
+                                <button type="submit" class="layui-btn layui-btn-xs layui-btn-primary"><i class="layui-icon layui-icon-delete"></i> 删除</button>
                             </form>
                             @else
                             <span style="color:#999;">-</span>

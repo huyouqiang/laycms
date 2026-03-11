@@ -19,7 +19,7 @@
                         <button type="button" class="layui-btn layui-btn-xs layui-btn-primary edit-group" data-group='<?php echo json_encode($g, 15, 512) ?>'><i class="layui-icon layui-icon-edit"></i> 编辑</button>
                         <form action="<?php echo e(route('form-groups.destroy', $g)); ?>" method="POST" style="display:inline;" onsubmit="return confirm('确定删除？');">
                             <?php echo csrf_field(); ?> <?php echo method_field('DELETE'); ?>
-                            <button type="submit" class="layui-btn layui-btn-xs layui-btn-danger" <?php echo e($g->forms_count > 0 ? 'disabled title="该分组下有表单"' : ''); ?>><i class="layui-icon layui-icon-delete"></i> 删除</button>
+                            <button type="submit" class="layui-btn layui-btn-xs layui-btn-primary" <?php echo e($g->forms_count > 0 ? 'disabled title="该分组下有表单"' : ''); ?>><i class="layui-icon layui-icon-delete"></i> 删除</button>
                         </form>
                     </td>
                 </tr>

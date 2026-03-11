@@ -32,7 +32,7 @@
                         @if($cms_user->is_root || $cms_user->hasPermission('_forms', 'delete'))
                         <form action="{{ route('form-fields.destroy', $field) }}" method="POST" style="display:inline;" onsubmit="return confirm('确定删除？');">
                             @csrf @method('DELETE')
-                            <button type="submit" class="layui-btn layui-btn-xs layui-btn-danger"><i class="layui-icon layui-icon-delete"></i> 删除</button>
+                            <button type="submit" class="layui-btn layui-btn-xs layui-btn-primary"><i class="layui-icon layui-icon-delete"></i> 删除</button>
                         </form>
                         @endif
                     </td>
