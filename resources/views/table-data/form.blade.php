@@ -3,27 +3,31 @@
 @section('title', ($row ? '编辑' : '新增') . ' - ' . $form->name)
 
 @section('content')
-<div class="card">
-    <div class="card-header">{{ $row ? '编辑' : '新增' }} {{ $form->name }}</div>
-    <div class="card-body">
-        <form action="{{ $row ? route('table-data.update', [$tableName, $row->id]) : route('table-data.store', $tableName) }}" method="POST">
+<style>.layui-form-label-muted{color:#999;font-size:12px;font-weight:400;}</style>
+<div class="layui-card">
+    <div class="layui-card-header">{{ $row ? '编辑' : '新增' }} {{ $form->name }}</div>
+    <div class="layui-card-body">
+        <form class="layui-form" action="{{ $row ? route('table-data.update', [$tableName, $row->id]) : route('table-data.store', $tableName) }}" method="POST" style="max-width:800px;">
             @csrf
             @if($row) @method('PUT') @endif
             @foreach($form->fields as $field)
-            <div class="mb-3">
-                <label class="form-label{{ $field->is_required ? ' required' : '' }}">{{ $field->label }}
+            <div class="layui-form-item">
+                <label class="layui-form-label{{ $field->is_required ? ' layui-form-required' : '' }}">{{ $field->label }}<span class="layui-form-label-muted">（{{ $field->field_name }}）</span>
                 @if($field->form_control === 'relation')
-                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" viewBox="0 0 16 16" class="ms-1 text-muted" title="外键关联">
-                    <path d="M4.715 6.542 3.343 7.914a3 3 0 1 0 4.243 4.243l1.828-1.829A3 3 0 0 0 8.586 5.5L8 6.086a1.002 1.002 0 0 0-.154.199 2 2 0 0 1 .861 3.337L6.88 11.45a2 2 0 1 1-2.83-2.83l.793-.792a4.018 4.018 0 0 1-.128-1.287z"/>
-                    <path d="M6.586 4.672A3 3 0 0 0 7.414 9.5l.775-.776a2 2 0 0 1-.896-3.346L9.12 3.55a2 2 0 1 1 2.83 2.83l-.793.792c.112.42.155.855.128 1.287l1.372-1.372a3 3 0 1 0-4.243-4.243L6.586 4.672z"/>
-                </svg>
+                <span class="layui-badge layui-bg-gray" title="外键关联">关联</span>
                 @endif
                 </label>
-                @include('table-data.field-control', ['field' => $field, 'value' => $row?->{$field->field_name} ?? old($field->field_name) ?? ''])
+                <div class="layui-input-block">
+                    @include('table-data.field-control', ['field' => $field, 'value' => $row?->{$field->field_name} ?? old($field->field_name) ?? ''])
+                </div>
             </div>
             @endforeach
-            <button type="submit" class="btn btn-primary"><i class="bi bi-check-lg me-1"></i>保存</button>
-            <a href="{{ route('table-data.index', $tableName) }}" class="btn btn-secondary"><i class="bi bi-arrow-left me-1"></i>返回</a>
+            <div class="layui-form-item">
+                <div class="layui-input-block">
+                    <button type="submit" class="layui-btn layui-btn-normal"><i class="layui-icon layui-icon-ok"></i> 保存</button>
+                    <a href="{{ route('table-data.index', $tableName) }}" class="layui-btn layui-btn-primary"><i class="layui-icon layui-icon-return"></i> 返回</a>
+                </div>
+            </div>
         </form>
     </div>
 </div>
@@ -35,7 +39,9 @@
 <script src="https://cdn.ckeditor.com/4.22.1/full/lang/zh-cn.js"></script>
 @endif
 <script>
-$(function(){
+layui.use(['jquery', 'form'], function(){
+    var $ = layui.$;
+    var form = layui.form;
     @if($form->fields->contains('form_control', 'editor'))
     $('.ckeditor-field').each(function(){
         CKEDITOR.replace(this.id, {
@@ -74,11 +80,11 @@ $(function(){
             $.get('{{ route("table-data.relation-options") }}', { table: table, ref: ref, display: display, q: q || '' }, function(res){
                 $dropdown.empty();
                 (res.data || []).forEach(function(item){
-                    var $a = $('<a href="javascript:;" class="list-group-item list-group-item-action"></a>').text(item.label).data('value', item.value);
+                    var $a = $('<a href="javascript:;" class="layui-table-cell"></a>').css('display','block').text(item.label).data('value', item.value);
                     $a.on('click', function(){ $value.val($(this).data('value')); $input.val($(this).text()); $dropdown.hide(); });
                     $dropdown.append($a);
                 });
-                if ((res.data || []).length === 0) $dropdown.append('<div class="list-group-item text-secondary">无匹配项</div>');
+                if ((res.data || []).length === 0) $dropdown.append('<div class="layui-table-cell" style="color:#999;">无匹配项</div>');
                 $dropdown.show();
             });
         }
@@ -91,7 +97,6 @@ $(function(){
         }).on('blur', function(){
             setTimeout(function(){ $dropdown.hide(); }, 150);
         });
-
         $input.on('keydown', function(e){
             if (e.key === 'Escape') { $dropdown.hide(); }
         });

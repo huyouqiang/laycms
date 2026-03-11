@@ -12620,3 +12620,7 @@
 #57 /opt/homebrew/var/www/laycms/vendor/laravel/framework/src/Illuminate/Foundation/resources/server.php(16): require_once('/opt/homebrew/v...')
 #58 {main}
 "} 
+[2026-03-11 17:40:50] local.ERROR: Allowed memory size of 134217728 bytes exhausted (tried to allocate 98570240 bytes) {"exception":"[object] (Symfony\\Component\\ErrorHandler\\Error\\FatalError(code: 0): Allowed memory size of 134217728 bytes exhausted (tried to allocate 98570240 bytes) at /opt/homebrew/var/www/laycms/app/Http/Controllers/TableDataController.php:15)
+[stacktrace]
+#0 {main}
+"} 

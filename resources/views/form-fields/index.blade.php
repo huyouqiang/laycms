@@ -3,18 +3,18 @@
 @section('title', '字段配置 - ' . $form->name)
 
 @section('content')
-<div class="card">
-    <div class="card-header d-flex justify-content-between align-items-center">
+<div class="layui-card">
+    <div class="layui-card-header" style="display:flex;justify-content:space-between;align-items:center;">
         <span>{{ $form->name }} - 字段配置</span>
         <div>
-            <a href="{{ route('table-data.index', $form->table_name) }}" class="btn btn-sm btn-outline-primary"><i class="bi bi-table me-1"></i>数据管理</a>
+            <a href="{{ route('table-data.index', $form->table_name) }}" class="layui-btn layui-btn-sm layui-btn-primary"><i class="layui-icon layui-icon-table"></i> 数据管理</a>
             @if($cms_user->is_root || $cms_user->hasPermission('_forms', 'update'))
-            <button type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#fieldModal" id="btnAdd"><i class="bi bi-plus-lg me-1"></i>添加字段</button>
+            <button type="button" class="layui-btn layui-btn-sm layui-btn-normal" id="btnAdd"><i class="layui-icon layui-icon-add-1"></i> 添加字段</button>
             @endif
         </div>
     </div>
-    <div class="card-body p-0">
-        <table class="table table-hover mb-0">
+    <div class="layui-card-body" style="padding:0;">
+        <table class="layui-table">
             <thead><tr><th>排序</th><th>字段名</th><th>标签</th><th>表单控件</th><th>必填</th><th>列表显示</th><th>操作</th></tr></thead>
             <tbody>
                 @foreach($form->fields as $field)
@@ -27,12 +27,12 @@
                     <td>{{ $field->is_list_visible ? '是' : '否' }}</td>
                     <td>
                         @if($cms_user->is_root || $cms_user->hasPermission('_forms', 'update'))
-                        <button type="button" class="btn btn-sm btn-outline-secondary edit-field" data-field='@json($field)'><i class="bi bi-pencil me-1"></i>编辑</button>
+                        <button type="button" class="layui-btn layui-btn-xs layui-btn-primary edit-field" data-field='@json($field)'><i class="layui-icon layui-icon-edit"></i> 编辑</button>
                         @endif
                         @if($cms_user->is_root || $cms_user->hasPermission('_forms', 'delete'))
-                        <form action="{{ route('form-fields.destroy', $field) }}" method="POST" class="d-inline" onsubmit="return confirm('确定删除？');">
+                        <form action="{{ route('form-fields.destroy', $field) }}" method="POST" style="display:inline;" onsubmit="return confirm('确定删除？');">
                             @csrf @method('DELETE')
-                            <button type="submit" class="btn btn-sm btn-outline-danger"><i class="bi bi-trash me-1"></i>删除</button>
+                            <button type="submit" class="layui-btn layui-btn-xs layui-btn-danger"><i class="layui-icon layui-icon-delete"></i> 删除</button>
                         </form>
                         @endif
                     </td>
@@ -46,109 +46,114 @@
 
 @push('modals')
 @if($cms_user->is_root || $cms_user->hasPermission('_forms', 'update'))
-<div class="modal fade" id="fieldModal" tabindex="-1">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="fieldModalTitle">添加字段</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+<div id="fieldModalBox" style="display:none;">
+    <form class="layui-form" id="fieldForm" style="padding:20px;">
+        <input type="hidden" name="form_id" value="{{ $form->id }}">
+        <input type="hidden" name="field_id" id="fieldId">
+        <div class="layui-form-item" id="fieldNameWrap">
+            <label class="layui-form-label">字段名</label>
+            <div class="layui-input-block">
+                <input type="text" name="field_name" id="fieldName" class="layui-input" placeholder="小写字母数字下划线">
             </div>
-            <form id="fieldForm">
-                <div class="modal-body">
-                    <input type="hidden" name="form_id" value="{{ $form->id }}">
-                    <input type="hidden" name="field_id" id="fieldId">
-                    <div class="mb-3" id="fieldNameWrap">
-                        <label class="form-label">字段名</label>
-                        <input type="text" name="field_name" id="fieldName" class="form-control" placeholder="小写字母数字下划线">
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">标签</label>
-                        <input type="text" name="label" id="fieldLabel" class="form-control" required placeholder="显示名称">
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">表单控件</label>
-                        <select name="form_control" id="formControl" class="form-select" required>
-                            <option value="input">单行文本</option>
-                            <option value="textarea">多行文本</option>
-                            <option value="number">数字</option>
-                            <option value="date">日期</option>
-                            <option value="datetime">日期时间</option>
-                            <option value="select">下拉框</option>
-                            <option value="radio">单选框</option>
-                            <option value="checkbox">多选框</option>
-                            <option value="file">文件</option>
-                            <option value="editor">富文本</option>
-                        </select>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">选项(JSON)</label>
-                        <textarea name="options" id="fieldOptions" class="form-control" placeholder='{"1":"选项1","2":"选项2"}' rows="2"></textarea>
-                    </div>
-                    <div class="mb-3">
-                        <div class="form-check">
-                            <input type="checkbox" name="is_required" id="isRequired" class="form-check-input">
-                            <label class="form-check-label" for="isRequired">必填</label>
-                        </div>
-                    </div>
-                    <div class="mb-3">
-                        <div class="form-check">
-                            <input type="checkbox" name="is_list_visible" id="isListVisible" class="form-check-input" checked>
-                            <label class="form-check-label" for="isListVisible">列表显示</label>
-                        </div>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><i class="bi bi-x-lg me-1"></i>取消</button>
-                    <button type="submit" class="btn btn-primary"><i class="bi bi-check-lg me-1"></i>保存</button>
-                </div>
-            </form>
         </div>
-    </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label layui-form-required">标签</label>
+            <div class="layui-input-block">
+                <input type="text" name="label" id="fieldLabel" class="layui-input" required placeholder="显示名称">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label layui-form-required">表单控件</label>
+            <div class="layui-input-block">
+                <select name="form_control" id="formControl" required>
+                    <option value="input">单行文本</option>
+                    <option value="textarea">多行文本</option>
+                    <option value="number">数字</option>
+                    <option value="date">日期</option>
+                    <option value="datetime">日期时间</option>
+                    <option value="select">下拉框</option>
+                    <option value="radio">单选框</option>
+                    <option value="checkbox">多选框</option>
+                    <option value="file">文件</option>
+                    <option value="editor">富文本</option>
+                </select>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">选项(JSON)</label>
+            <div class="layui-input-block">
+                <textarea name="options" id="fieldOptions" class="layui-textarea" placeholder='{"1":"选项1","2":"选项2"}' rows="2"></textarea>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <input type="checkbox" name="is_required" id="isRequired" lay-skin="primary" title="必填">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <input type="checkbox" name="is_list_visible" id="isListVisible" lay-skin="primary" title="列表显示" checked>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <button type="submit" class="layui-btn layui-btn-normal">保存</button>
+                <button type="button" class="layui-btn layui-btn-primary" id="fieldModalClose">取消</button>
+            </div>
+        </div>
+    </form>
 </div>
 @endif
 @endpush
 
 @push('scripts')
 <script>
-$(function(){
-    var modalEl = document.getElementById('fieldModal');
-    if (!modalEl) return;
-    var fieldModal = new bootstrap.Modal(modalEl);
-    $('#btnAdd').on('click', function(){
-        $('#fieldModalTitle').text('添加字段');
-        $('#fieldId').val('');
-        $('#fieldName').val('').prop('readonly', false);
-        $('#fieldNameWrap').show();
-        $('#fieldForm')[0].reset();
-        $('#isListVisible').prop('checked', true);
-    });
-    $('.edit-field').on('click', function(){
-        var f = $(this).data('field');
-        $('#fieldModalTitle').text('编辑字段');
-        $('#fieldId').val(f.id);
-        $('#fieldName').val(f.field_name).prop('readonly', true);
-        $('#fieldNameWrap').hide();
-        $('#fieldLabel').val(f.label);
-        $('#formControl').val(f.form_control || 'input');
-        $('#fieldOptions').val(f.options || '');
-        $('#isRequired').prop('checked', f.is_required);
-        $('#isListVisible').prop('checked', f.is_list_visible !== false);
-        fieldModal.show();
-    });
-    $('#fieldForm').on('submit', function(e){
-        e.preventDefault();
-        var fid = $('#fieldId').val();
-        var data = $(this).serializeArray();
-        var obj = { _token: '{{ csrf_token() }}', _method: fid ? 'PUT' : 'POST' };
-        data.forEach(function(i){ obj[i.name]=i.value; });
-        if($('#isRequired').prop('checked')) obj.is_required=1;
-        if($('#isListVisible').prop('checked')) obj.is_list_visible=1;
-        $.post(fid ? '/form-fields/'+fid : '/form-fields', obj).done(function(){
-            location.reload();
-        }).fail(function(x){
-            alert(x.responseJSON?.msg || '保存失败');
+layui.use(['jquery', 'layer', 'form'], function(){
+    var $ = layui.$;
+    var layer = layui.layer;
+    var form = layui.form;
+    var fieldModalIndex = 0;
+
+    function openFieldModal(title, editData){
+        var html = $('#fieldModalBox').html();
+        fieldModalIndex = layer.open({
+            type: 1,
+            title: title,
+            area: ['500px', '560px'],
+            content: html,
+            success: function(layero, index){
+                form.render('select');
+                form.render('checkbox');
+                if (editData) {
+                    layero.find('#fieldId').val(editData.id);
+                    layero.find('#fieldName').val(editData.field_name).prop('readonly', true);
+                    layero.find('#fieldNameWrap').show();
+                    layero.find('#fieldLabel').val(editData.label);
+                    layero.find('#formControl').val(editData.form_control || 'input');
+                    layero.find('#fieldOptions').val(editData.options || '');
+                    layero.find('#isRequired').prop('checked', editData.is_required);
+                    layero.find('#isListVisible').prop('checked', editData.is_list_visible !== false);
+                    form.render('checkbox');
+                } else {
+                    layero.find('#fieldId').val('');
+                    layero.find('#fieldName').val('').prop('readonly', false);
+                    layero.find('#fieldNameWrap').show();
+                    layero.find('#isListVisible').prop('checked', true);
+                    form.render('checkbox');
+                }
+                layero.find('#fieldModalClose').on('click', function(){ layer.close(index); });
+                layero.find('#fieldForm').on('submit', function(e){
+                    e.preventDefault();
+                    var fid = layero.find('#fieldId').val();
+                    var data = { _token: '{{ csrf_token() }}', _method: fid ? 'PUT' : 'POST', form_id: layero.find('input[name="form_id"]').val(), field_name: layero.find('#fieldName').val(), label: layero.find('#fieldLabel').val(), form_control: layero.find('#formControl').val(), options: layero.find('#fieldOptions').val(), is_required: layero.find('#isRequired').prop('checked') ? 1 : 0, is_list_visible: layero.find('#isListVisible').prop('checked') ? 1 : 0 };
+                    $.post(fid ? '/form-fields/'+fid : '/form-fields', data).done(function(){ layer.close(index); location.reload(); }).fail(function(x){ layer.msg(x.responseJSON && x.responseJSON.msg ? x.responseJSON.msg : '保存失败'); });
+                });
+            }
         });
-    });
+    }
+
+    $('#btnAdd').on('click', function(){ openFieldModal('添加字段', null); });
+    $(document).on('click', '.edit-field', function(){ openFieldModal('编辑字段', $(this).data('field')); });
 });
 </script>
 @endpush

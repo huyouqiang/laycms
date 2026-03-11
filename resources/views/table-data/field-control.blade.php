@@ -4,23 +4,23 @@
 @endphp
 @switch($field->form_control)
     @case('textarea')
-        <textarea name="{{ $name }}" class="form-control" placeholder="{{ $field->label }}">{{ $value }}</textarea>
+        <textarea name="{{ $name }}" class="layui-textarea" placeholder="{{ $field->label }}">{{ $value }}</textarea>
         @break
     @case('number')
-        <input type="number" name="{{ $name }}" value="{{ $value }}" class="form-control" placeholder="{{ $field->label }}">
+        <input type="number" name="{{ $name }}" value="{{ $value }}" class="layui-input" placeholder="{{ $field->label }}">
         @break
     @case('date')
-        <input type="date" name="{{ $name }}" value="{{ $value }}" class="form-control">
+        <input type="date" name="{{ $name }}" value="{{ $value }}" class="layui-input">
         @break
     @case('datetime')
         @php
             $dtVal = $value ? (strlen($value) > 10 ? substr($value, 0, 19) : $value) : '';
             if ($dtVal && strpos($dtVal, ' ') !== false) $dtVal = str_replace(' ', 'T', $dtVal);
         @endphp
-        <input type="datetime-local" name="{{ $name }}" value="{{ $dtVal }}" class="form-control" step="1">
+        <input type="datetime-local" name="{{ $name }}" value="{{ $dtVal }}" class="layui-input" step="1">
         @break
     @case('select')
-        <select name="{{ $name }}" class="form-select" {{ $field->is_required ? 'required' : '' }}>
+        <select name="{{ $name }}" lay-ignore {{ $field->is_required ? 'required' : '' }}>
             <option value="">请选择</option>
             @foreach($opts as $k => $v)
             <option value="{{ $k }}" {{ (string)$value === (string)$k ? 'selected' : '' }}>{{ $v }}</option>
@@ -28,38 +28,32 @@
         </select>
         @break
     @case('radio')
-        <div class="d-flex gap-3 flex-wrap">
+        <div style="display:flex;gap:15px;flex-wrap:wrap;">
             @foreach($opts as $k => $v)
-            <div class="form-check">
-                <input type="radio" name="{{ $name }}" value="{{ $k }}" class="form-check-input" id="radio_{{ $name }}_{{ $k }}" {{ (string)$value === (string)$k ? 'checked' : '' }}>
-                <label class="form-check-label" for="radio_{{ $name }}_{{ $k }}">{{ $v }}</label>
-            </div>
+            <input type="radio" name="{{ $name }}" value="{{ $k }}" title="{{ $v }}" {{ (string)$value === (string)$k ? 'checked' : '' }}>
             @endforeach
         </div>
         @break
     @case('checkbox')
-        <div class="d-flex gap-3 flex-wrap">
+        <div style="display:flex;gap:15px;flex-wrap:wrap;">
             @foreach($opts as $k => $v)
-            <div class="form-check">
-                <input type="checkbox" name="{{ $name }}[]" value="{{ $k }}" class="form-check-input" id="cb_{{ $name }}_{{ $k }}"
-                    {{ is_array($value) && in_array($k, $value) ? 'checked' : (is_string($value) && in_array($k, json_decode($value, true) ?? []) ? 'checked' : '') }}>
-                <label class="form-check-label" for="cb_{{ $name }}_{{ $k }}">{{ $v }}</label>
-            </div>
+            <input type="checkbox" name="{{ $name }}[]" value="{{ $k }}" lay-skin="primary" title="{{ $v }}"
+                {{ is_array($value) && in_array($k, $value) ? 'checked' : (is_string($value) && in_array($k, json_decode($value, true) ?? []) ? 'checked' : '') }}>
             @endforeach
         </div>
         @break
     @case('editor')
-        <textarea name="{{ $name }}" id="ckeditor-{{ $name }}" class="form-control ckeditor-field" style="min-height:200px">{{ $value }}</textarea>
+        <textarea name="{{ $name }}" id="ckeditor-{{ $name }}" class="ckeditor-field" style="min-height:200px">{{ $value }}</textarea>
         @break
     @case('file')
-        <div class="file-upload-wrap d-flex align-items-center gap-2 flex-wrap" data-name="{{ $name }}">
+        <div class="file-upload-wrap" style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;" data-name="{{ $name }}">
             <input type="hidden" name="{{ $name }}" value="{{ $value }}" class="file-path-input" {{ $field->is_required ? 'required' : '' }}>
-            <label class="btn btn-sm btn-outline-primary mb-0">
-                <i class="bi bi-upload me-1"></i>
-                <input type="file" class="file-upload-input d-none" accept="*/*">选择文件
-            </label>
-            <span class="file-path-display text-secondary small">{!! $value ? '<a href="'.asset($value).'" target="_blank" rel="noopener">'.$value.'</a>' : '未上传' !!}</span>
-            <a href="javascript:;" class="file-clear-link small" style="{{ $value ? '' : 'display:none' }}"><i class="bi bi-x-circle me-1"></i>清除</a>
+            <button type="button" class="layui-btn layui-btn-sm layui-btn-primary layui-btn-fluid" style="width:auto;">
+                <i class="layui-icon layui-icon-upload"></i> 选择文件
+                <input type="file" class="file-upload-input" accept="*/*" style="position:absolute;left:0;top:0;width:100%;height:100%;opacity:0;cursor:pointer;">
+            </button>
+            <span class="file-path-display" style="color:#999;font-size:12px;">{!! $value ? '<a href="'.asset($value).'" target="_blank" rel="noopener">'.$value.'</a>' : '未上传' !!}</span>
+            <a href="javascript:;" class="file-clear-link layui-btn layui-btn-sm layui-btn-primary" style="{{ $value ? '' : 'display:none' }}"><i class="layui-icon layui-icon-close"></i> 清除</a>
         </div>
         @break
     @case('relation')
@@ -79,10 +73,10 @@
         @endphp
         <div class="relation-autocomplete" data-table="{{ $rel && $rel->relatedForm ? $rel->relatedForm->table_name : '' }}" data-ref="{{ $refCol }}" data-display="{{ $displayCol }}" data-name="{{ $name }}" data-required="{{ $field->is_required ? '1' : '0' }}">
             <input type="hidden" name="{{ $name }}" value="{{ $value }}" class="relation-value" {{ $field->is_required ? 'required' : '' }}>
-            <input type="text" class="form-control relation-input" placeholder="输入搜索或选择" value="{{ $initLabel }}" autocomplete="off">
-            <div class="relation-dropdown list-group"></div>
+            <input type="text" class="layui-input relation-input" placeholder="输入搜索或选择" value="{{ $initLabel }}" autocomplete="off">
+            <div class="relation-dropdown" style="position:absolute;top:100%;left:0;right:0;max-height:200px;overflow-y:auto;z-index:9999;display:none;margin-top:2px;border:1px solid #e6e6e6;border-radius:2px;background:#fff;box-shadow:0 2px 12px rgba(0,0,0,.1);"></div>
         </div>
         @break
     @default
-        <input type="text" name="{{ $name }}" value="{{ is_array($value) ? json_encode($value) : $value }}" class="form-control" placeholder="{{ $field->label }}">
+        <input type="text" name="{{ $name }}" value="{{ is_array($value) ? json_encode($value) : $value }}" class="layui-input" placeholder="{{ $field->label }}">
 @endswitch

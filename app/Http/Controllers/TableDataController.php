@@ -12,9 +12,12 @@ class TableDataController extends Controller
     {
         $form = Form::where('table_name', $tableName)->with('fields')->firstOrFail();
         $query = DB::table($tableName);
+
+        $listVisible = $form->fields->where('is_list_visible', true);
+        $searchableControls = ['input', 'textarea', 'editor', 'number', 'date', 'datetime'];
+
         if ($request->filled('search')) {
-            $searchFields = $form->fields->where('is_list_visible', true)
-                ->filter(fn ($f) => in_array($f->form_control, ['input', 'textarea', 'editor']));
+            $searchFields = $listVisible->filter(fn ($f) => in_array($f->form_control, $searchableControls));
             if ($searchFields->isNotEmpty()) {
                 $query->where(function ($q) use ($searchFields, $request) {
                     foreach ($searchFields as $field) {
@@ -23,13 +26,39 @@ class TableDataController extends Controller
                 });
             }
         }
+
+        foreach ($listVisible as $field) {
+            $param = 'search_' . $field->field_name;
+            if (!$request->filled($param)) {
+                continue;
+            }
+            $val = trim($request->$param);
+            if ($val === '') {
+                continue;
+            }
+            if (in_array($field->form_control, ['number', 'relation'])) {
+                if (is_numeric($val)) {
+                    $query->where($field->field_name, (int) $val);
+                }
+                continue;
+            }
+            if (in_array($field->form_control, ['select', 'radio'])) {
+                $query->where($field->field_name, $val);
+                continue;
+            }
+            $query->where($field->field_name, 'like', '%' . $val . '%');
+        }
+
         $perPage = max(1, min(100, (int) $request->get('limit', 15)));
         $data = $query->orderByDesc('id')->paginate($perPage);
         if ($request->expectsJson() || $request->ajax() || $request->has('page')) {
+            $items = collect($data->items())->map(function ($row) {
+                return (array) $row;
+            })->values()->all();
             return response()->json([
                 'code' => 0,
                 'count' => $data->total(),
-                'data' => $data->items(),
+                'data' => $items,
                 'msg' => '',
             ]);
         }

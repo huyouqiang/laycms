@@ -1,6 +1,6 @@
 # LayCMS - 动态表单 CMS 系统
 
-基于 PHP 8 + Laravel 10 + Bootstrap 5 + jQuery + MySQL 的轻量级 CMS，仿照 DiliCMS 设计，支持动态表单与字段配置、数据 CRUD、表单分组、关联表单（外键）、索引管理、用户权限管理。
+基于 PHP 8 + Laravel 10 + Layui 2.13 + MySQL 的轻量级 CMS，仿照 DiliCMS 设计，支持动态表单与字段配置、数据 CRUD、表单分组、关联表单（外键）、索引管理、用户权限管理。
 
 ## 功能特性
 
@@ -49,7 +49,7 @@
 ## 技术栈
 
 - **后端**：Laravel 10、PHP 8.1+
-- **前端**：Bootstrap 5、jQuery、仿 Element UI 风格
+- **前端**：Layui 2.13（含内置 jQuery）、Layer 弹层、Layui 表单与表格
 - **富文本**：CKEditor 4（CDN）
 - **数据库**：MySQL 5.7+
 
