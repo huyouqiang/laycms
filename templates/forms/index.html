@@ -1,6 +1,7 @@
 {% extends "layouts/app.html" %}
 {% block title %}表单管理{% endblock %}
 {% block content %}
+<div id="formsMessage" class="mb-2"></div>
 <div class="card">
     <div class="card-header d-flex justify-content-between align-items-center">
         <span>表单列表</span>
@@ -43,7 +44,20 @@
 $('.btn-delete-form').on('click', function(){
     if (!confirm('确定删除？')) return;
     var url = $(this).closest('form').data('url');
-    $.ajax({ url: url, method: 'DELETE' }).done(function(){ location.reload(); }).fail(function(x){ alert((x.responseJSON && x.responseJSON.msg) || '删除失败'); });
+    $.ajax({ url: url, method: 'DELETE' })
+        .done(function(){ location.reload(); })
+        .fail(function(x){
+            var j = x.responseJSON;
+            var msg = '删除失败';
+            if (j) {
+                if (j.msg) msg = j.msg;
+                else if (j.error) msg = j.error;
+                else if (typeof j.detail === 'string') msg = j.detail;
+                else if (Array.isArray(j.detail) && j.detail[0] && j.detail[0].msg) msg = j.detail[0].msg;
+                else if (j.detail && typeof j.detail === 'object') msg = JSON.stringify(j.detail).slice(0, 200);
+            } else if (x.responseText) msg = x.responseText.substring(0, 300).replace(/<[^>]+>/g, '');
+            $('#formsMessage').html('<div class="alert alert-danger mb-0">'+$('<div>').text(msg).html()+'</div>');
+        });
 });
 </script>
 {% endblock %}

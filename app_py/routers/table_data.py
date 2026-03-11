@@ -6,6 +6,7 @@ from typing import Optional
 from fastapi import APIRouter, Depends, Request, HTTPException, Query
 from fastapi.responses import RedirectResponse, HTMLResponse, JSONResponse
 from sqlalchemy import text
+from sqlalchemy.exc import OperationalError, IntegrityError
 from sqlalchemy.orm import Session
 
 from app_py.database import get_db, get_table_columns, db_execute_raw, db_fetchall, db_fetchone, table_exists, engine
@@ -405,7 +406,15 @@ async def destroy(
     current_user: CmsUser = Depends(require_table_permission("delete")),
     db: Session = Depends(get_db),
 ):
-    db_execute_raw(f"DELETE FROM `{table_name}` WHERE id = :id", {"id": id})
-    if "application/json" in request.headers.get("accept", "") or request.headers.get("x-requested-with") == "XMLHttpRequest":
+    is_json = "application/json" in request.headers.get("accept", "") or request.headers.get("x-requested-with") == "XMLHttpRequest"
+    try:
+        db_execute_raw(f"DELETE FROM `{table_name}` WHERE id = :id", {"id": id})
+    except (OperationalError, IntegrityError) as e:
+        msg = str(e.orig) if getattr(e, "orig", None) else str(e)
+        if is_json:
+            return JSONResponse({"code": 1, "msg": msg}, status_code=400)
+        request.session["errors"] = [msg]
+        return RedirectResponse(url=url_for("table_data_index", table_name=table_name), status_code=302)
+    if is_json:
         return JSONResponse({"code": 0, "msg": "删除成功"})
     return RedirectResponse(url=url_for("table_data_index", table_name=table_name), status_code=302)

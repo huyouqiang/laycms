@@ -357,4 +357,62 @@ main {
 }
 .table-data-scroll .table tbody td {
   white-space: nowrap;
+  max-width: 200px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* 固定列宽 + 左侧固定：序号、ID */
+.table-data-scroll .table .sticky-col-index {
+  position: sticky;
+  left: 0;
+  z-index: 3;
+  width: 48px;
+  min-width: 48px;
+  max-width: 48px;
+  box-sizing: border-box;
+  background: var(--el-fill-base);
+  box-shadow: 1px 0 0 var(--el-border-lighter);
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.table-data-scroll .table .sticky-col-id {
+  position: sticky;
+  left: 48px;
+  z-index: 3;
+  width: 80px;
+  min-width: 80px;
+  max-width: 80px;
+  box-sizing: border-box;
+  background: var(--el-fill-base);
+  box-shadow: 1px 0 0 var(--el-border-lighter);
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.table-data-scroll .table thead th.sticky-col-index,
+.table-data-scroll .table thead th.sticky-col-id {
+  z-index: 4;
+}
+
+/* 右侧固定：操作 */
+.table-data-scroll .table .sticky-col-actions {
+  position: sticky;
+  right: 0;
+  z-index: 3;
+  width: 150px;
+  min-width: 150px;
+  max-width: 150px;
+  box-sizing: border-box;
+  background: var(--el-fill-base);
+  box-shadow: -1px 0 0 var(--el-border-lighter);
+}
+.table-data-scroll .table thead th.sticky-col-actions {
+  z-index: 4;
+}
+/* 操作列：编辑/删除按钮完整显示，不省略 */
+.table-data-scroll .table tbody td.sticky-col-actions {
+  overflow: visible;
+  text-overflow: unset;
+  max-width: none;
+  white-space: nowrap;
 }

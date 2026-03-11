@@ -81,12 +81,16 @@ $(function(){
         var data = { csrf_token: '{{ csrf_token() }}', _method: gid ? 'PUT' : 'POST', name: $('#groupName').val(), sort_order: $('#groupSortOrder').val() || 0 };
         $.post(gid ? '/form-groups/'+gid : '{{ url_for("form_groups_index") }}', data).done(function(){ location.reload(); }).fail(function(x){ alert((x.responseJSON && x.responseJSON.msg) || '保存失败'); });
     });
-    $('.btn-delete-group').on('click', function(){
+    $('.btn-delete-group').on('click', function(e){
+        e.preventDefault();
+        e.stopPropagation();
         var btn = $(this);
         if (btn.prop('disabled')) return;
         if (!confirm('确定删除？')) return;
-        var url = btn.closest('form').data('url');
-        $.ajax({ url: url, method: 'DELETE' }).done(function(){ location.reload(); }).fail(function(x){ alert((x.responseJSON && x.responseJSON.msg) || '删除失败'); });
+        var form = btn.closest('form.form-delete-group');
+        var url = form.attr('data-url') || form.data('url');
+        if (!url) { alert('无法获取删除地址'); return; }
+        $.ajax({ url: url, method: 'DELETE', headers: { 'X-Requested-With': 'XMLHttpRequest' } }).done(function(){ location.reload(); }).fail(function(x){ alert((x.responseJSON && x.responseJSON.msg) || '删除失败'); });
     });
 });
 </script>

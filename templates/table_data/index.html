@@ -1,6 +1,7 @@
 {% extends "layouts/app.html" %}
 {% block title %}{{ form.name }} - 数据管理{% endblock %}
 {% block content %}
+<div id="tableDataMessage" class="mb-2"></div>
 <div class="card">
     <div class="card-header d-flex justify-content-between align-items-center flex-wrap gap-2">
         <span>{{ form.name }} 数据列表</span>
@@ -16,12 +17,12 @@
             <table class="table table-hover mb-0" id="dataTable">
                 <thead>
                     <tr>
-                        <th>#</th>
-                        <th>ID</th>
+                        <th class="sticky-col-index">#</th>
+                        <th class="sticky-col-id">ID</th>
                         {% for f in form.fields if f.is_list_visible %}
                         <th>{{ f.label }}</th>
                         {% endfor %}
-                        <th style="width:150px">操作</th>
+                        <th class="sticky-col-actions">操作</th>
                     </tr>
                 </thead>
                 <tbody></tbody>
@@ -85,15 +86,15 @@ $(function(){
             var tbody = $('#dataTable tbody').empty();
             (res.data || []).forEach(function(row, i){
                 var tr = $('<tr></tr>');
-                tr.append($('<td></td>').text((page-1)*limit + i + 1));
-                tr.append($('<td></td>').text(row.id));
+                tr.append($('<td class="sticky-col-index"></td>').text((page-1)*limit + i + 1));
+                tr.append($('<td class="sticky-col-id"></td>').text(row.id));
                 listFields.forEach(function(f){
                     var r = formatCellVal(row, f);
                     tr.append($('<td></td>')[r.t === 'html' ? 'html' : 'text'](r.v));
                 });
-                var actions = $('<td></td>');
+                var actions = $('<td class="sticky-col-actions"></td>');
                 if(canEdit) actions.append($('<a class="btn btn-sm btn-outline-primary me-1"></a>').html('<i class="bi bi-pencil me-1"></i>编辑').attr('href', '/table-data/'+tableName+'/'+row.id+'/edit'));
-                if(canDel && row.id != null && row.id !== '') actions.append($('<button class="btn btn-sm btn-outline-danger"></button>').html('<i class="bi bi-trash me-1"></i>删除').on('click', function(){ if(confirm('确定删除？')) $.ajax({url: '/table-data/'+tableName+'/'+row.id, method:'DELETE'}).done(function(){ loadData(); }).fail(function(x){ alert((x.responseJSON && x.responseJSON.msg) || '删除失败'); }); }));
+                if(canDel && row.id != null && row.id !== '') actions.append($('<button class="btn btn-sm btn-outline-danger"></button>').html('<i class="bi bi-trash me-1"></i>删除').on('click', function(){ if(confirm('确定删除？')) $.ajax({url: '/table-data/'+tableName+'/'+row.id, method:'DELETE'}).done(function(){ loadData(); $('#tableDataMessage').empty(); }).fail(function(x){ var j = x.responseJSON; var msg = '删除失败'; if (j) { if (j.msg) msg = j.msg; else if (j.error) msg = j.error; else if (typeof j.detail === 'string') msg = j.detail; else if (Array.isArray(j.detail) && j.detail[0] && j.detail[0].msg) msg = j.detail[0].msg; else if (j.detail && typeof j.detail === 'object') msg = JSON.stringify(j.detail).slice(0, 200); } else if (x.responseText) msg = x.responseText.substring(0, 300).replace(/<[^>]+>/g, ''); $('#tableDataMessage').html('<div class="alert alert-danger mb-0">'+$('<div>').text(msg).html()+'</div>'); }); }));
                 tr.append(actions);
                 tbody.append(tr);
             });

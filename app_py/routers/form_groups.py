@@ -41,17 +41,47 @@ async def update(request: Request, group_id: int, name: str = Form(...), sort_or
     return RedirectResponse(url=url_for("form_groups_index"), status_code=302)
 
 
+@router.post("/{group_id}")
+async def update_via_post(
+    request: Request,
+    group_id: int,
+    name: str = Form(...),
+    sort_order: int = Form(0),
+    current_user: CmsUser = Depends(require_permission("forms", "update")),
+    db: Session = Depends(get_db),
+):
+    """POST /form-groups/{id} 视为更新，与 PUT 行为一致（前端用 $.post 提交编辑）"""
+    grp = db.query(FormGroup).filter(FormGroup.id == group_id).first()
+    if not grp:
+        raise HTTPException(404)
+    grp.name, grp.sort_order = name, sort_order
+    db.commit()
+    if "application/json" in request.headers.get("accept", ""):
+        return JSONResponse({"code": 0, "msg": "更新成功"})
+    request.session["success"] = "更新成功"
+    return RedirectResponse(url=url_for("form_groups_index"), status_code=302)
+
+
+@router.delete("/")
+async def destroy_no_id(request: Request, current_user: CmsUser = Depends(require_permission("forms", "delete"))):
+    """DELETE 缺少 group_id 时返回明确错误，避免 405"""
+    if "application/json" in request.headers.get("accept", "") or request.headers.get("x-requested-with") == "XMLHttpRequest":
+        return JSONResponse({"code": 1, "msg": "删除需要指定分组 ID，请使用 DELETE /form-groups/{id}"}, status_code=400)
+    return RedirectResponse(url=url_for("form_groups_index"), status_code=302)
+
+
 @router.delete("/{group_id}")
 async def destroy(request: Request, group_id: int, current_user: CmsUser = Depends(require_permission("forms", "delete")), db: Session = Depends(get_db)):
     grp = db.query(FormGroup).filter(FormGroup.id == group_id).first()
     if not grp:
         raise HTTPException(404)
+    is_json = "application/json" in request.headers.get("accept", "") or request.headers.get("x-requested-with") == "XMLHttpRequest"
     if grp.forms and len(grp.forms) > 0:
-        if "application/json" in request.headers.get("accept", ""):
+        if is_json:
             return JSONResponse({"code": 1, "msg": "该分组下存在表单，请先移出或删除表单"}, 400)
         return RedirectResponse(url=url_for("form_groups_index"), status_code=302)
     db.delete(grp)
     db.commit()
-    if "application/json" in request.headers.get("accept", ""):
+    if is_json:
         return JSONResponse({"code": 0, "msg": "删除成功"})
     return RedirectResponse(url=url_for("form_groups_index"), status_code=302)

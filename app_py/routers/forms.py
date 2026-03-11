@@ -2,6 +2,7 @@ import hashlib
 import re
 from fastapi import APIRouter, Depends, Request, Form, HTTPException
 from fastapi.responses import RedirectResponse, HTMLResponse, JSONResponse
+from sqlalchemy.exc import OperationalError, IntegrityError
 from sqlalchemy.orm import Session, joinedload
 
 from app_py.database import get_db, db_execute_raw, db_fetchall, db_fetchone, table_exists, get_table_columns
@@ -275,9 +276,17 @@ async def destroy(
     form = db.query(FormModel).filter(FormModel.id == form_id).first()
     if not form:
         raise HTTPException(404)
-    db_execute_raw(f"DROP TABLE IF EXISTS `{form.table_name}`")
-    db.delete(form)
-    db.commit()
-    if "application/json" in request.headers.get("accept", ""):
+    is_json = "application/json" in request.headers.get("accept", "") or request.headers.get("x-requested-with") == "XMLHttpRequest"
+    try:
+        db_execute_raw(f"DROP TABLE IF EXISTS `{form.table_name}`")
+        db.delete(form)
+        db.commit()
+    except (OperationalError, IntegrityError) as e:
+        msg = str(e.orig) if getattr(e, "orig", None) else str(e)
+        if is_json:
+            return JSONResponse({"code": 1, "msg": msg}, status_code=400)
+        request.session["errors"] = [msg]
+        return RedirectResponse(url=url_for("forms_index"), status_code=302)
+    if is_json:
         return JSONResponse({"code": 0, "msg": "删除成功"})
     return RedirectResponse(url=url_for("forms_index"), status_code=302)
