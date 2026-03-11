@@ -6,6 +6,7 @@ use App\Models\Form;
 use App\Models\FormField;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Validation\Rule;
 
 class FormFieldController extends Controller
@@ -22,7 +23,7 @@ class FormFieldController extends Controller
             'form_id' => 'required|exists:cms_forms,id',
             'field_name' => 'required|string|max:64|regex:/^[a-z][a-z0-9_]*$/',
             'label' => 'required|string|max:100',
-            'form_control' => 'required|in:input,textarea,select,radio,checkbox,date,datetime,number,file,editor,relation',
+            'form_control' => 'required|in:input,input_bigint,textarea,select,radio,checkbox,date,datetime,number,file,editor,relation',
             'options' => 'nullable|string',
             'attributes' => 'nullable|string',
             'sort_order' => 'nullable|integer|min:0',
@@ -51,7 +52,7 @@ class FormFieldController extends Controller
     {
         $validated = $request->validate([
             'label' => 'required|string|max:100',
-            'form_control' => 'required|in:input,textarea,select,radio,checkbox,date,datetime,number,file,editor,relation',
+            'form_control' => 'required|in:input,input_bigint,textarea,select,radio,checkbox,date,datetime,number,file,editor,relation',
             'options' => 'nullable|string',
             'attributes' => 'nullable|string',
             'sort_order' => 'nullable|integer|min:0',
@@ -60,7 +61,35 @@ class FormFieldController extends Controller
         ]);
         $validated['is_required'] = (bool) ($validated['is_required'] ?? false);
         $validated['is_list_visible'] = (bool) ($validated['is_list_visible'] ?? true);
+        $oldFormControl = $field->form_control;
         $field->update($validated);
+        if ($oldFormControl !== $field->form_control) {
+            $field->loadMissing('form');
+            if ($field->form && Schema::hasTable($field->form->table_name) && Schema::hasColumn($field->form->table_name, $field->field_name)) {
+                try {
+                    $this->modifyColumnType($field->form->table_name, $field);
+                } catch (\Throwable $e) {
+                    \Illuminate\Support\Facades\Log::warning('修改字段类型失败', [
+                        'table' => $field->form->table_name,
+                        'column' => $field->field_name,
+                        'type' => $this->getColumnTypeForControl($field->form_control),
+                        'message' => $e->getMessage(),
+                    ]);
+                    $warningMsg = '数据库列类型修改失败：' . $e->getMessage();
+                    if ($request->expectsJson() || $request->ajax()) {
+                        return response()->json([
+                            'code' => 0,
+                            'msg' => '字段已保存',
+                            'warning' => $warningMsg,
+                            'redirect' => route('form-fields.index', $field->form),
+                        ]);
+                    }
+                    return redirect()->route('form-fields.index', $field->form)
+                        ->with('success', '字段已保存')
+                        ->with('warning', $warningMsg);
+                }
+            }
+        }
         if ($request->expectsJson()) {
             return response()->json(['code' => 0, 'msg' => '更新成功']);
         }
@@ -78,10 +107,10 @@ class FormFieldController extends Controller
         return redirect()->route('form-fields.index', $form)->with('success', '字段已删除');
     }
 
-    private function addColumnToTable(string $table, FormField $field): void
+    private function getColumnTypeForControl(string $formControl): string
     {
-        $type = match ($field->form_control) {
-            'number', 'relation' => 'BIGINT',
+        return match ($formControl) {
+            'number', 'relation', 'input_bigint' => 'BIGINT UNSIGNED',
             'date' => 'DATE',
             'datetime' => 'DATETIME',
             'textarea', 'editor' => 'TEXT',
@@ -89,8 +118,20 @@ class FormFieldController extends Controller
             'radio', 'checkbox', 'select' => 'VARCHAR(255)',
             default => 'VARCHAR(255)',
         };
+    }
+
+    private function addColumnToTable(string $table, FormField $field): void
+    {
+        $type = $this->getColumnTypeForControl($field->form_control);
         $nullable = $field->is_required ? 'NOT NULL' : 'NULL';
         DB::statement("ALTER TABLE `{$table}` ADD COLUMN `{$field->field_name}` {$type} {$nullable}");
+    }
+
+    private function modifyColumnType(string $table, FormField $field): void
+    {
+        $type = $this->getColumnTypeForControl($field->form_control);
+        $nullable = $field->is_required ? 'NOT NULL' : 'NULL';
+        DB::statement("ALTER TABLE `{$table}` MODIFY COLUMN `{$field->field_name}` {$type} {$nullable}");
     }
 
     private function dropColumnFromTable(string $table, string $column): void

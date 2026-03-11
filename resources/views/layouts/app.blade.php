@@ -105,6 +105,9 @@
                 @if(session('success'))
                 <div class="layui-elem-quote layui-quote-nm layui-bg-green" style="margin-bottom:15px;">{{ session('success') }}</div>
                 @endif
+                @if(session('warning'))
+                <div class="layui-elem-quote layui-quote-nm" style="margin-bottom:15px;background:#fff8e1;border-left:4px solid #ffc107;color:#856404;">{{ session('warning') }}</div>
+                @endif
                 @if($errors->any())
                 <div class="layui-elem-quote layui-quote-nm layui-bg-red" style="margin-bottom:15px;">@foreach($errors->all() as $e) {{ $e }} @endforeach</div>
                 @endif

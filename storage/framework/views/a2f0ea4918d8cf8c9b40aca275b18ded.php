@@ -106,6 +106,9 @@
                 <?php if(session('success')): ?>
                 <div class="layui-elem-quote layui-quote-nm layui-bg-green" style="margin-bottom:15px;"><?php echo e(session('success')); ?></div>
                 <?php endif; ?>
+                <?php if(session('warning')): ?>
+                <div class="layui-elem-quote layui-quote-nm" style="margin-bottom:15px;background:#fff8e1;border-left:4px solid #ffc107;color:#856404;"><?php echo e(session('warning')); ?></div>
+                <?php endif; ?>
                 <?php if($errors->any()): ?>
                 <div class="layui-elem-quote layui-quote-nm layui-bg-red" style="margin-bottom:15px;"><?php $__currentLoopData = $errors->all(); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $e): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?> <?php echo e($e); ?> <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?></div>
                 <?php endif; ?>

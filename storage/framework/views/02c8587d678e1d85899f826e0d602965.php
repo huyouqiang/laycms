@@ -1,6 +1,14 @@
 <?php $__env->startSection('title', '字段配置 - ' . $form->name); ?>
 
 <?php $__env->startSection('content'); ?>
+<?php if(session('warning')): ?>
+<div style="margin-bottom:15px;" class="warning-block">
+    <blockquote class="layui-elem-quote layui-quote-nm layui-bg-green"><?php echo e(session('warning')); ?></blockquote>
+</div>
+<?php endif; ?>
+<div id="jsWarningBlock" style="margin-bottom:15px;display:none;">
+    <blockquote class="layui-elem-quote layui-quote-nm layui-bg-green" id="jsWarningText"></blockquote>
+</div>
 <div class="layui-card">
     <div class="layui-card-header" style="display:flex;justify-content:space-between;align-items:center;">
         <span><?php echo e($form->name); ?> - 字段配置</span>
@@ -30,7 +38,7 @@
                         <?php if($cms_user->is_root || $cms_user->hasPermission('_forms', 'delete')): ?>
                         <form action="<?php echo e(route('form-fields.destroy', $field)); ?>" method="POST" style="display:inline;" onsubmit="return confirm('确定删除？');">
                             <?php echo csrf_field(); ?> <?php echo method_field('DELETE'); ?>
-                            <button type="submit" class="layui-btn layui-btn-xs layui-btn-danger"><i class="layui-icon layui-icon-delete"></i> 删除</button>
+                            <button type="submit" class="layui-btn layui-btn-xs layui-btn-primary"><i class="layui-icon layui-icon-delete"></i> 删除</button>
                         </form>
                         <?php endif; ?>
                     </td>
@@ -64,16 +72,17 @@
             <label class="layui-form-label layui-form-required">表单控件</label>
             <div class="layui-input-block">
                 <select name="form_control" id="formControl" required>
-                    <option value="input">单行文本</option>
-                    <option value="textarea">多行文本</option>
-                    <option value="number">数字</option>
-                    <option value="date">日期</option>
-                    <option value="datetime">日期时间</option>
-                    <option value="select">下拉框</option>
-                    <option value="radio">单选框</option>
-                    <option value="checkbox">多选框</option>
-                    <option value="file">文件</option>
-                    <option value="editor">富文本</option>
+                    <option value="input">单行文本 (VARCHAR(255))</option>
+                    <option value="input_bigint">单行文本 (BIGINT)</option>
+                    <option value="textarea">多行文本 (TEXT)</option>
+                    <option value="number">数字 (BIGINT)</option>
+                    <option value="date">日期 (DATE)</option>
+                    <option value="datetime">日期时间 (DATETIME)</option>
+                    <option value="select">下拉框 (VARCHAR(255))</option>
+                    <option value="radio">单选框 (VARCHAR(255))</option>
+                    <option value="checkbox">多选框 (VARCHAR(255))</option>
+                    <option value="file">文件 (VARCHAR(500))</option>
+                    <option value="editor">富文本 (TEXT)</option>
                 </select>
             </div>
         </div>
@@ -106,6 +115,14 @@
 
 <?php $__env->startPush('scripts'); ?>
 <script>
+(function(){
+    var w = sessionStorage.getItem('formFieldsWarning');
+    if (w) {
+        sessionStorage.removeItem('formFieldsWarning');
+        document.getElementById('jsWarningText').textContent = w;
+        document.getElementById('jsWarningBlock').style.display = '';
+    }
+})();
 layui.use(['jquery', 'layer', 'form'], function(){
     var $ = layui.$;
     var layer = layui.layer;
@@ -120,8 +137,6 @@ layui.use(['jquery', 'layer', 'form'], function(){
             area: ['500px', '560px'],
             content: html,
             success: function(layero, index){
-                form.render('select');
-                form.render('checkbox');
                 if (editData) {
                     layero.find('#fieldId').val(editData.id);
                     layero.find('#fieldName').val(editData.field_name).prop('readonly', true);
@@ -131,20 +146,32 @@ layui.use(['jquery', 'layer', 'form'], function(){
                     layero.find('#fieldOptions').val(editData.options || '');
                     layero.find('#isRequired').prop('checked', editData.is_required);
                     layero.find('#isListVisible').prop('checked', editData.is_list_visible !== false);
-                    form.render('checkbox');
                 } else {
                     layero.find('#fieldId').val('');
                     layero.find('#fieldName').val('').prop('readonly', false);
                     layero.find('#fieldNameWrap').show();
+                    layero.find('#formControl').val('input');
                     layero.find('#isListVisible').prop('checked', true);
-                    form.render('checkbox');
                 }
+                form.render('select');
+                form.render('checkbox');
                 layero.find('#fieldModalClose').on('click', function(){ layer.close(index); });
                 layero.find('#fieldForm').on('submit', function(e){
                     e.preventDefault();
                     var fid = layero.find('#fieldId').val();
-                    var data = { _token: '<?php echo e(csrf_token()); ?>', _method: fid ? 'PUT' : 'POST', form_id: layero.find('input[name="form_id"]').val(), field_name: layero.find('#fieldName').val(), label: layero.find('#fieldLabel').val(), form_control: layero.find('#formControl').val(), options: layero.find('#fieldOptions').val(), is_required: layero.find('#isRequired').prop('checked') ? 1 : 0, is_list_visible: layero.find('#isListVisible').prop('checked') ? 1 : 0 };
-                    $.post(fid ? '/form-fields/'+fid : '/form-fields', data).done(function(){ layer.close(index); location.reload(); }).fail(function(x){ layer.msg(x.responseJSON && x.responseJSON.msg ? x.responseJSON.msg : '保存失败'); });
+                    var formControlVal = layero.find('select[name="form_control"]').val() || layero.find('#formControl').val();
+                    var data = { _token: '<?php echo e(csrf_token()); ?>', _method: fid ? 'PUT' : 'POST', form_id: layero.find('input[name="form_id"]').val(), field_name: layero.find('#fieldName').val(), label: layero.find('#fieldLabel').val(), form_control: formControlVal, options: layero.find('#fieldOptions').val(), is_required: layero.find('#isRequired').prop('checked') ? 1 : 0, is_list_visible: layero.find('#isListVisible').prop('checked') ? 1 : 0 };
+                    $.post(fid ? '/form-fields/'+fid : '/form-fields', data)
+                        .done(function(data){
+                            if (data && data.redirect) {
+                                if (data.warning) sessionStorage.setItem('formFieldsWarning', data.warning);
+                                window.location = data.redirect;
+                                return;
+                            }
+                            layer.close(index);
+                            location.reload();
+                        })
+                        .fail(function(x){ layer.msg(x.responseJSON && x.responseJSON.msg ? x.responseJSON.msg : '保存失败'); });
                 });
             }
         });

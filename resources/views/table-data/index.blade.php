@@ -7,12 +7,15 @@
     <div class="layui-card-header" style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;">
         <span><i class="layui-icon layui-icon-table"></i> {{ $form->name }}</span>
         <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
-            <input type="text" id="searchInput" class="layui-input" style="width:160px;height:34px;display:inline-block;" placeholder="关键词搜索多字段">
-            @foreach($form->fields->where('is_list_visible', true) as $f)
-            @if(in_array($f->form_control, ['input', 'textarea', 'number']))
-            <input type="text" class="layui-input field-search" data-field="{{ $f->field_name }}" placeholder="{{ $f->label }}" style="width:120px;height:34px;display:inline-block;">
-            @endif
-            @endforeach
+            <select id="searchFieldSelect" lay-search style="width:140px;height:34px;display:inline-block;">
+                <option value="">全部字段</option>
+                @foreach($form->fields->where('is_list_visible', true) as $f)
+                @if(in_array($f->form_control, ['input','textarea','editor','number','date','datetime','select','radio','input_bigint','relation']))
+                <option value="{{ $f->field_name }}">{{ $f->label }}</option>
+                @endif
+                @endforeach
+            </select>
+            <input type="text" id="searchInput" class="layui-input" style="width:160px;height:34px;display:inline-block;" placeholder="关键词">
             <button type="button" class="layui-btn layui-btn-sm layui-btn-normal" id="btnSearch"><i class="layui-icon layui-icon-search"></i> 搜索</button>
             <button type="button" class="layui-btn layui-btn-sm layui-btn-primary" id="btnReset">重置</button>
             @if($cms_user->is_root || $cms_user->canAccessTable($form->table_name, 'create'))
@@ -41,6 +44,9 @@
 .layui-nav{
     background-color: #001529;
 }
+.layui-laypage a:hover{
+    color: #001529 !important;
+}
 </style>
 @endsection
 
@@ -51,9 +57,10 @@
 @endphp
 @push('scripts')
 <script>
-layui.use(['table', 'layer', 'jquery'], function(){
+layui.use(['table', 'layer', 'jquery', 'form'], function(){
     var table = layui.table;
     var layer = layui.layer;
+    var form = layui.form;
     var $ = layui.$;
 
     var url = '{{ route("table-data.index", $form->table_name) }}';
@@ -64,12 +71,14 @@ layui.use(['table', 'layer', 'jquery'], function(){
 
     function getSearchWhere(){
         var where = {};
-        var search = $('#searchInput').val();
-        if (search) where.search = search;
-        $('.field-search').each(function(){
-            var val = $(this).val();
-            if (val) where['search_' + $(this).data('field')] = val;
-        });
+        var keyword = $('#searchInput').val();
+        var fieldName = $('#searchFieldSelect').val();
+        if (!keyword) return where;
+        if (fieldName) {
+            where['search_' + fieldName] = keyword;
+        } else {
+            where.search = keyword;
+        }
         return where;
     }
 
@@ -162,6 +171,7 @@ layui.use(['table', 'layer', 'jquery'], function(){
         },
         response: { statusCode: 0 },
         done: function() {
+            form.render('select');
             var card = $('.table-data-card');
             card.off('click.tableDelete').on('click.tableDelete', '.layui-btn-delete', function() {
                 var id = $(this).data('id');
@@ -179,7 +189,8 @@ layui.use(['table', 'layer', 'jquery'], function(){
     $('#btnSearch').on('click', function() { table.reload('dataTable', { where: getSearchWhere(), page: { curr: 1 } }); });
     $('#btnReset').on('click', function() {
         $('#searchInput').val('');
-        $('.field-search').val('');
+        $('#searchFieldSelect').val('');
+        form.render('select');
         table.reload('dataTable', { where: {}, page: { curr: 1 } });
     });
 

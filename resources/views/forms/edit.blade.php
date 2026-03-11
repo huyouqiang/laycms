@@ -3,6 +3,14 @@
 @section('title', '编辑表单')
 
 @section('content')
+@if(session('warning'))
+<div style="margin-bottom:15px;">
+    <blockquote class="layui-elem-quote layui-quote-nm layui-bg-green">{{ session('warning') }}</blockquote>
+</div>
+@endif
+<div id="jsWarningBlock" style="margin-bottom:15px;display:none;">
+    <blockquote class="layui-elem-quote layui-quote-nm layui-bg-green" id="jsWarningText"></blockquote>
+</div>
 <style>
 .add-index-form .layui-form-item .layui-input-block { width: 220px; position: relative; min-width: 0; }
 .add-index-form .layui-form-select { width: 100% !important; min-width: 100% !important; position: relative; display: block; overflow: visible; }
@@ -166,7 +174,7 @@
         <div class="layui-form-item">
             <label class="layui-form-label layui-form-required">关联表单</label>
             <div class="layui-input-block">
-                <select name="related_form_id" id="relatedFormId" required>
+                <select name="related_form_id" id="relatedFormId" lay-filter="relationRelatedForm" required>
                     <option value="">请选择</option>
                     @foreach($otherForms ?? [] as $of)
                     <option value="{{ $of->id }}" data-table="{{ $of->table_name }}">{{ $of->name }}（{{ $of->table_name }}）</option>
@@ -177,10 +185,9 @@
         <div class="layui-form-item">
             <label class="layui-form-label layui-form-required">关联字段</label>
             <div class="layui-input-block">
-                <select name="related_field_name" id="relatedFieldName" required>
-                    <option value="id">id</option>
-                </select>
-                <div class="layui-form-mid layui-word-aux">选择关联表中的字段（通常为 id）</div>
+                <input type="hidden" name="related_field_name" value="id">
+                <input type="text" class="layui-input" value="id" readonly style="background:#f5f5f5;">
+                <div class="layui-form-mid layui-word-aux">固定为关联表主键 id</div>
             </div>
         </div>
         <div class="layui-form-item">
@@ -197,23 +204,23 @@
 @if($cms_user->is_root || $cms_user->hasPermission('_forms', 'update'))
 @push('scripts')
 <script>
+(function(){
+    var w = sessionStorage.getItem('formsEditWarning');
+    if (w) {
+        sessionStorage.removeItem('formsEditWarning');
+        var el = document.getElementById('jsWarningText');
+        var block = document.getElementById('jsWarningBlock');
+        if (el && block) { el.textContent = w; block.style.display = ''; }
+    }
+})();
 layui.use(['jquery', 'layer', 'form'], function(){
     var $ = layui.$;
     var layer = layui.layer;
     var form = layui.form;
     form.render('select');
 
-    $('#relatedFormId').on('change', function(){
-        var fid = $(this).val();
-        var sel = $('#relatedFieldName').empty().append('<option value="id">id</option>');
-        if (!fid) return;
-        var url = '{{ url("/forms") }}/' + fid + '/related-columns';
-        $.get(url, function(res){
-            (res.columns || []).forEach(function(col){
-                if (col !== 'id') sel.append($('<option></option>').val(col).text(col));
-            });
-            form.render('select');
-        });
+    form.on('select(relationRelatedForm)', function(data){
+        // 关联字段固定为 id，无需根据关联表单切换
     });
 
     $('#btnAddRelation').on('click', function(){
@@ -237,7 +244,18 @@ layui.use(['jquery', 'layer', 'form'], function(){
                     if (!fd.get('related_form_id')) { layer.msg('请选择关联表单'); return; }
                     var data = { _token: '{{ csrf_token() }}', form_id: fd.get('form_id'), related_form_id: fd.get('related_form_id'), related_field_name: fd.get('related_field_name') || 'id' };
                     if (fd.get('form_field_id')) data.form_field_id = fd.get('form_field_id'); else data.field_name = fd.get('field_name');
-                    $.post('{{ route("form-relations.store") }}', data).done(function(){ layer.close(index); location.reload(); }).fail(function(x){ layer.msg(x.responseJSON && x.responseJSON.message ? x.responseJSON.message : (x.responseJSON && x.responseJSON.errors ? JSON.stringify(x.responseJSON.errors) : '添加失败')); });
+                    $.post('{{ route("form-relations.store") }}', data)
+                        .done(function(data){
+                            if (data && data.redirect) {
+                                if (data.warning) sessionStorage.setItem('formsEditWarning', data.warning);
+                                else if (data.code === 1 && data.msg) sessionStorage.setItem('formsEditWarning', data.msg);
+                                window.location = data.redirect;
+                                return;
+                            }
+                            layer.close(index);
+                            location.reload();
+                        })
+                        .fail(function(x){ layer.msg(x.responseJSON && x.responseJSON.message ? x.responseJSON.message : (x.responseJSON && x.responseJSON.errors ? JSON.stringify(x.responseJSON.errors) : '添加失败')); });
                 });
             }
         });

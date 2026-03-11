@@ -36,7 +36,7 @@ class TableDataController extends Controller
             if ($val === '') {
                 continue;
             }
-            if (in_array($field->form_control, ['number', 'relation'])) {
+            if (in_array($field->form_control, ['number', 'relation', 'input_bigint'])) {
                 if (is_numeric($val)) {
                     $query->where($field->field_name, (int) $val);
                 }
@@ -154,7 +154,7 @@ class TableDataController extends Controller
             if ($field->form_control === 'checkbox') {
                 $value = is_array($value) ? json_encode($value) : $value;
             }
-            if (in_array($field->form_control, ['number', 'relation'])) {
+            if (in_array($field->form_control, ['number', 'relation', 'input_bigint'])) {
                 $value = is_numeric($value) ? (int) $value : ($value === '' || $value === null ? null : $value);
             }
             if ($value !== null && $value !== '') {
