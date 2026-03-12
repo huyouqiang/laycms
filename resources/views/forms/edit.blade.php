@@ -12,7 +12,9 @@
     <blockquote class="layui-elem-quote layui-quote-nm layui-bg-green" id="jsWarningText"></blockquote>
 </div>
 <style>
-.add-index-form .layui-form-item .layui-input-block { width: 220px; position: relative; min-width: 0; }
+.add-index-form .layui-form-item { display: flex; align-items: center; flex-wrap: nowrap; }
+.add-index-form .layui-form-item .layui-form-label { width: 100px; flex-shrink: 0; float: none; }
+.add-index-form .layui-form-item .layui-input-block { width: 220px; margin-left: 0; position: relative; min-width: 0; }
 .add-index-form .layui-form-select { width: 100% !important; min-width: 100% !important; position: relative; display: block; overflow: visible; }
 .add-index-form .layui-form-select .layui-input { width: 100%; box-sizing: border-box; padding-right: 30px; }
 /* 下拉箭头固定在输入框右侧，稍向下对齐 */
@@ -131,9 +133,9 @@
         @if(!empty($tableColumns))
         <form class="layui-form add-index-form" action="{{ route('forms.add-index', $form) }}" method="POST" style="display:flex;gap:10px;align-items:flex-end;flex-wrap:wrap;">
             @csrf
-            <div class="layui-form-item" style="margin-bottom:0;min-width:200px;">
+            <div class="layui-form-item" style="margin-bottom:0;">
                 <label class="layui-form-label">选择字段</label>
-                <div class="layui-input-block" style="margin-left:100px;">
+                <div class="layui-input-block">
                     <select name="column_name" required>
                         <option value="">请选择要添加索引的字段</option>
                         @foreach($tableColumns as $col)

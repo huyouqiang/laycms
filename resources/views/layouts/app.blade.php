@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>@yield('title', 'LayCMS') - LayCMS</title>
-    <link href="https://cdn.jsdelivr.net/npm/layui@2.13.4/dist/css/layui.css" rel="stylesheet">
+    <link href="{{ asset('layui/css/layui.css') }}" rel="stylesheet">
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
 </head>
 <style>
@@ -25,6 +25,13 @@
     background-color: #001529;
     border-color: #001529;
 }
+/* 顶部右侧用户名下拉：避免用户名过短时下拉显示不全 */
+.layui-header .layui-layout-right .layui-nav-item > a {
+    min-width: 100px;
+}
+.layui-header .layui-layout-right .layui-nav-child {
+    min-width: 180px;
+}
 .layui-layer-btn .layui-layer-btn0{
     background-color: #001529;
 }
@@ -38,12 +45,15 @@
     background-color: #001529;
     border-color: #001529;
 }
+.layui-card{
+    border: 1px solid #eee;
+}
 </style>
 <body>
     <div class="layui-layout layui-layout-admin">
         <div class="layui-header layui-bg-black">
-            <div class="layui-logo" style="width:210px;left:0;text-align:center;">
-                <a href="{{ route('dashboard') }}" style="color:#fff;font-size:18px;font-weight:600;"><i class="layui-icon layui-icon-website"></i> LayCMS</a>
+            <div class="layui-logo" style="width:210px;left:0;text-align:left;margin-left:20px;">
+                <a href="{{ route('dashboard') }}" style="color:#fff;font-size:18px;font-weight:600;"><img src="{{ asset('img/logo.png') }}" alt="LayCMS" style="width:30px;height:30px;margin-right:10px;"> laycms</a>
             </div>
             <ul class="layui-nav layui-layout-left" style="left:210px;">
                 <li class="layui-nav-item"><a href="{{ route('dashboard') }}"><i class="layui-icon layui-icon-home"></i> 首页</a></li>
@@ -116,7 +126,7 @@
         </div>
     </div>
     @stack('modals')
-    <script src="https://cdn.jsdelivr.net/npm/layui@2.13.4/dist/layui.js"></script>
+    <script src="{{ asset('layui/layui.js') }}"></script>
     <script>
     layui.config({ base: '' }).use(['element', 'layer'], function(){
         var element = layui.element;

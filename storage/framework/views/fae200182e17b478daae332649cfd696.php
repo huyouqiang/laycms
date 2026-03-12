@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>登录 - LayCMS</title>
-    <link href="https://cdn.jsdelivr.net/npm/layui@2.13.4/dist/css/layui.css" rel="stylesheet">
+    <link href="<?php echo e(asset('layui/css/layui.css')); ?>" rel="stylesheet">
     <link href="<?php echo e(rtrim(request()->getSchemeAndHttpHost() . request()->getBasePath(), '/')); ?>/css/app.css" rel="stylesheet">
     <style>
         :root { --login-primary: #003366; --login-bg: #001529; }
@@ -64,6 +64,7 @@
             <div class="login-footer-left">LayCMS © <?php echo e(date('Y')); ?></div>
         </div>
         <div class="login-right">
+            <img src="<?php echo e(asset('img/logo.png')); ?>" alt="LayCMS" style="width:60px;height:60px;margin-bottom:20px;">
             <h1 class="login-title">欢迎回来</h1>
             <p class="login-subtitle">登录您的账户继续使用</p>
             <?php if($errors->any()): ?>
@@ -92,7 +93,7 @@
             <div class="login-footer-right">LayCMS · 基于 Laravel 构建</div>
         </div>
     </div>
-    <script src="https://cdn.jsdelivr.net/npm/layui@2.13.4/dist/layui.js"></script>
+    <script src="<?php echo e(asset('layui/layui.js')); ?>"></script>
     <script>layui.use('form', function(){ var form = layui.form; });</script>
 </body>
 </html>
