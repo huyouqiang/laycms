@@ -416,3 +416,94 @@ main {
   max-width: none;
   white-space: nowrap;
 }
+
+/* Layui 后台：顶栏图标与文字水平（垂直居中）对齐 */
+.layui-layout-admin .layui-header .layui-nav > .layui-nav-item {
+  display: flex;
+  align-items: center;
+}
+.layui-layout-admin .layui-header .layui-nav.layui-layout-left > .layui-nav-item > a,
+.layui-layout-admin .layui-header .layui-nav.layui-layout-right > .layui-nav-item > a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  line-height: 1.2;
+}
+.layui-layout-admin .layui-header .layui-nav .layui-nav-child dd > a {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  line-height: 1.2;
+}
+.layui-layout-admin .layui-header .layui-nav .layui-nav-child dd.layui-font-gray {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.layui-layout-admin .layui-header .layui-nav a > .layui-icon {
+  margin-right: 0;
+  flex-shrink: 0;
+  font-size: 16px;
+  line-height: 1.2;
+  vertical-align: 0;
+  position: relative;
+  top: 0;
+}
+/* 侧栏：链接内图标与文字同一基线居中 */
+.layui-layout-admin .layui-side .layui-nav.layui-nav-tree .layui-nav-item > a,
+.layui-layout-admin .layui-side .layui-nav.layui-nav-tree .layui-nav-child dd > a {
+  display: inline-flex;
+  align-items: center;
+  line-height: 1.2;
+}
+.layui-layout-admin .layui-side .layui-nav a .layui-icon {
+  margin-right: 8px;
+  font-size: 16px;
+  line-height: 1.2;
+  vertical-align: 0;
+  position: relative;
+  top: 0;
+}
+.layui-layout-admin .layui-side .layui-nav.layui-nav-tree .layui-nav-item > a .layui-icon {
+  margin-right: 10px;
+}
+.layui-layout-admin .layui-logo a {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  line-height: 1.2;
+}
+.layui-layout-admin .layui-logo a .layui-icon {
+  margin-right: 0;
+  font-size: 18px;
+  line-height: 1.2;
+  vertical-align: 0;
+}
+
+/* Layui 动态表格：卡片内贴边。
+   勿对 .layui-table-header / .layui-table-body 笼统设置 overflow-x:auto：
+   会作用到固定列内部副本，导致表头、操作列也出现横向滚动条。 */
+.table-data-layui-wrap .layui-table-view {
+  margin: 0;
+}
+.table-data-layui-wrap .layui-table-box > .layui-table-header {
+  overflow-x: hidden !important;
+}
+.table-data-layui-wrap .layui-table-fixed .layui-table-header,
+.table-data-layui-wrap .layui-table-fixed .layui-table-body {
+  overflow-x: hidden !important;
+}
+/* 右侧固定列（操作）：不显示纵向滚动条（Layui 行高微差时常出现细滚动条） */
+.table-data-layui-wrap .layui-table-fixed-r,
+.table-data-layui-wrap .layui-table-fixed-r .layui-table-header,
+.table-data-layui-wrap .layui-table-fixed-r .layui-table-body {
+  overflow-y: hidden !important;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.table-data-layui-wrap .layui-table-fixed-r .layui-table-header::-webkit-scrollbar,
+.table-data-layui-wrap .layui-table-fixed-r .layui-table-body::-webkit-scrollbar {
+  width: 0 !important;
+  height: 0 !important;
+}

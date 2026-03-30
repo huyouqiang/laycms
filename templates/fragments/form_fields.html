@@ -1,0 +1,139 @@
+<div class="layui-card">
+    <div class="layui-card-header layui-clear">
+        <span>字段 — {{.Form.Name}}</span>
+        <a href="{{urlFor "forms_edit" "id" (printf "%d" .Form.ID)}}" class="layui-btn layui-btn-xs" style="float:right">返回表单</a>
+    </div>
+    <div class="layui-card-body">
+        <button type="button" class="layui-btn layui-btn-sm layui-bg-cyan" id="btnAddField">添加字段</button>
+        <table class="layui-table" lay-skin="line" style="margin-top:10px;">
+            <thead><tr><th>排序</th><th>字段名</th><th>标签</th><th>控件</th><th>必填</th><th>列表</th><th>操作</th></tr></thead>
+            <tbody>
+                {{range .Form.Fields}}
+                <tr>
+                    <td>{{.SortOrder}}</td>
+                    <td><code>{{.FieldName}}</code></td>
+                    <td>{{.Label}}</td>
+                    <td>{{.FormControl}}</td>
+                    <td>{{if .IsRequired}}是{{else}}否{{end}}</td>
+                    <td>{{if .IsListVisible}}是{{else}}否{{end}}</td>
+                    <td>
+                        <button type="button" class="layui-btn layui-btn-xs btn-edit-field" data-id="{{.ID}}">编辑</button>
+                        <button type="button" class="layui-btn layui-btn-xs layui-btn-danger btn-del-field" data-id="{{.ID}}">删</button>
+                    </td>
+                </tr>
+                {{end}}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div id="fieldModal" style="display:none;padding:16px;">
+    <form class="layui-form" id="fieldForm">
+        <input type="hidden" name="field_id" id="ff_id">
+        <div class="layui-form-item">
+            <label class="layui-form-label">字段名</label>
+            <div class="layui-input-block">
+                <input type="text" name="field_name" id="ff_name" class="layui-input" required>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">标签</label>
+            <div class="layui-input-block">
+                <input type="text" name="label" id="ff_label" class="layui-input" required>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">控件</label>
+            <div class="layui-input-block">
+                <select name="form_control" id="ff_ctrl">
+                    <option value="input">input</option>
+                    <option value="textarea">textarea</option>
+                    <option value="select">select</option>
+                    <option value="radio">radio</option>
+                    <option value="checkbox">checkbox</option>
+                    <option value="date">date</option>
+                    <option value="datetime">datetime</option>
+                    <option value="number">number</option>
+                    <option value="file">file</option>
+                    <option value="editor">editor</option>
+                    <option value="relation">relation</option>
+                </select>
+            </div>
+        </div>
+        <div class="layui-form-item layui-form-text">
+            <label class="layui-form-label">选项JSON</label>
+            <div class="layui-input-block">
+                <textarea name="options" id="ff_opts" class="layui-textarea" placeholder='{"k":"v"}'></textarea>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">排序</label>
+            <div class="layui-input-block">
+                <input type="number" name="sort_order" id="ff_sort" class="layui-input" value="0">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">必填</label>
+            <div class="layui-input-block">
+                <input type="checkbox" name="is_required" id="ff_req" lay-skin="primary" title="必填">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">列表显示</label>
+            <div class="layui-input-block">
+                <input type="checkbox" name="is_list_visible" id="ff_list" lay-skin="primary" title="显示" checked>
+            </div>
+        </div>
+    </form>
+</div>
+
+<script>
+var allFields = {{.FieldsJSON}};
+layui.use(['layer','form','jquery'], function(){
+    var layer = layui.layer, form = layui.form, $ = layui.$;
+    var formId = {{.Form.ID}};
+    function findField(id){ return (allFields||[]).find(function(x){ return String(x.id)===String(id); }); }
+    $('#btnAddField').on('click', function(){
+        $('#ff_id').val(''); $('#ff_name').val('').prop('readonly', false);
+        $('#ff_label').val(''); $('#ff_ctrl').val('input'); $('#ff_opts').val('');
+        $('#ff_sort').val(0); $('#ff_req').prop('checked', false); $('#ff_list').prop('checked', true);
+        form.render('checkbox');
+        layer.open({type:1, title:'添加字段', area:['520px','auto'], content:$('#fieldModal'), btn:['保存','取消'],
+            yes:function(ix){
+                var data = {
+                    csrf_token:'{{.CSRFToken}}', form_id: formId, field_name:$('#ff_name').val(), label:$('#ff_label').val(),
+                    form_control:$('#ff_ctrl').val(), options:$('#ff_opts').val(), sort_order:$('#ff_sort').val()||0,
+                    is_required: $('#ff_req').prop('checked')?'true':'false',
+                    is_list_visible: $('#ff_list').prop('checked')?'true':'false'
+                };
+                $.post('/form-fields/', data).done(function(){ layer.close(ix); location.reload(); })
+                    .fail(function(x){ layer.msg((x.responseJSON&&x.responseJSON.msg)||'失败'); });
+            }});
+    });
+    $('.btn-edit-field').on('click', function(){
+        var d = findField($(this).data('id'));
+        if(!d){ layer.msg('找不到字段'); return; }
+        $('#ff_id').val(d.id); $('#ff_name').val(d.field_name||'').prop('readonly', true);
+        $('#ff_label').val(d.label||''); $('#ff_ctrl').val(d.form_control||'input');
+        $('#ff_opts').val(d.options||''); $('#ff_sort').val(d.sort_order||0);
+        $('#ff_req').prop('checked', !!d.is_required); $('#ff_list').prop('checked', d.is_list_visible!==false);
+        form.render('checkbox');
+        layer.open({type:1, title:'编辑字段', area:['520px','auto'], content:$('#fieldModal'), btn:['保存','取消'],
+            yes:function(ix){
+                var data = {
+                    label:$('#ff_label').val(), form_control:$('#ff_ctrl').val(), options:$('#ff_opts').val(),
+                    sort_order:$('#ff_sort').val()||0,
+                    is_required: $('#ff_req').prop('checked')?'true':'false',
+                    is_list_visible: $('#ff_list').prop('checked')?'true':'false'
+                };
+                $.ajax({url:'/form-fields/field/'+d.id, method:'PUT', data:data}).done(function(){ layer.close(ix); location.reload(); })
+                    .fail(function(x){ layer.msg((x.responseJSON&&x.responseJSON.msg)||'失败'); });
+            }});
+    });
+    $('.btn-del-field').on('click', function(){
+        if(!confirm('确定删除？')) return;
+        $.ajax({url:'/form-fields/field/'+$(this).data('id'), method:'DELETE'}).done(function(){ location.reload(); })
+            .fail(function(x){ layer.msg((x.responseJSON&&x.responseJSON.msg)||'失败'); });
+    });
+});
+</script>

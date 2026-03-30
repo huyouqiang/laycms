@@ -1,0 +1,21 @@
+<div class="layui-card">
+    <div class="layui-card-header">欢迎使用 LayCMS 动态表单管理系统</div>
+    <div class="layui-card-body">
+        <div class="layui-row layui-col-space15">
+            {{range .Forms}}
+            <div class="layui-col-md4">
+                <div class="layui-card">
+                    <div class="layui-card-header">{{.Name}}</div>
+                    <div class="layui-card-body">
+                        <p>{{if .Description}}{{.Description}}{{else}}暂无描述{{end}}</p>
+                        <a href="{{urlFor "table_data_index" "table_name" .DataTable}}" class="layui-btn layui-btn-sm layui-bg-cyan">管理数据</a>
+                        {{if or (and $.CmsUser $.CmsUser.IsRoot) ($.Can "_forms" "read")}}
+                        <a href="{{urlFor "form_fields_index" "form_id" (printf "%d" .ID)}}" class="layui-btn layui-btn-sm layui-btn-primary">字段配置</a>
+                        {{end}}
+                    </div>
+                </div>
+            </div>
+            {{end}}
+        </div>
+    </div>
+</div>

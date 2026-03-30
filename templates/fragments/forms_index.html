@@ -1,0 +1,37 @@
+<div class="layui-card">
+    <div class="layui-card-header">
+        <a href="{{urlFor "forms_create"}}" class="layui-btn layui-btn-sm layui-bg-cyan">新建表单</a>
+    </div>
+    <div class="layui-card-body">
+        <table class="layui-table" lay-skin="line">
+            <thead><tr><th>ID</th><th>名称</th><th>表名</th><th>分组</th><th>字段数</th><th>操作</th></tr></thead>
+            <tbody>
+                {{range .Forms}}
+                <tr>
+                    <td>{{.ID}}</td>
+                    <td>{{.Name}}</td>
+                    <td><code>{{.DataTable}}</code></td>
+                    <td>{{if .FormGroup}}{{.FormGroup.Name}}{{else}}-{{end}}</td>
+                    <td>{{index $.FormCounts .ID}}</td>
+                    <td>
+                        <a href="{{urlFor "forms_edit" "id" (printf "%d" .ID)}}" class="layui-btn layui-btn-xs">编辑</a>
+                        <a href="{{urlFor "form_fields_index" "form_id" (printf "%d" .ID)}}" class="layui-btn layui-btn-xs layui-btn-primary">字段</a>
+                        <button type="button" class="layui-btn layui-btn-xs layui-btn-danger btn-del-form" data-id="{{.ID}}">删除</button>
+                    </td>
+                </tr>
+                {{end}}
+            </tbody>
+        </table>
+    </div>
+</div>
+<script>
+layui.use(['layer','jquery'], function(){
+    var layer = layui.layer, $ = layui.$;
+    $('.btn-del-form').on('click', function(){
+        if(!confirm('确定删除表单及数据表？')) return;
+        var id = $(this).data('id');
+        $.ajax({url:'/forms/'+id, method:'DELETE', headers:{'X-Requested-With':'XMLHttpRequest'}})
+            .done(function(){ location.reload(); }).fail(function(x){ layer.msg((x.responseJSON&&x.responseJSON.msg)||'删除失败'); });
+    });
+});
+</script>

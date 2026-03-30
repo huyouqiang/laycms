@@ -1,0 +1,173 @@
+<div class="layui-card">
+    <div class="layui-card-header layui-clear">
+        <span>编辑表单</span>
+        <a href="{{urlFor "form_fields_index" "form_id" (printf "%d" .Form.ID)}}" class="layui-btn layui-btn-xs layui-bg-cyan" style="float:right">字段配置</a>
+    </div>
+    <div class="layui-card-body">
+        <form class="layui-form" id="formEdit" style="max-width:720px;">
+            <input type="hidden" name="csrf_token" value="{{.CSRFToken}}">
+            <div class="layui-form-item">
+                <label class="layui-form-label">分组</label>
+                <div class="layui-input-block">
+                    <select name="form_group_id">
+                        {{range .FormGroups}}<option value="{{.ID}}" {{if eq $.Form.FormGroupID .ID}}selected{{end}}>{{.Name}}</option>{{end}}
+                    </select>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">排序</label>
+                <div class="layui-input-block">
+                    <input type="number" name="sort_order" value="{{.Form.SortOrder}}" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">名称</label>
+                <div class="layui-input-block">
+                    <input type="text" name="name" value="{{.Form.Name}}" required class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">表名</label>
+                <div class="layui-input-block">
+                    <input type="text" name="table_name" value="{{.Form.DataTable}}" readonly class="layui-input layui-disabled">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">描述</label>
+                <div class="layui-input-block">
+                    <input type="text" name="description" value="{{with .Form.Description}}{{.}}{{end}}" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-input-block">
+                    <button type="submit" class="layui-btn layui-bg-cyan">保存</button>
+                    <a href="{{urlFor "forms_index"}}" class="layui-btn layui-btn-primary">返回</a>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="layui-card" style="margin-top:15px;">
+    <div class="layui-card-header">数据表列</div>
+    <div class="layui-card-body">
+        <table class="layui-table" lay-skin="line"><thead><tr><th>列名</th></tr></thead>
+        <tbody>
+            {{range .TableColumns}}<tr><td><code>{{.}}</code></td></tr>
+            {{else}}<tr><td class="layui-word-aux">暂无</td></tr>{{end}}
+        </tbody></table>
+    </div>
+</div>
+
+<div class="layui-card" style="margin-top:15px;">
+    <div class="layui-card-header">索引</div>
+    <div class="layui-card-body">
+        <form class="layui-form" id="formAddIndex" style="margin-bottom:10px;">
+            <select name="column_name" id="idxCol" class="layui-input" style="display:inline-block;width:200px;">
+                <option value="">选择字段</option>
+                {{range .TableColumns}}<option value="{{.}}">{{.}}</option>{{end}}
+            </select>
+            <button type="submit" class="layui-btn layui-btn-sm">添加索引</button>
+        </form>
+        <table class="layui-table" lay-skin="line">
+            <thead><tr><th>索引名</th><th>列</th><th>类型</th><th>操作</th></tr></thead>
+            <tbody>
+                {{range .TableIndexes}}
+                <tr>
+                    <td><code>{{.Name}}</code></td>
+                    <td>{{.Column}}</td>
+                    <td>{{.Type}}</td>
+                    <td>{{if ne .Name "PRIMARY"}}<button type="button" class="layui-btn layui-btn-xs layui-btn-danger btn-drop-idx" data-name="{{.Name}}">删</button>{{end}}</td>
+                </tr>
+                {{else}}<tr><td colspan="4">暂无索引</td></tr>{{end}}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="layui-card" style="margin-top:15px;">
+    <div class="layui-card-header">外键关联</div>
+    <div class="layui-card-body">
+        <form class="layui-form layui-row" id="formAddFk">
+            <div class="layui-col-md3">
+                <select id="fkLocal" class="layui-input" required>
+                    <option value="">本表字段</option>
+                    {{range .TableColumns}}<option value="{{.}}">{{.}}</option>{{end}}
+                </select>
+            </div>
+            <div class="layui-col-md3">
+                <select id="fkRelated" class="layui-input" required>
+                    <option value="">关联表</option>
+                    {{range .OtherForms}}<option value="{{.ID}}">{{.Name}}</option>{{end}}
+                </select>
+            </div>
+            <div class="layui-col-md3">
+                <select id="fkRefCol" class="layui-input" required disabled><option value="">关联字段</option></select>
+            </div>
+            <div class="layui-col-md3">
+                <button type="submit" class="layui-btn layui-btn-sm layui-bg-cyan">添加外键</button>
+            </div>
+        </form>
+        <table class="layui-table" lay-skin="line" style="margin-top:10px;">
+            <thead><tr><th>本表字段</th><th>关联表</th><th>关联字段</th><th>操作</th></tr></thead>
+            <tbody>
+                {{range .Form.Relations}}
+                <tr>
+                    <td>{{if .FormField}}<code>{{.FormField.FieldName}}</code>{{else}}-{{end}}</td>
+                    <td>{{if .RelatedForm}}{{.RelatedForm.Name}}{{else}}-{{end}}</td>
+                    <td><code>{{.RelatedFieldName}}</code></td>
+                    <td><button type="button" class="layui-btn layui-btn-xs layui-btn-danger btn-drop-fk" data-id="{{.ID}}">删</button></td>
+                </tr>
+                {{else}}<tr><td colspan="4">暂无</td></tr>{{end}}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+(function(){
+    var formId = {{.Form.ID}};
+    $('#formEdit').on('submit', function(e){
+        e.preventDefault();
+        $.ajax({url:'/forms/'+formId, method:'PUT', data:$(this).serialize()}).done(function(){ location.reload(); })
+            .fail(function(x){ alert((x.responseJSON&&x.responseJSON.msg)||'保存失败'); });
+    });
+    $('#formAddIndex').on('submit', function(e){
+        e.preventDefault();
+        var col = $('#idxCol').val();
+        if(!col){ alert('请选择字段'); return; }
+        $.post('/forms/'+formId+'/add-index', {csrf_token:'{{.CSRFToken}}', column_name:col}).done(function(){ location.reload(); })
+            .fail(function(x){ alert((x.responseJSON&&x.responseJSON.msg)||'失败'); });
+    });
+    $('.btn-drop-idx').on('click', function(){
+        if(!confirm('确定删除索引？')) return;
+        var n = $(this).data('name');
+        $.ajax({url:'/forms/'+formId+'/drop-index', method:'DELETE', data:{csrf_token:'{{.CSRFToken}}', index_name:n}}).done(function(){ location.reload(); })
+            .fail(function(x){ alert((x.responseJSON&&x.responseJSON.msg)||'失败'); });
+    });
+    $('#fkRelated').on('change', function(){
+        var fid = $(this).val();
+        var $s = $('#fkRefCol').prop('disabled', !fid).html('<option value=\"\">加载...</option>');
+        if(!fid){ $s.html('<option value=\"\">先选关联表</option>'); return; }
+        $.get('/forms/'+fid+'/related-columns').done(function(res){
+            var o = '<option value=\"\">选择字段</option>';
+            (res.columns||[]).forEach(function(c){ o += '<option value=\"'+c+'\">'+c+'</option>'; });
+            $s.html(o);
+        });
+    });
+    $('#formAddFk').on('submit', function(e){
+        e.preventDefault();
+        $.post('/form-relations', {
+            csrf_token:'{{.CSRFToken}}', form_id: formId, field_name: $('#fkLocal').val(), form_field_id: 0,
+            related_form_id: $('#fkRelated').val(), related_field_name: $('#fkRefCol').val()
+        }).done(function(){ location.reload(); }).fail(function(x){ alert((x.responseJSON&&x.responseJSON.msg)||'失败'); });
+    });
+    $('.btn-drop-fk').on('click', function(){
+        if(!confirm('确定删除关联？')) return;
+        var id = $(this).data('id');
+        $.ajax({url:'/form-relations/'+id, method:'DELETE'}).done(function(){ location.reload(); })
+            .fail(function(x){ alert((x.responseJSON&&x.responseJSON.msg)||'失败'); });
+    });
+    layui.use('form', function(){ layui.form.render(); });
+})();
+</script>

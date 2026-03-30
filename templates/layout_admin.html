@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{.CSRFToken}}">
+    <title>{{.Title}} - LayCMS</title>
+    <link rel="stylesheet" href="https://unpkg.com/layui@2.9.20/dist/css/layui.css">
+    <link href="/css/app.css" rel="stylesheet">
+    <script src="https://unpkg.com/layui@2.9.20/dist/layui.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+    <div class="layui-header layui-bg-cyan">
+        <div class="layui-logo layui-hide-xs" style="width:200px"><a href="{{urlFor "dashboard"}}" class="layui-font-white"><i class="layui-icon layui-icon-component"></i> LayCMS</a></div>
+        <ul class="layui-nav layui-layout-left">
+            <li class="layui-nav-item"><a href="{{urlFor "dashboard"}}"><i class="layui-icon layui-icon-home"></i> 首页</a></li>
+            {{if and .CmsUser (or .CmsUser.IsRoot (.Can "_forms" "read"))}}
+            <li class="layui-nav-item">
+                <a href="javascript:;"><i class="layui-icon layui-icon-template"></i> 表单管理</a>
+                <dl class="layui-nav-child">
+                    <dd><a href="{{urlFor "form_groups_index"}}"><i class="layui-icon layui-icon-file-b"></i> 表单分组</a></dd>
+                    <dd><a href="{{urlFor "forms_index"}}"><i class="layui-icon layui-icon-form"></i> 表单列表</a></dd>
+                </dl>
+            </li>
+            {{end}}
+            {{if and .CmsUser (or .CmsUser.IsRoot (.Can "_users" "read"))}}
+            <li class="layui-nav-item">
+                <a href="javascript:;"><i class="layui-icon layui-icon-user"></i> 用户管理</a>
+                <dl class="layui-nav-child">
+                    <dd><a href="{{urlFor "user_groups_index"}}"><i class="layui-icon layui-icon-group"></i> 用户组</a></dd>
+                    <dd><a href="{{urlFor "users_index"}}"><i class="layui-icon layui-icon-username"></i> 用户列表</a></dd>
+                </dl>
+            </li>
+            {{end}}
+        </ul>
+        <ul class="layui-nav layui-layout-right">
+            {{if .CmsUser}}
+            <li class="layui-nav-item">
+                <a href="javascript:;"><i class="layui-icon layui-icon-username"></i> {{if .CmsUser.Nickname}}{{.CmsUser.Nickname}}{{else}}{{.CmsUser.Username}}{{end}}</a>
+                <dl class="layui-nav-child">
+                    <dd class="layui-font-gray" style="padding:8px 16px">
+                        <i class="layui-icon layui-icon-auz"></i>
+                        {{if .CmsUser.IsRoot}}角色：超级管理员
+                        {{else if .CmsUser.UserGroup}}角色：{{.CmsUser.UserGroup.Name}}
+                        {{else}}角色：-{{end}}
+                    </dd>
+                    <dd><a href="{{urlFor "logout"}}"><i class="layui-icon layui-icon-logout"></i> 退出登录</a></dd>
+                </dl>
+            </li>
+            {{end}}
+        </ul>
+    </div>
+    <div class="layui-side layui-bg-black">
+        <div class="layui-side-scroll">
+            <ul class="layui-nav layui-nav-tree">
+                {{range .MenuFormGroups}}
+                <li class="layui-nav-item layui-nav-itemed">
+                    <a href="javascript:;"><i class="layui-icon layui-icon-folder"></i> {{.Name}}</a>
+                    <dl class="layui-nav-child">
+                        {{range .Forms}}
+                        {{if or (and $.CmsUser $.CmsUser.IsRoot) ($.CanTable .DataTable "read")}}
+                        <dd{{if eq $.CurrentTable .DataTable}} class="layui-this"{{end}}>
+                            <a href="{{urlFor "table_data_index" "table_name" .DataTable}}"><i class="layui-icon layui-icon-table"></i> {{.Name}}</a>
+                        </dd>
+                        {{end}}
+                        {{end}}
+                    </dl>
+                </li>
+                {{end}}
+            </ul>
+        </div>
+    </div>
+    <div class="layui-body" style="bottom:0">
+        <div style="padding:15px">
+            {{if .FlashSuccess}}<div class="layui-bg-green" style="padding:8px;margin-bottom:10px">{{.FlashSuccess}}</div>{{end}}
+            {{if .FlashErrors}}<div class="layui-bg-red" style="padding:8px;margin-bottom:10px">{{range .FlashErrors}}{{.}} {{end}}</div>{{end}}
+            {{.Body}}
+        </div>
+    </div>
+</div>
+{{.Scripts}}
+</body>
+</html>

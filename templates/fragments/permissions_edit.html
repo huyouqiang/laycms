@@ -1,0 +1,52 @@
+<div class="layui-card">
+    <div class="layui-card-header layui-clear">
+        <span>{{.Group.Name}} — 权限配置</span>
+        <a href="{{urlFor "user_groups_index"}}" class="layui-btn layui-btn-xs" style="float:right">返回</a>
+    </div>
+    <div class="layui-card-body">
+        <form class="layui-form" id="permForm">
+            <input type="hidden" name="csrf_token" value="{{.CSRFToken}}">
+            <table class="layui-table" lay-skin="line">
+                <thead><tr><th>资源/表</th><th>新增</th><th>查看</th><th>编辑</th><th>删除</th></tr></thead>
+                <tbody>
+                    {{range .Tables}}
+                    {{$p := index $.Perms .Name}}
+                    <tr>
+                        <td>{{.Label}}</td>
+                        <td>
+                            <input type="hidden" name="permissions[{{.Name}}][create]" value="0">
+                            <input type="checkbox" name="permissions[{{.Name}}][create]" value="1" title=" " {{if and $p $p.CanCreate}}checked{{end}} lay-skin="primary">
+                        </td>
+                        <td>
+                            <input type="hidden" name="permissions[{{.Name}}][read]" value="0">
+                            <input type="checkbox" name="permissions[{{.Name}}][read]" value="1" title=" " {{if and $p $p.CanRead}}checked{{end}} lay-skin="primary">
+                        </td>
+                        <td>
+                            <input type="hidden" name="permissions[{{.Name}}][update]" value="0">
+                            <input type="checkbox" name="permissions[{{.Name}}][update]" value="1" title=" " {{if and $p $p.CanUpdate}}checked{{end}} lay-skin="primary">
+                        </td>
+                        <td>
+                            <input type="hidden" name="permissions[{{.Name}}][delete]" value="0">
+                            <input type="checkbox" name="permissions[{{.Name}}][delete]" value="1" title=" " {{if and $p $p.CanDelete}}checked{{end}} lay-skin="primary">
+                        </td>
+                    </tr>
+                    {{end}}
+                </tbody>
+            </table>
+            <button type="submit" class="layui-btn layui-bg-cyan">保存</button>
+        </form>
+    </div>
+</div>
+<script>
+layui.use(['form','jquery'], function(){
+    var form = layui.form, $ = layui.$;
+    form.render('checkbox');
+    var groupId = {{.Group.ID}};
+    $('#permForm').on('submit', function(e){
+        e.preventDefault();
+        $.ajax({url:'/permissions/'+groupId, method:'PUT', data:$(this).serialize()})
+            .done(function(){ window.location = '{{urlFor "user_groups_index"}}'; })
+            .fail(function(x){ alert((x.responseJSON&&x.responseJSON.msg)||'失败'); });
+    });
+});
+</script>

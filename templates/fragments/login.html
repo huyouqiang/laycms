@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>登录 - LayCMS</title>
+    <link rel="stylesheet" href="https://unpkg.com/layui@2.9.20/dist/css/layui.css">
+    <link href="/css/app.css" rel="stylesheet">
+</head>
+<body style="background:linear-gradient(135deg,#001529 0%,#003366 100%);min-height:100vh;display:flex;align-items:center;justify-content:center;">
+<div class="layui-card" style="width:400px;max-width:92vw;">
+    <div class="layui-card-header layui-bg-cyan" style="color:#fff;font-size:18px;">LayCMS 登录</div>
+    <div class="layui-card-body">
+        {{range .Errors}}<div class="layui-bg-red" style="padding:8px;margin-bottom:10px">{{.}}</div>{{end}}
+        <form class="layui-form" action="/login" method="POST">
+            <input type="hidden" name="csrf_token" value="{{.CSRFToken}}">
+            <div class="layui-form-item">
+                <label class="layui-form-label">用户名</label>
+                <div class="layui-input-block">
+                    <input type="text" name="username" required lay-verify="required" placeholder="用户名" class="layui-input" value="{{.OldUsername}}">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">密码</label>
+                <div class="layui-input-block">
+                    <input type="password" name="password" required lay-verify="required" placeholder="密码" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-input-block">
+                    <button type="submit" class="layui-btn layui-btn-fluid layui-bg-cyan">登 录</button>
+                </div>
+            </div>
+        </form>
+        <div class="layui-word-aux">{{.FooterNote}}</div>
+    </div>
+</div>
+<script src="https://unpkg.com/layui@2.9.20/dist/layui.js"></script>
+</body>
+</html>

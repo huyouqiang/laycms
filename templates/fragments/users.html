@@ -1,0 +1,103 @@
+<div class="layui-card">
+    <div class="layui-card-header">
+        <button type="button" class="layui-btn layui-btn-sm layui-bg-cyan" id="btnAddUser">新建用户</button>
+    </div>
+    <div class="layui-card-body">
+        <table class="layui-table" lay-skin="line">
+            <thead><tr><th>ID</th><th>用户名</th><th>昵称</th><th>用户组</th><th>状态</th><th>操作</th></tr></thead>
+            <tbody>
+                {{range .Users}}
+                <tr>
+                    <td>{{.ID}}</td>
+                    <td>{{.Username}}{{if .IsRoot}} <span class="layui-badge">root</span>{{end}}</td>
+                    <td>{{if .Nickname}}{{.Nickname}}{{else}}-{{end}}</td>
+                    <td>{{if .UserGroup}}{{.UserGroup.Name}}{{else}}-{{end}}</td>
+                    <td>{{if .IsActive}}正常{{else}}禁用{{end}}</td>
+                    <td>
+                        {{if not .IsRoot}}
+                        <button type="button" class="layui-btn layui-btn-xs btn-edit-user" data-id="{{.ID}}">编辑</button>
+                        <button type="button" class="layui-btn layui-btn-xs layui-btn-danger btn-del-user" data-id="{{.ID}}">删</button>
+                        {{else}}-{{end}}
+                    </td>
+                </tr>
+                {{end}}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div id="userModal" style="display:none;padding:16px;">
+    <form class="layui-form">
+        <input type="hidden" id="u_id">
+        <div class="layui-form-item">
+            <label class="layui-form-label">用户名</label>
+            <div class="layui-input-block">
+                <input type="text" id="u_name" class="layui-input" required>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">密码</label>
+            <div class="layui-input-block">
+                <input type="password" id="u_pass" class="layui-input" placeholder="编辑可留空">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">昵称</label>
+            <div class="layui-input-block">
+                <input type="text" id="u_nick" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">用户组</label>
+            <div class="layui-input-block">
+                <select id="u_gid">
+                    {{range .Groups}}<option value="{{.ID}}">{{.Name}}</option>{{end}}
+                </select>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">启用</label>
+            <div class="layui-input-block">
+                <input type="checkbox" id="u_active" lay-skin="switch" lay-text="是|否" checked>
+            </div>
+        </div>
+    </form>
+</div>
+
+<script>
+var allUsers = {{.UsersJSON}};
+layui.use(['layer','form','jquery'], function(){
+    var layer = layui.layer, form = layui.form, $ = layui.$;
+    function findUser(id){ return (allUsers||[]).find(function(x){ return String(x.id)===String(id); }); }
+    $('#btnAddUser').on('click', function(){
+        $('#u_id').val(''); $('#u_name').val('').prop('readonly', false); $('#u_pass').val(''); $('#u_nick').val(''); $('#u_gid').val($('#u_gid option:first').val());
+        $('#u_active').prop('checked', true); form.render('select');
+        layer.open({type:1, title:'新建用户', area:['480px','auto'], content:$('#userModal'), btn:['保存','取消'],
+            yes:function(ix){
+                var data = {csrf_token:'{{.CSRFToken}}', username:$('#u_name').val(), password:$('#u_pass').val(), nickname:$('#u_nick').val(),
+                    user_group_id:$('#u_gid').val(), is_active: $('#u_active').prop('checked')?'true':'false'};
+                $.post('/users', data).done(function(){ layer.close(ix); location.reload(); })
+                    .fail(function(x){ layer.msg((x.responseJSON&&x.responseJSON.msg)||'失败'); });
+            }});
+    });
+    $('.btn-edit-user').on('click', function(){
+        var d = findUser($(this).data('id'));
+        if(!d){ layer.msg('找不到用户'); return; }
+        $('#u_id').val(d.id); $('#u_name').val(d.username).prop('readonly', true); $('#u_pass').val('');
+        $('#u_nick').val(d.nickname||''); $('#u_gid').val(String(d.user_group_id||$('#u_gid option:first').val()));
+        $('#u_active').prop('checked', !!d.is_active); form.render('select');
+        layer.open({type:1, title:'编辑用户', area:['480px','auto'], content:$('#userModal'), btn:['保存','取消'],
+            yes:function(ix){
+                var data = {nickname:$('#u_nick').val(), user_group_id:$('#u_gid').val(), is_active: $('#u_active').prop('checked')?'true':'false'};
+                if($('#u_pass').val()) data.password = $('#u_pass').val();
+                $.ajax({url:'/users/'+d.id, method:'PUT', data:data}).done(function(){ layer.close(ix); location.reload(); })
+                    .fail(function(x){ layer.msg((x.responseJSON&&x.responseJSON.msg)||'失败'); });
+            }});
+    });
+    $('.btn-del-user').on('click', function(){
+        if(!confirm('确定删除？')) return;
+        $.ajax({url:'/users/'+$(this).data('id'), method:'DELETE'}).done(function(){ location.reload(); })
+            .fail(function(x){ layer.msg((x.responseJSON&&x.responseJSON.msg)||'失败'); });
+    });
+});
+</script>

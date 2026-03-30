@@ -1,0 +1,87 @@
+<div class="layui-card">
+    <div class="layui-card-header">{{if .IsEdit}}编辑{{else}}新增{{end}} {{.Form.Name}}</div>
+    <div class="layui-card-body">
+        <form class="layui-form layui-form-pane" id="dataForm" style="max-width:800px;" data-is-edit="{{if .IsEdit}}1{{else}}0{{end}}"
+              action="/table-data/{{.TableName}}{{if .IsEdit}}/{{index .Row "id"}}{{end}}" method="POST">
+            <input type="hidden" name="csrf_token" value="{{.CSRFToken}}">
+            {{range .Form.Fields}}
+            <div class="layui-form-item">
+                <label class="layui-form-label">{{if eq .FormControl "relation"}}<span class="layui-font-blue">关联</span> {{end}}{{.Label}}</label>
+                <div class="layui-input-block">
+                    {{renderField . $.Row}}
+                </div>
+            </div>
+            {{end}}
+            <div class="layui-form-item">
+                <div class="layui-input-block">
+                    <button type="submit" class="layui-btn layui-bg-cyan">保存</button>
+                    <a href="{{urlFor "table_data_index" "table_name" .TableName}}" class="layui-btn layui-btn-primary">返回</a>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<script src="https://cdn.ckeditor.com/4.22.1/full/ckeditor.js"></script>
+<script>
+$(function(){
+    if (typeof CKEDITOR !== 'undefined') {
+        CKEDITOR.config.versionCheck = false;
+        $('.ckeditor-field').each(function(){ CKEDITOR.replace(this.id, {height:200}); });
+    }
+    $('.file-upload-wrap').each(function(){
+        var $w = $(this);
+        $w.find('.file-btn').on('click', function(){ $w.find('.file-upload-input').click(); });
+        $w.find('.file-upload-input').on('change', function(){
+            var file = this.files[0]; if(!file) return;
+            var $in = $w.find('.file-path-input'), $disp = $w.find('.file-path-display');
+            $disp.text('上传中...');
+            var fd = new FormData(); fd.append('file', file);
+            $.ajax({url:'/api/upload', method:'POST', data:fd, processData:false, contentType:false})
+                .done(function(res){
+                    if(res.code===0 && res.path){ $in.val(res.path);
+                        var href = res.path.charAt(0)==='/'?res.path:'/'+res.path;
+                        $disp.html('<a href="'+href+'" target="_blank">'+$('<div>').text(res.path).html()+'</a>');
+                    } else { $disp.html('<span style="color:red">'+(res.msg||'失败')+'</span>'); }
+                }).fail(function(x){ $disp.html('<span style="color:red">失败</span>'); });
+            $(this).val('');
+        });
+        $w.find('.file-clear-link').on('click', function(e){ e.preventDefault(); $w.find('.file-path-input').val(''); $w.find('.file-path-display').text('未上传'); });
+    });
+    function initRelation(){
+        $('.relation-autocomplete').each(function(){
+            var $wrap = $(this), table = $wrap.data('table'), ref = $wrap.data('ref')||'id', display = $wrap.data('display')||'name';
+            var $h = $wrap.find('.relation-value'), $inp = $wrap.find('.relation-input'), $dd = $wrap.find('.relation-dropdown');
+            if(!table) return;
+            function fetchOptions(q){
+                $.get('/table-data/relation-options', {table:table, ref:ref, display:display, q:q||''}).done(function(res){
+                    $dd.empty();
+                    (res.data||[]).forEach(function(it){
+                        $dd.append($('<a href="javascript:;" class="layui-menu-body-title"></a>').text(it.label||it.value).on('click', function(){
+                            $h.val(it.value); $inp.val(it.label||it.value); $dd.hide();
+                        }));
+                    });
+                    if((res.data||[]).length===0) $dd.append($('<div class="layui-word-aux"></div>').text(q?'无匹配':'输入搜索'));
+                    $dd.show();
+                });
+            }
+            var cur = $h.val();
+            if(cur){ $.get('/table-data/relation-options', {table:table, ref:ref, display:display, q:cur}).done(function(res){
+                var found = (res.data||[]).find(function(it){ return String(it.value)===String(cur); });
+                $inp.val(found ? (found.label||cur) : cur);
+            });}
+            $inp.on('focus', function(){ fetchOptions($inp.val()); });
+            $inp.on('input', function(){ clearTimeout($inp.data('t')); $inp.data('t', setTimeout(function(){ fetchOptions($inp.val()); }, 200)); });
+            $inp.on('blur', function(){ setTimeout(function(){ $dd.hide(); }, 150); });
+        });
+    }
+    initRelation();
+    $('#dataForm').on('submit', function(e){
+        e.preventDefault();
+        if (typeof CKEDITOR !== 'undefined') { for (var n in CKEDITOR.instances) CKEDITOR.instances[n].updateElement(); }
+        var $f = $(this), isEdit = $f.data('is-edit')==1 || $f.data('is-edit')==='1';
+        $.ajax({ url: $f.attr('action'), method: isEdit ? 'PUT' : 'POST', data: new FormData(this), processData:false, contentType:false })
+            .done(function(){ window.location = '{{urlFor "table_data_index" "table_name" .TableName}}'; })
+            .fail(function(x){ alert((x.responseJSON&&x.responseJSON.msg)||'保存失败'); });
+    });
+});
+</script>

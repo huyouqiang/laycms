@@ -1,0 +1,238 @@
+<div id="tableDataMessage"></div>
+<div class="layui-card">
+    <div class="layui-card-header layui-clear">
+        <span>{{.Form.Name}} 数据列表</span>
+        <div style="float:right">
+            <input type="text" id="searchInput" class="layui-input" style="display:inline-block;width:220px;" placeholder="搜索 / where 条件">
+            {{if or (and $.CmsUser $.CmsUser.IsRoot) ($.CanTable .Form.DataTable "create")}}
+            <a href="{{urlFor "table_data_create" "table_name" .Form.DataTable}}" class="layui-btn layui-btn-sm layui-bg-cyan">新增</a>
+            {{end}}
+        </div>
+    </div>
+    <div class="layui-card-body layui-form table-data-layui-wrap">
+        <div id="tableDataElem"></div>
+    </div>
+</div>
+<script>
+layui.use(['table', 'jquery', 'layer'], function(){
+    var table = layui.table;
+    var $ = layui.$;
+    var layer = layui.layer;
+    var tableName = '{{.Form.DataTable}}';
+    var url = '{{urlFor "table_data_index" "table_name" .Form.DataTable}}';
+    var canEdit = {{if or (and $.CmsUser $.CmsUser.IsRoot) ($.CanTable .Form.DataTable "update")}}true{{else}}false{{end}};
+    var canDel = {{if or (and $.CmsUser $.CmsUser.IsRoot) ($.CanTable .Form.DataTable "delete")}}true{{else}}false{{end}};
+    function normFieldKey(v) {
+        if (v == null) return '';
+        return String(v).trim().toLowerCase();
+    }
+    var listFields = {{.ListFieldsJSON}} || [];
+    listFields = listFields.filter(function (f) {
+        var raw = f.name != null ? f.name : f.Name;
+        return normFieldKey(raw) !== 'id';
+    });
+    var tableId = 'tableDataList';
+    var colWidth = 200;
+    var savedPage = 1;
+    var resizeTimer;
+
+    function calcTableHeight() {
+        var el = document.getElementById('tableDataElem');
+        if (!el) {
+            return Math.max(240, Math.floor(window.innerHeight * 0.55));
+        }
+        var top = el.getBoundingClientRect().top;
+        var bottomGap = 12;
+        return Math.max(220, Math.floor(window.innerHeight - top - bottomGap));
+    }
+
+    function esc(s) {
+        return $('<div>').text(s == null ? '' : String(s)).html();
+    }
+
+    function rowFieldVal(row, name) {
+        if (!row || name == null || name === '') return undefined;
+        if (Object.prototype.hasOwnProperty.call(row, name)) return row[name];
+        var t = String(name).toLowerCase();
+        for (var k in row) {
+            if (Object.prototype.hasOwnProperty.call(row, k) && k.toLowerCase() === t) {
+                return row[k];
+            }
+        }
+        return undefined;
+    }
+
+    function formatCellHtml(row, field) {
+        var val = rowFieldVal(row, field.name);
+        if (val === undefined || val === null || val === '') {
+            return '<span class="layui-font-gray">-</span>';
+        }
+        if (field.control === 'date' || field.control === 'datetime') {
+            if (typeof val === 'object' && val !== null && ('Valid' in val || 'Time' in val)) {
+                var ok = val.Valid !== false && val.Time != null && val.Time !== '';
+                if (!ok) {
+                    return '<span class="layui-font-gray">-</span>';
+                }
+                val = val.Time;
+            }
+            return esc(String(val).replace('T', ' ').slice(0, 19));
+        }
+        if (field.control === 'file' && val) {
+            var p = String(val).trim();
+            var href = (p.indexOf('http') === 0) ? p : (window.location.origin + (p.charAt(0) === '/' ? p : '/' + p));
+            return '<a href="' + href + '" target="_blank" rel="noopener" class="layui-table-link">' + esc(p) + '</a>';
+        }
+        if ((field.control === 'radio' || field.control === 'select') && field.opts && typeof field.opts === 'object') {
+            var k = String(val);
+            var label = field.opts[k] !== undefined ? field.opts[k] : val;
+            return esc(label);
+        }
+        if (field.control === 'checkbox' && field.opts && typeof field.opts === 'object') {
+            var arr;
+            try { arr = typeof val === 'string' ? JSON.parse(val) : val; } catch (e) { arr = [val]; }
+            if (!Array.isArray(arr)) arr = [arr];
+            var label = arr.map(function (x) {
+                return field.opts[String(x)] !== undefined ? field.opts[String(x)] : x;
+            }).join(' / ');
+            return esc(label || val);
+        }
+        if (field.control === 'editor' && val) {
+            var div = document.createElement('div');
+            div.innerHTML = String(val);
+            var text = (div.textContent || '').replace(/\s+/g, ' ').trim();
+            return esc(text);
+        }
+        return esc(val);
+    }
+
+    /* 仅保留左侧固定的 ID，不再渲染序号列 #（避免与主键列重复） */
+    var cols = [[
+        { field: 'id', title: 'ID', width: 72, fixed: 'left', unresize: true }
+    ]];
+    listFields.forEach(function (f) {
+        cols[0].push({
+            field: f.name,
+            title: f.label || f.name,
+            width: colWidth,
+            minWidth: 120,
+            templet: function (d) {
+                return formatCellHtml(d, f);
+            }
+        });
+    });
+    cols[0].push({
+        fixed: 'right',
+        title: '操作',
+        width: canEdit && canDel ? 168 : (canEdit || canDel ? 100 : 72),
+        align: 'center',
+        unresize: true,
+        templet: function (d) {
+            var h = '';
+            if (canEdit) {
+                h += '<a class="layui-btn layui-btn-xs" href="/table-data/' + tableName + '/' + d.id + '/edit">编辑</a>';
+            }
+            if (canDel) {
+                h += ' <a class="layui-btn layui-btn-xs layui-btn-danger" href="javascript:;" lay-event="del">删除</a>';
+            }
+            return h || '<span class="layui-font-gray">-</span>';
+        }
+    });
+
+    (function dedupeDataCols() {
+        var seen = {};
+        var out = [];
+        cols[0].forEach(function (col) {
+            if (!col.field) {
+                out.push(col);
+                return;
+            }
+            var k = normFieldKey(col.field);
+            if (seen[k]) return;
+            seen[k] = true;
+            out.push(col);
+        });
+        cols[0] = out;
+    })();
+
+    table.render({
+        elem: '#tableDataElem',
+        id: tableId,
+        url: url,
+        method: 'GET',
+        skin: 'line',
+        size: 'sm',
+        escape: false,
+        cellExpandedMode: 'tips',
+        cellExpandedWidth: 400,
+        syncFixedRowHeight: true,
+        page: true,
+        limit: 50,
+        limits: [15, 30, 50, 100],
+        height: calcTableHeight(),
+        autoSort: false,
+        headers: { 'X-Requested-With': 'XMLHttpRequest' },
+        where: { search: $('#searchInput').val() || '' },
+        cols: cols,
+        text: { none: '暂无数据' },
+        parseData: function (res) {
+            return {
+                code: res.code,
+                msg: res.msg || '',
+                count: res.count,
+                data: res.data || []
+            };
+        },
+        done: function (_res, curr) {
+            if (typeof curr === 'number' && curr > 0) {
+                savedPage = curr;
+            }
+            $('#tableDataMessage').empty();
+        },
+        error: function (_res, msg) {
+            $('#tableDataMessage').html('<div class="layui-bg-red" style="padding:8px">' + esc(msg || '加载失败') + '</div>');
+        }
+    });
+
+    $('#searchInput').on('keypress', function (e) {
+        if (e.which === 13) {
+            savedPage = 1;
+            table.reload(tableId, {
+                where: { search: $(this).val() || '' },
+                page: { curr: 1 },
+                height: calcTableHeight()
+            });
+        }
+    });
+
+    $(window).on('resize', function () {
+        clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(function () {
+            table.reload(tableId, {
+                where: { search: $('#searchInput').val() || '' },
+                page: { curr: savedPage },
+                height: calcTableHeight()
+            });
+        }, 150);
+    });
+
+    table.on('tool(' + tableId + ')', function (obj) {
+        if (obj.event !== 'del') return;
+        layer.confirm('确定删除？', function (index) {
+            $.ajax({
+                url: '/table-data/' + tableName + '/' + obj.data.id,
+                method: 'DELETE',
+                headers: { 'X-Requested-With': 'XMLHttpRequest' }
+            }).done(function () {
+                layer.close(index);
+                table.reload(tableId, {
+                    where: { search: $('#searchInput').val() || '' },
+                    height: calcTableHeight()
+                });
+            }).fail(function (x) {
+                var m = (x.responseJSON && x.responseJSON.msg) || '删除失败';
+                layer.msg(m, { icon: 2 });
+            });
+        });
+    });
+});
+</script>

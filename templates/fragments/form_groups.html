@@ -1,0 +1,72 @@
+<div class="layui-card">
+    <div class="layui-card-header">
+        <button type="button" class="layui-btn layui-btn-sm layui-bg-cyan" id="btnAddGroup">新建分组</button>
+    </div>
+    <div class="layui-card-body">
+        <table class="layui-table" lay-skin="line">
+            <thead><tr><th>ID</th><th>分组名称</th><th>排序</th><th>表单数</th><th>操作</th></tr></thead>
+            <tbody>
+                {{range .Groups}}
+                <tr>
+                    <td>{{.ID}}</td>
+                    <td>{{.Name}}</td>
+                    <td>{{.SortOrder}}</td>
+                    <td>{{len .Forms}}</td>
+                    <td>
+                        <button type="button" class="layui-btn layui-btn-xs edit-group" data-id="{{.ID}}" data-name="{{.Name}}" data-sort="{{.SortOrder}}">编辑</button>
+                        <button type="button" class="layui-btn layui-btn-xs layui-btn-danger btn-del-group" data-id="{{.ID}}" {{if len .Forms}}disabled title="该分组下有表单"{{end}}>删除</button>
+                    </td>
+                </tr>
+                {{end}}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<form class="layui-form" id="groupFormModal" style="display:none;padding:16px;">
+    <input type="hidden" name="group_id" id="groupId">
+    <div class="layui-form-item">
+        <label class="layui-form-label">名称</label>
+        <div class="layui-input-block">
+            <input type="text" name="name" id="groupName" required class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">排序</label>
+        <div class="layui-input-block">
+            <input type="number" name="sort_order" id="groupSort" value="0" class="layui-input">
+        </div>
+    </div>
+</form>
+
+<script>
+layui.use(['layer','jquery'], function(){
+    var layer = layui.layer, $ = layui.$;
+    $('#btnAddGroup').on('click', function(){
+        $('#groupId').val(''); $('#groupName').val(''); $('#groupSort').val(0);
+        layer.open({type:1, title:'新建分组', area:['400px','auto'], content:$('#groupFormModal'), btn:['保存','取消'],
+            yes:function(ix){
+                var gid = $('#groupId').val();
+                var data = {csrf_token:'{{.CSRFToken}}', name:$('#groupName').val(), sort_order:$('#groupSort').val()||0};
+                var url = gid ? '/form-groups/'+gid : '/form-groups/';
+                $.post(url, data).done(function(){ layer.close(ix); location.reload(); }).fail(function(x){ layer.msg((x.responseJSON&&x.responseJSON.msg)||'保存失败'); });
+            }});
+    });
+    $('.edit-group').on('click', function(){
+        var b = $(this);
+        $('#groupId').val(b.data('id')); $('#groupName').val(b.data('name')); $('#groupSort').val(b.data('sort')||0);
+        layer.open({type:1, title:'编辑分组', area:['400px','auto'], content:$('#groupFormModal'), btn:['保存','取消'],
+            yes:function(ix){
+                var gid = $('#groupId').val();
+                var data = {csrf_token:'{{.CSRFToken}}', name:$('#groupName').val(), sort_order:$('#groupSort').val()||0};
+                $.post('/form-groups/'+gid, data).done(function(){ layer.close(ix); location.reload(); }).fail(function(x){ layer.msg((x.responseJSON&&x.responseJSON.msg)||'保存失败'); });
+            }});
+    });
+    $('.btn-del-group').on('click', function(){
+        var b = $(this); if(b.prop('disabled')) return;
+        if(!confirm('确定删除？')) return;
+        $.ajax({url:'/form-groups/'+b.data('id'), method:'DELETE', headers:{'X-Requested-With':'XMLHttpRequest'}})
+            .done(function(){ location.reload(); }).fail(function(x){ layer.msg((x.responseJSON&&x.responseJSON.msg)||'删除失败'); });
+    });
+});
+</script>

@@ -1,1 +1,0 @@
-# LayCMS - FastAPI backend
